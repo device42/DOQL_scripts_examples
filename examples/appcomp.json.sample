@@ -1,0 +1,31 @@
+{
+  "output_filename": "reports/appcomp",
+  "output_format": "csv",
+  "query": "select
+          app.name app_name,
+          d.name on_device,
+          sdev.name device_name,
+          d.type,
+          sdev.serial_no,
+          sdev.asset_no,
+          sdev.uuid,
+          s.service_name,
+          spid.is_listening,
+          spid.ip,
+          sp.port
+        from view_appcomp_v1 app
+        left join view_device_v1 d on d.device_pk = app.device_fk
+        left join view_serviceinstance_v1 sd on sd.appcomp_fk = app.appcomp_pk
+        left join view_service_v1 s on s.service_pk = sd.service_fk
+        left join view_device_v1 sdev on sdev.device_pk = sd.device_fk
+        left join view_serviceportip_v1 spid on spid.mapped_serviceinstance_fk = sd.serviceinstance_pk
+        left join view_serviceport_v1 sp on sp.serviceport_pk = spid.serviceport_fk
+        where s.service_type is null or s.service_type <> 'ignored'
+        order by app.appcomp_pk",
+  "limit": null,
+  "offset": 1000,
+  "date": {  
+    "column": null,
+    "days_limit": null
+  }
+}

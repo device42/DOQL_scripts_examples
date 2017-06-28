@@ -1,0 +1,36 @@
+{
+  "output_filename": "reports/software",
+  "output_format": "json",
+  "query": "select
+        s.name software_name,
+        sd.alias_name,
+        sd.component_name,
+        sk.the_key software_key,
+        d.name device_name,
+        e.name user_name,
+        sd.version,
+        sd.software_fk,
+        sd.install_date,
+        sd.count_in_licensing,
+        sd.device_fk,
+        sd.enduser_fk,
+        sd.first_detected,
+        sd.last_updated,
+        sd.softwarelicensekey_fk,
+        sd.license_use_count,
+        sd.file_version,
+        sd.install_path
+        from view_softwareinuse_v1 sd
+        join view_software_v1 s on s.software_pk = sd.software_fk
+        left join view_softwarelicensekey_v1 sk on sk.softwarelicensekey_pk = sd.softwarelicensekey_fk
+        left join view_device_v1 d on d.device_pk = sd.device_fk
+        left join view_enduser_v1 e on e.enduser_pk = sd.enduser_fk
+        where s.software_type <> 'ignored'
+        order by sd.softwareinuse_pk",
+  "limit": null,
+  "offset": 1000,
+  "date": {
+    "column": null,
+    "days_limit": null
+  }
+}

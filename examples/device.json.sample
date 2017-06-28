@@ -1,0 +1,41 @@
+{
+  "output_filename": "reports/device",
+  "output_format": "csv",
+  "query": "select 
+          d.device_pk ID,
+          d.name \"Name\", d.type \"Type\", d.network_device \"Network Device\", '' \"Fiber Switch\", d.blade_chassis \"Blade Chassis\",
+          d.virtual_host \"Virtual Host\", '' \"In Service\", '' \"Service Level\", d.serial_no \"Serial %23\", d.asset_no \"Asset %23\", d.uuid UUID, d.hardware_fk Hardware,
+          d.customer_fk Customer, d.virtual_host_device_fk \"Device Virtual Host\", d.bladeno \"Blade Slot %23\", d.host_chassis_device_fk \"Device Host Chassis\",
+          d.notes Notes, d.sub_type_id \"Device Subtype\", d.virtual_subtype \"Virtual Subtype\", '' Building, '' Room, '' Rack, d.first_added \"First added\",
+          d.last_edited \"Last updated\", d.storage_room_fk \"Storage Room\", '' \"Discovery spec\", d.devicecategory_fk Category, '' \"Change Cooling Setpoint To\",
+          d.os_name \"Operating System\", d.os_version \"OS Version\", d.os_version_no \"OS Version Number\", d.cpucount \"CPU Count\", d.cpucore \"CPU Cores\",
+          d.cpupower \"CPU Speed (MHz)\", d.ram \"Memory (MB)\", d.hard_disk_count \"HDD Count\", d.hard_disk_size \"HDD Size (GB)\", d.hw_sw_raid \"HW/SW Raid\",
+          d.raid_type \"Raid Type\",
+           (SELECT array_to_string(array(
+              select i.ip_address
+              from d42_readonly.view_ipaddress_v1 i
+              where d.device_pk = i.device_fk),
+              ' ')) \"IPs\",
+           (SELECT array_to_string(array(
+              select n.hwaddress
+              from d42_readonly.view_netport_v1 n
+              left join d42_readonly.view_ipaddress_v1 i on i.netport_fk = n.netport_pk
+              where d.device_pk = i.device_fk
+              group by n.hwaddress),
+              ' ')) \"MACs\",
+          '' \"Row\", '' \"Tags\", '' \"U Size\", '' \"Software\",
+          '' \"Last Lifecycle State\", '' \"Last Lifecycle Note\", '' \"Last Lifecycle Date\", '' \"Last Lifecycle User\", '' \"Checked Out By\", '' \"Checked Out Date\", 
+          '' \"Checked In Date\", '' \"Impacted Customers\", '' \"Parts Checked Out To Device\", '' \"Number of Contracts\", '' \"Contract Info\", '' \"Contract End Dates\", 
+          '' \"Current Contract Info\", '' \"Current Contract End Date\", '' \"Power Connections\", '' \"Transfers\", '' \"Aliases\", '' \"Passwords\", '' \"Service Profile Name\", 
+          '' \"UCS Manager Name\", '' \"OS End of Life\", '' \"OS End of Support\", '' \"Hardware End of Life\", '' \"Hardware End of Support\", '' \"Total Cost (including parts)\", 
+          '' \"Mount Points\" 
+          from view_device_v1 d
+          order by d.device_pk",
+  "limit": null,
+  "offset": 1000,
+  "date": {  
+    "column": null,
+    "days_limit": null
+  }
+}
+

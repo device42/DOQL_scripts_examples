@@ -1,0 +1,34 @@
+{
+  "output_filename": "reports/service",
+  "output_format": "json",
+  "query": "select
+          s.displayname,
+          s.name,
+          s.service_name,
+          s.service_type,
+          o.name vendor,
+          s.category_name,
+          ac.name appcomp,
+          d.name device_name,
+          e.name user_name,
+          sd.startmode,
+          sd.state,
+          sd.device_fk,
+          sd.enduser_fk,
+          sd.first_detected,
+          sd.last_updated,
+          sd.appcomp_fk
+        from view_serviceinstance_v1 sd
+        join view_service_v1 s on s.service_pk = sd.service_fk
+        left join view_vendor_v1 o on o.vendor_pk = s.vendor_fk
+        left join view_device_v1 d on d.device_pk = sd.device_fk
+        left join view_enduser_v1 e on e.enduser_pk = sd.enduser_fk
+        left join view_appcomp_v1 ac on ac.appcomp_pk = sd.appcomp_fk
+        order by sd.serviceinstance_pk",
+  "limit": null,
+  "offset": 1000,
+  "date": {  
+    "column": null,
+    "days_limit": null
+  }
+}
