@@ -24,7 +24,7 @@ Set settings and run!
 * `limit: 50` - query records limit
 * `offset: 100` - pagination offset, items per file
 * `date:`
-	`  column: last_edited` - filter column
+	`  column: last_edited` - filter column, can be last_edited or first_added
 	`  days_limit: 2` - days limit since today
 
 ### Run
