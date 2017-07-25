@@ -1,0 +1,36 @@
+{
+  "output_filename": "servics-ports",
+  "output_format": "json",
+  "query": "select
+            dev.device_pk,
+            dev.name listener_name,
+            spip.ip listener_ip,
+            (SELECT array_to_string(array(
+                    select ip.ip_address
+                    from view_ipaddress_v1 ip
+                    where ip.device_fk = dev.device_pk),
+                    ', ')) all_listener_device_ips,
+            srv.service_name listener_service,
+            sp.port listener_port,
+            os.name listener_os,
+            CASE dev.type_id
+              WHEN 3 THEN 'yes'
+              ELSE 'no'
+            END listener_is_virtual,
+            coalesce(hdw.name, '') listener_hardware
+          from view_serviceport_v1 sp
+          join view_serviceportip_v1 spip on spip.serviceport_fk = sp.serviceport_pk
+          join view_device_v1 dev on dev.device_pk = sp.device_fk
+          join view_serviceinstance_v1 sd on sd.serviceinstance_pk = spip.mapped_serviceinstance_fk
+          join view_service_v1 srv on srv.service_pk = sd.service_fk
+          left join view_os_v1 os on os.os_pk = dev.os_fk
+          left join view_hardware_v1 hdw on hdw.hardware_pk = dev.hardware_fk
+          where spip.is_listening = 't' and srv.service_type <> 'ignored'
+          order by dev.device_pk;",
+  "limit": null,
+  "offset": 1000,
+  "date": {  
+    "column": null,
+    "days_limit": null
+  }
+}
