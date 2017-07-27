@@ -1,6 +1,7 @@
 {
   "output_filename": "reports/service-deps",
   "output_format": "json",
+  "description": "Service dependencies",
   "query": "select
           dev.device_pk,
           dev.name listener_name,

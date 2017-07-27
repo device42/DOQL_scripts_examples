@@ -1,6 +1,7 @@
 {
   "output_filename": "reports/appcomp",
   "output_format": "csv",
+  "description": "Appcomp",
   "query": "select
           app.name app_name,
           d.name on_device,

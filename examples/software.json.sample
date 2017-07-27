@@ -1,6 +1,7 @@
 {
   "output_filename": "reports/software",
   "output_format": "json",
+  "description": "Software",
   "query": "select
         s.name software_name,
         sd.alias_name,

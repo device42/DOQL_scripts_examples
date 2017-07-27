@@ -1,6 +1,7 @@
 {
   "output_filename": "reports/device",
   "output_format": "csv",
+  "description": "Device",
   "query": "select 
           d.device_pk ID,
           d.name \"Name\", d.type \"Type\", d.network_device \"Network Device\", '' \"Fiber Switch\", d.blade_chassis \"Blade Chassis\",

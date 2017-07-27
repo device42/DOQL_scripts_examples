@@ -1,0 +1,17 @@
+{
+  "output_filename": "reports/software-device-x",
+  "output_format": "json",
+  "description": "Software Report includes Devices without Software X",
+  "query": "select
+        d.name device_name
+        from view_device_v1 d
+        left join (view_softwareinuse_v1 sd
+         join view_software_v1 s on s.software_pk = sd.software_fk and s.name = 'Software X')  on sd.device_fk = d.device_pk
+        where sd.softwareinuse_pk is null;",
+  "limit": null,
+  "offset": 1000,
+  "date": {
+    "column": null,
+    "days_limit": null
+  }
+}

@@ -1,6 +1,7 @@
 {
   "output_filename": "reports/service",
   "output_format": "json",
+  "description": "Service",
   "query": "select
           s.displayname,
           s.name,
