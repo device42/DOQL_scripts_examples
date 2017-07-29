@@ -6,10 +6,10 @@ This repository contains scripts that helps you create CSV or JSON files from DO
 
 ### Device42 DOQL to JSON/CSV file
 -----------------------------
-Please rename `settings.json.sample` to `settings.json`.
-Add `__some_name__.json` or copy / edit examples from "examples" folder.
-Add `reports` folder in the root of repository ( see additional information ).
-Set settings and run!
+* Please rename `settings.json.sample` to `settings.json`.
+* For the query you need to run - add `__some_name__.json` or copy / edit examples from "examples" folder.
+* Add `reports` folder in the root of repository ( see additional information ).
+* Set settings and run!
 
 ### settings.json references
 -----------------------------
@@ -30,7 +30,7 @@ Set settings and run!
 
 ### Run
 -----------------------------
-Call script from command line : `python starter.py query.json`! ( You may specify any json file that fit our sample structure )
+Call script from command line : `python starter.py query.json` ( You may specify any json file that fit our sample structure )
 
 ### Additional information
 -----------------------------
