@@ -8,6 +8,7 @@ This repository contains scripts that helps you create CSV or JSON files from DO
 -----------------------------
 Please rename `settings.json.sample` to `settings.json`.
 Add `__some_name__.json` or copy / edit examples from "examples" folder.
+Add `reports` folder in the root of repository ( see additional information ).
 Set settings and run!
 
 ### settings.json references
@@ -34,6 +35,7 @@ Call script from command line : `python starter.py query.json`! ( You may specif
 ### Additional information
 -----------------------------
 * If you don't want to use `date`, `offset` or `limit` filters  - just put value : `null`
+* By default all reports comes the `reports` folder. You may change it to the path that you want.
 
 ### Support
 -----------------------------
