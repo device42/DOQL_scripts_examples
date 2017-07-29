@@ -35,7 +35,7 @@ Call script from command line : `python starter.py query.json`! ( You may specif
 ### Additional information
 -----------------------------
 * If you don't want to use `date`, `offset` or `limit` filters  - just put value : `null`
-* By default all reports comes the `reports` folder. You may change it to the path that you want.
+* By default all reports comes to the `reports` folder. You may change it to the path that you want.
 
 ### Support
 -----------------------------
