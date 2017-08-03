@@ -1,0 +1,33 @@
+{
+  "output_filename": "reports/device-details",
+  "output_format": "json",
+  "description": "Device with CPU/RAM/HDD Parts/Mounts/Shares",
+  "query": "SELECT d.device_pk, d.name, d.serial_no, d.uuid UUID, d.cpucount, d.cpucore, d.cpupower,
+          d.hz, d.ram, d.ram_size_type, d.hard_disk_count, d.hard_disk_size, d.hard_disk_size_type,
+          d.hw_sw_raid, d.raid_type,
+          (SELECT array_to_string(array(
+                  select pm.name
+                  from view_part_v1 p
+                  left join view_partmodel_v1 pm on pm.partmodel_pk = p.partmodel_fk
+                  where p.device_fk = d.device_pk and pm.type_id = 3),
+                  ', ')) hdd_parts,
+          (SELECT array_to_string(array(
+                  select ns.name
+                  from view_networkshare_v1 ns
+                  where ns.device_fk = d.device_pk),
+                  ', ')) network_shares,
+          (SELECT array_to_string(array(
+                  select mp.filesystem
+                  from view_mountpoint_v1 mp
+                  where mp.device_fk = d.device_pk),
+                  ', ')) mount_points
+          from view_device_v1 d
+          order by d.device_pk;",
+  "limit": null,
+  "offset": 1000,
+  "date": {  
+    "column": null,
+    "days_limit": null
+  }
+}
+

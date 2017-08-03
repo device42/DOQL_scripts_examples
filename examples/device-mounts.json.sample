@@ -1,0 +1,17 @@
+{
+  "output_filename": "reports/device-mounts",
+  "output_format": "json",
+  "description": "Device with Mounts",
+  "query": "SELECT d.device_pk, d.name, d.serial_no, d.uuid UUID,
+          mp.filesystem, mp.fstype_id, mp.fstype_name, mp.capacity, mp.free_capacity, mp.label
+          from view_device_v1 d
+          left join view_mountpoint_v1 mp on mp.device_fk = d.device_pk
+          order by d.device_pk;",
+  "limit": null,
+  "offset": 1000,
+  "date": {  
+    "column": null,
+    "days_limit": null
+  }
+}
+

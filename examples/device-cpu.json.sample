@@ -1,0 +1,20 @@
+{
+  "output_filename": "reports/device-cpu",
+  "output_format": "csv",
+  "description": "Device with CPU/RAM/HDD Parts",
+  "query": "SELECT d.device_pk, d.name, d.serial_no, d.uuid UUID, d.cpucount, d.cpucore, d.cpupower,
+          d.hz, d.ram, d.ram_size_type, d.hard_disk_count, d.hard_disk_size, d.hard_disk_size_type,
+          d.hw_sw_raid, d.raid_type, pm.name, pm.hdsize, pm.hdsize_unit, pm.hddtype_name, pm.hdrpm_name,
+          p.pcount, p.firmware, p.serial_no, p.raid_type_name, p.raid_group
+          from view_device_v1 d
+          left join view_part_v1 p on p.device_fk = d.device_pk
+          left join view_partmodel_v1 pm on pm.partmodel_pk = p.partmodel_fk
+          where pm.type_id = 3 order by d.device_pk;",
+  "limit": null,
+  "offset": 1000,
+  "date": {  
+    "column": null,
+    "days_limit": null
+  }
+}
+
