@@ -10,7 +10,7 @@
                     select ip.ip_address
                     from view_ipaddress_v1 ip
                     where ip.device_fk = dev.device_pk),
-                    ', ')) all_listener_device_ips,
+                    '; ')) all_listener_device_ips,
             srv.service_name listener_service,
             sp.port listener_port,
             os.name listener_os,
@@ -27,7 +27,7 @@
           left join view_os_v1 os on os.os_pk = dev.os_fk
           left join view_hardware_v1 hdw on hdw.hardware_pk = dev.hardware_fk
           where spip.is_listening = 't' and srv.service_type <> 'ignored'
-          order by dev.device_pk;",
+          order by dev.device_pk",
   "limit": null,
   "offset": 1000,
   "date": {  

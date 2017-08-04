@@ -10,7 +10,7 @@
                   select ip.ip_address
                   from view_ipaddress_v1 ip
                   where ip.device_fk = dev.device_pk),
-                  ', ')) all_listener_device_ips,
+                  '; ')) all_listener_device_ips,
           srv.service_name listener_service,
           sp.port listener_port,
           os.name listener_os,

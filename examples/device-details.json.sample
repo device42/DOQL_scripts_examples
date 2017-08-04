@@ -10,19 +10,19 @@
                   from view_part_v1 p
                   left join view_partmodel_v1 pm on pm.partmodel_pk = p.partmodel_fk
                   where p.device_fk = d.device_pk and pm.type_id = 3),
-                  ', ')) hdd_parts,
+                  '; ')) hdd_parts,
           (SELECT array_to_string(array(
                   select ns.name
                   from view_networkshare_v1 ns
                   where ns.device_fk = d.device_pk),
-                  ', ')) network_shares,
+                  '; ')) network_shares,
           (SELECT array_to_string(array(
                   select mp.filesystem
                   from view_mountpoint_v1 mp
                   where mp.device_fk = d.device_pk),
-                  ', ')) mount_points
+                  '; ')) mount_points
           from view_device_v1 d
-          order by d.device_pk;",
+          order by d.device_pk",
   "limit": null,
   "offset": 1000,
   "date": {  

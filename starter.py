@@ -24,10 +24,15 @@ global _debug
 _debug = True
 
 
-def _getter(url, options):
-    request = urllib2.Request(url)
+def _poster(url, query, options):
+
+    request = urllib2.Request(url, urllib.urlencode({
+        "query": query,
+        "header": "yes"
+    }))
     base64string = base64.b64encode('%s:%s' % (options['username'], options['password']))
     request.add_header("Authorization", "Basic %s" % base64string)
+    request.get_method = lambda: 'POST'
     r = urllib2.urlopen(request, context=ctx)
     body = r.read()
     r.close()
@@ -35,10 +40,11 @@ def _getter(url, options):
     if _debug:
         msg = 'Status code: %s' % str(r.code)
 
-        print '\n\t----------- GET FUNCTION -----------'
+        print '\n\t----------- POST FUNCTION -----------'
         print '\t' + url
         print '\t' + msg
-        print '\t------- END OF GET FUNCTION -------\n'
+        print '\t Query: ' + query
+        print '\t------- END OF POST FUNCTION -------\n'
 
     return body
 
@@ -55,12 +61,10 @@ def get_list_from_csv(text):
 
 def doql_call(config, query):
 
-    # fix length and decode spaces
     query['query'] = ' '.join(query['query'].split())
-    query_url = query['query'].replace(' ', '%20')
 
-    res = _getter(
-        'https://%s/services/data/v1.0/query/?query=%s&header=yes' % (config['host'], query_url), {
+    res = _poster(
+        'https://%s/services/data/v1.0/query/' % config['host'], query['query'], {
             'username': config['username'],
             'password': config['password']
         }

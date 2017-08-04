@@ -16,14 +16,14 @@
               select i.ip_address
               from d42_readonly.view_ipaddress_v1 i
               where d.device_pk = i.device_fk),
-              ' ')) \"IPs\",
+              '; ')) \"IPs\",
            (SELECT array_to_string(array(
               select n.hwaddress
               from d42_readonly.view_netport_v1 n
               left join d42_readonly.view_ipaddress_v1 i on i.netport_fk = n.netport_pk
               where d.device_pk = i.device_fk
               group by n.hwaddress),
-              ' ')) \"MACs\",
+              '; ')) \"MACs\",
           '' \"Row\", '' \"Tags\", '' \"U Size\", '' \"Software\",
           '' \"Last Lifecycle State\", '' \"Last Lifecycle Note\", '' \"Last Lifecycle Date\", '' \"Last Lifecycle User\", '' \"Checked Out By\", '' \"Checked Out Date\", 
           '' \"Checked In Date\", '' \"Impacted Customers\", '' \"Parts Checked Out To Device\", '' \"Number of Contracts\", '' \"Contract Info\", '' \"Contract End Dates\", 

@@ -9,7 +9,7 @@
           from view_device_v1 d
           left join view_part_v1 p on p.device_fk = d.device_pk
           left join view_partmodel_v1 pm on pm.partmodel_pk = p.partmodel_fk
-          where pm.type_id = 3 order by d.device_pk;",
+          where pm.type_id = 3 order by d.device_pk",
   "limit": null,
   "offset": 1000,
   "date": {  

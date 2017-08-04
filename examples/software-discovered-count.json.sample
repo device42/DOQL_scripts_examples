@@ -4,7 +4,7 @@
   "description": "Software Report where Discovered Count is greater than License Count",
   "query": "select s.name
         from d42_readonly.view_software_v1 s
-        where s.discovered_count > s.licensed_count;",
+        where s.discovered_count > s.licensed_count",
   "limit": null,
   "offset": 1000,
   "date": {

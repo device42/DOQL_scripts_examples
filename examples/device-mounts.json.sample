@@ -6,7 +6,7 @@
           mp.filesystem, mp.fstype_id, mp.fstype_name, mp.capacity, mp.free_capacity, mp.label
           from view_device_v1 d
           left join view_mountpoint_v1 mp on mp.device_fk = d.device_pk
-          order by d.device_pk;",
+          order by d.device_pk",
   "limit": null,
   "offset": 1000,
   "date": {  

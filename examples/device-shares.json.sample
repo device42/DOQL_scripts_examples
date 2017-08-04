@@ -6,7 +6,7 @@
           ns.name, ns.path, ns.caption, ns.description, ns.status, ns.type, ns.install_date
           from view_device_v1 d
           left join view_networkshare_v1 ns on ns.device_fk = d.device_pk
-          order by d.device_pk;",
+          order by d.device_pk",
   "limit": null,
   "offset": 1000,
   "date": {  
