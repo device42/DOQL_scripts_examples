@@ -24,7 +24,7 @@ global _debug
 _debug = True
 
 
-def _poster(url, query, options):
+def _post(url, query, options):
 
     request = urllib2.Request(url, urllib.urlencode({
         "query": query,
@@ -63,7 +63,7 @@ def doql_call(config, query):
 
     query['query'] = ' '.join(query['query'].split())
 
-    res = _poster(
+    res = _post(
         'https://%s/services/data/v1.0/query/' % config['host'], query['query'], {
             'username': config['username'],
             'password': config['password']
