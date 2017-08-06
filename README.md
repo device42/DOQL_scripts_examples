@@ -36,6 +36,8 @@ Call script from command line : `python starter.py query.json` ( You may specify
 -----------------------------
 * If you don't want to use `date`, `offset` or `limit` filters  - just put value : `null`
 * By default all reports comes to the `reports` folder. You may change it to the path that you want.
+* Possible to direct insert into different SQL databases with pyodbc, just specify driver like in `examples/service-2-db.json.sample` ( `pip install pyodbc` required )
+* Script insert data to the same DB rows names as returns by SELECT query.
 
 ### Support
 -----------------------------

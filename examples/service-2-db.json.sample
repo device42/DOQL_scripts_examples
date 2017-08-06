@@ -1,0 +1,21 @@
+{
+  "connection_string": "DRIVER={MySQL};SERVER=127.0.0.1;DATABASE=test;UID=root;PWD=root",
+  "table": "test2",
+  "output_format": "database",
+  "description": "Service",
+  "query": "select
+          s.displayname,
+          s.name
+        from view_serviceinstance_v1 sd
+        join view_service_v1 s on s.service_pk = sd.service_fk
+        left join view_vendor_v1 o on o.vendor_pk = s.vendor_fk
+        left join view_device_v1 d on d.device_pk = sd.device_fk
+        left join view_enduser_v1 e on e.enduser_pk = sd.enduser_fk
+        left join view_appcomp_v1 ac on ac.appcomp_pk = sd.appcomp_fk
+        order by sd.serviceinstance_pk",
+  "limit": null,
+  "date": {  
+    "column": null,
+    "days_limit": null
+  }
+}

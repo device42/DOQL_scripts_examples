@@ -10,8 +10,14 @@ import urllib
 import urllib2
 import base64
 import StringIO
+
 from datetime import datetime
 from datetime import timedelta
+
+try:
+    import pyodbc
+except ImportError:
+    pass
 
 reload(sys)  
 sys.setdefaultencoding('utf8')
@@ -43,7 +49,7 @@ def _post(url, query, options):
         print '\n\t----------- POST FUNCTION -----------'
         print '\t' + url
         print '\t' + msg
-        print '\t Query: ' + query
+        print '\tQuery: ' + query
         print '\t------- END OF POST FUNCTION -------\n'
 
     return body
@@ -100,7 +106,8 @@ def doql_call(config, query):
         else:
             file = open('%s_%s.csv' % (query['output_filename'], time.strftime("%Y%m%d%H%M%S")), 'w+')
             file.write(csv)
-    else:
+        file.close()
+    elif query['output_format'] == 'json':
         if query['offset']:
             pages = (len(lines) / query['offset']) + 2
             for i in range(1, pages):
@@ -111,8 +118,33 @@ def doql_call(config, query):
             file = open('%s_%s.json' % (query['output_filename'], time.strftime("%Y%m%d%H%M%S")), 'w+')
             csv_list, field_order = get_list_from_csv(csv)
             file.write(json.dumps(csv_list, indent=4, sort_keys=True))
+        file.close()
+    elif query['output_format'] == 'database':
+        cnxn = pyodbc.connect(query['connection_string'], autocommit=True)
+        conn = cnxn.cursor()
 
-    file.close()
+        for line in lines:
+            # some special cases for strange DOQL responses ( that may break database such as MySQL)
+            if len(line) > 0:
+                if '",' in line:
+                    line = line.replace(',', '__comma__')
+                    line = line.replace('"__comma__', '",')
+                if ',"' in line:
+                    line = line.replace(',', '__comma__')
+                    line = line.replace('__comma__"', ',"')
+                if '","' in line:
+                    line = line.replace(',', '__comma__')
+                    line = line.replace('"__comma__"', '","')
+
+                line = line.replace('\,', ',')
+                if line.endswith('\\'):
+                    line = line[:-1]
+                query_str = "INSERT INTO %s (%s) VALUES (%s)" % (query['table'], header, ",".join(["'%s'" % x.replace('__comma__', ',').replace("'", "\\'") for x in line.split(',')]))
+                conn.execute(query_str)
+
+        print("Added %s records" % len(lines))
+
+        conn.close()
 
 
 def main():
