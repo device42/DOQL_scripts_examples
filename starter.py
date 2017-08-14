@@ -56,7 +56,7 @@ def _post(url, query, options):
 
 
 def get_list_from_csv(text):
-    f = StringIO.StringIO(text.encode('utf-8'))
+    f = StringIO.StringIO(text)
     list_ = []
     dict_reader = csv.DictReader(f, quotechar='"', delimiter=',', quoting=csv.QUOTE_ALL, skipinitialspace=True, dialect='excel')
     for item in dict_reader:
@@ -75,7 +75,7 @@ def doql_call(config, query):
             'password': config['password']
         }
     )
-    csv = res.encode('ascii', 'ignore')
+    csv = res
 
     # prepare date-filtered csv
     if query['date'] and query['date']['column'] and query['date']['days_limit']:
