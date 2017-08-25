@@ -67,64 +67,107 @@ def get_list_from_csv(text):
 
 def doql_call(config, query):
 
-    query['query'] = ' '.join(query['query'].split())
+    limit = 0
+    query['query'] = ' '.join(query['query'].split()).lower()
 
-    res = _post(
-        'https://%s/services/data/v1.0/query/' % config['host'], query['query'], {
-            'username': config['username'],
-            'password': config['password']
-        }
-    )
-    csv = res
-
-    # prepare date-filtered csv
+    # prepare date-filtered query
     if query['date'] and query['date']['column'] and query['date']['days_limit']:
-        csv_list, field_order = get_list_from_csv(csv)
-        csv = [x for x in csv_list if datetime.strptime(x[query['date']['column']].split(' ')[0], '%Y-%m-%d') > datetime.now() - timedelta(days=query['date']['days_limit'])]
-        temp = [','.join(field_order)]
+        index = None
+        where_index = query['query'].find('where')
+        order_index =  query['query'].find('order by')
 
-        for x in csv:
-            temp.append(','.join(['"%s"' % x[y] for y in field_order]))
-        csv = '\n'.join(temp)
+        if where_index > 0:
+            index = where_index + 6
+            query['query'] = query['query'][:index] + " %s > current_date - interval '%s day' and " % (query['date']['column'], query['date']['days_limit']) + query['query'][index:]
+        elif order_index > 0:
+            index = order_index
+            query['query'] = query['query'][:index] + " where %s > current_date - interval '%s day' " % (query['date']['column'], query['date']['days_limit']) + query['query'][index:]
 
-    lines = csv.split('\n')
-    header = lines.pop(0)
-
-    # check limits
-    if query['limit']:
-        try:
-            lines = lines[:query['limit']]
-        except:
-            pass
-
-    if query['output_format'] == 'csv':
+    if query['output_format'] == 'csv' or query['output_format'] == 'json':
         if query['offset']:
-            pages = (len(lines) / query['offset']) + 2
-            for i in range(1, pages):
-                file = open('%s_%s_%s.csv' % (query['output_filename'], time.strftime("%Y%m%d%H%M%S"), i), 'w+')
-                file.write('\n'.join([header] + lines[(i - 1) * query['offset']:i * query['offset']]))
+            page = 0
+            _next = True
+            while _next:
+
+                doql_offset = page * query['offset']
+                doql_limit = query['offset']
+
+                if query['limit'] and query['limit'] > query['offset']:
+                    if (doql_offset + query['offset']) > query['limit']:
+                        doql_limit = query['limit'] - doql_offset
+                else:
+                    if query['limit']:
+                        doql_limit = query['limit']
+
+                doql_query = query['query'] + ' LIMIT %s OFFSET %s' % (doql_limit, doql_offset)
+
+                res = _post(
+                    'https://%s/services/data/v1.0/query/' % config['host'], doql_query, {
+                        'username': config['username'],
+                        'password': config['password']
+                    }
+                )
+                lines = res.split('\n')
+
+                if query['output_format'] == 'csv':
+                    file = open('%s_%s_%s.csv' % (query['output_filename'], time.strftime("%Y%m%d%H%M%S"), page), 'w+')
+                    file.write('\n'.join(lines))
+                elif query['output_format'] == 'json':
+                    csv_list, field_order = get_list_from_csv('\n'.join(lines))
+                    file = open('%s_%s_%s.json' % (query['output_filename'], time.strftime("%Y%m%d%H%M%S"), page), 'w+')
+                    file.write(json.dumps(csv_list, indent=4, sort_keys=True))
+
+                if doql_limit != query['offset'] or (len(lines) - 2) != query['offset'] or (doql_offset + doql_limit) == query['limit'] :
+                    break
+
+                page += 1
+
         else:
-            file = open('%s_%s.csv' % (query['output_filename'], time.strftime("%Y%m%d%H%M%S")), 'w+')
-            file.write(csv)
-        file.close()
-    elif query['output_format'] == 'json':
-        if query['offset']:
-            pages = (len(lines) / query['offset']) + 2
-            for i in range(1, pages):
-                file = open('%s_%s_%s.json' % (query['output_filename'], time.strftime("%Y%m%d%H%M%S"), i), 'w+')
-                csv_list, field_order = get_list_from_csv('\n'.join([header] + lines[(i - 1) * query['offset']:i * query['offset']]))
+
+            if query['limit']:
+                doql_query = query['query'] + ' LIMIT %s ' % query['limit']
+            else:
+                doql_query = query['query']
+
+            res = _post(
+                'https://%s/services/data/v1.0/query/' % config['host'], doql_query, {
+                    'username': config['username'],
+                    'password': config['password']
+                }
+            )
+            lines = res.split('\n')
+
+            if query['output_format'] == 'csv':
+                file = open('%s_%s.csv' % (query['output_filename'], time.strftime("%Y%m%d%H%M%S")), 'w+')
+                file.write(csv)
+            elif query['output_format'] == 'json':
+                csv_list, field_order = get_list_from_csv('\n'.join(lines))
+                file = open('%s_%s.json' % (query['output_filename'], time.strftime("%Y%m%d%H%M%S")), 'w+')
                 file.write(json.dumps(csv_list, indent=4, sort_keys=True))
-        else:
-            file = open('%s_%s.json' % (query['output_filename'], time.strftime("%Y%m%d%H%M%S")), 'w+')
-            csv_list, field_order = get_list_from_csv(csv)
-            file.write(json.dumps(csv_list, indent=4, sort_keys=True))
+
         file.close()
+
     elif query['output_format'] == 'database':
+
+        if query['limit']:
+            doql_query = query['query'] + ' LIMIT %s ' % query['limit']
+        else:
+            doql_query = query['query']
+
+        res = _post(
+            'https://%s/services/data/v1.0/query/' % config['host'], doql_query, {
+                'username': config['username'],
+                'password': config['password']
+            }
+        )
+        lines = res.split('\n')
+        header = lines.pop(0)
+
         cnxn = pyodbc.connect(query['connection_string'], autocommit=True)
         conn = cnxn.cursor()
 
         for line in lines:
-            # some special cases for strange DOQL responses ( that may break database such as MySQL)
+            # some special cases for strange DOQL responses ( that may break database such as MySQL )
             if len(line) > 0:
                 if '",' in line:
                     line = line.replace(',', '__comma__')
@@ -169,6 +212,6 @@ if __name__ == "__main__":
         print 'Please use "python starter.py query.json".'
         sys.exit()
 
-    retval = main()
+    main()
     print 'Done!'
-    sys.exit(retval)
+    sys.exit()
