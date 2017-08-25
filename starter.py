@@ -110,10 +110,10 @@ def doql_call(config, query):
                 csv_list, field_order = get_list_from_csv(res)
 
                 if query['output_format'] == 'csv':
-                    file = open('%s_%s_%s.csv' % (query['output_filename'], time.strftime("%Y%m%d%H%M%S"), page), 'w+')
+                    file = open('%s_%s_%s.csv' % (query['output_filename'], time.strftime("%Y%m%d%H%M%S"), page + 1 ), 'w+')
                     file.write(res)
                 elif query['output_format'] == 'json':
-                    file = open('%s_%s_%s.json' % (query['output_filename'], time.strftime("%Y%m%d%H%M%S"), page), 'w+')
+                    file = open('%s_%s_%s.json' % (query['output_filename'], time.strftime("%Y%m%d%H%M%S"), page + 1), 'w+')
                     file.write(json.dumps(csv_list, indent=4, sort_keys=True))
 
                 if doql_limit != query['offset'] or len(csv_list) != query['offset'] or (doql_offset + doql_limit) == query['limit'] :
