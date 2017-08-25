@@ -107,17 +107,16 @@ def doql_call(config, query):
                         'password': config['password']
                     }
                 )
-                lines = res.split('\n')
+                csv_list, field_order = get_list_from_csv(res)
 
                 if query['output_format'] == 'csv':
                     file = open('%s_%s_%s.csv' % (query['output_filename'], time.strftime("%Y%m%d%H%M%S"), page), 'w+')
-                    file.write('\n'.join(lines))
+                    file.write(res)
                 elif query['output_format'] == 'json':
-                    csv_list, field_order = get_list_from_csv('\n'.join(lines))
                     file = open('%s_%s_%s.json' % (query['output_filename'], time.strftime("%Y%m%d%H%M%S"), page), 'w+')
                     file.write(json.dumps(csv_list, indent=4, sort_keys=True))
 
-                if doql_limit != query['offset'] or (len(lines) - 2) != query['offset'] or (doql_offset + doql_limit) == query['limit'] :
+                if doql_limit != query['offset'] or len(csv_list) != query['offset'] or (doql_offset + doql_limit) == query['limit'] :
                     break
 
                 page += 1
@@ -135,13 +134,13 @@ def doql_call(config, query):
                     'password': config['password']
                 }
             )
-            lines = res.split('\n')
+            csv_list, field_order = get_list_from_csv(res)
 
             if query['output_format'] == 'csv':
                 file = open('%s_%s.csv' % (query['output_filename'], time.strftime("%Y%m%d%H%M%S")), 'w+')
                 file.write(res)
             elif query['output_format'] == 'json':
-                csv_list, field_order = get_list_from_csv('\n'.join(lines))
+                csv_list, field_order = get_list_from_csv(res)
                 file = open('%s_%s.json' % (query['output_filename'], time.strftime("%Y%m%d%H%M%S")), 'w+')
                 file.write(json.dumps(csv_list, indent=4, sort_keys=True))
 
@@ -160,32 +159,17 @@ def doql_call(config, query):
                 'password': config['password']
             }
         )
-        lines = res.split('\n')
-        header = lines.pop(0)
+        csv_list, field_order = get_list_from_csv(res)
 
         cnxn = pyodbc.connect(query['connection_string'], autocommit=True)
         conn = cnxn.cursor()
 
-        for line in lines:
+        for record in csv_list:
             # some special cases for strange DOQL responses ( that may break database such as MySQL )
-            if len(line) > 0:
-                if '",' in line:
-                    line = line.replace(',', '__comma__')
-                    line = line.replace('"__comma__', '",')
-                if ',"' in line:
-                    line = line.replace(',', '__comma__')
-                    line = line.replace('__comma__"', ',"')
-                if '","' in line:
-                    line = line.replace(',', '__comma__')
-                    line = line.replace('"__comma__"', '","')
+            query_str = "INSERT INTO %s (%s) VALUES (%s)" % (query['table'], ','.join(field_order), ','.join([str("'%s'" % record[x][:-1].replace("'", "\\'")) if record[x].endswith('\\') else str("'%s'" % record[x].replace("'", "\\'")) for x in record]))
+            conn.execute(query_str)
 
-                line = line.replace('\,', ',')
-                if line.endswith('\\'):
-                    line = line[:-1]
-                query_str = "INSERT INTO %s (%s) VALUES (%s)" % (query['table'], header, ",".join(["'%s'" % x.replace('__comma__', ',').replace("'", "\\'") for x in line.split(',')]))
-                conn.execute(query_str)
-
-        print("Added %s records" % len(lines))
+        print("Added %s records" % len(csv_list))
 
         conn.close()
 
