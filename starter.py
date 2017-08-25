@@ -139,7 +139,7 @@ def doql_call(config, query):
 
             if query['output_format'] == 'csv':
                 file = open('%s_%s.csv' % (query['output_filename'], time.strftime("%Y%m%d%H%M%S")), 'w+')
-                file.write(csv)
+                file.write(res)
             elif query['output_format'] == 'json':
                 csv_list, field_order = get_list_from_csv('\n'.join(lines))
                 file = open('%s_%s.json' % (query['output_filename'], time.strftime("%Y%m%d%H%M%S")), 'w+')
