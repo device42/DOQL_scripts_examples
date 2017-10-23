@@ -1,7 +1,7 @@
 [Device42](http://www.device42.com/) is a Continuous Discovery software for your IT Infrastructure. It helps you automatically maintain an up-to-date inventory of your physical, virtual, and cloud servers and containers, network components, software/services/applications, and their inter-relationships and inter-dependencies.
 
 
-This repository contains scripts that helps you create CSV or JSON files from DOQL queries. It also contains an example folder with some complex queries.
+This repository contains scripts that helps you create CSV, JSON files or send data direct to the database from DOQL queries. It also contains an example folder with some complex queries.
 
 
 ### Device42 DOQL to JSON/CSV file
