@@ -6,10 +6,7 @@ import sys
 import csv
 import json
 import time
-import urllib
-import urllib2
 import base64
-import StringIO
 
 from datetime import datetime
 from datetime import timedelta
@@ -19,8 +16,22 @@ try:
 except ImportError:
     pass
 
-reload(sys)  
-sys.setdefaultencoding('utf8')
+# PYTHON 2 FALLBACK #
+
+try:
+    from urllib.request import urlopen, Request
+    from urllib.parse import urlencode
+    from io import StringIO
+    python = 3
+except ImportError:
+    from urllib import urlencode
+    from urllib2 import urlopen, Request
+    from StringIO import StringIO
+    reload(sys)  
+    sys.setdefaultencoding('utf8')
+    python = 2
+
+# PYTHON 2 FALLBACK #
 
 ctx = ssl.create_default_context()
 ctx.check_hostname = False
@@ -32,31 +43,44 @@ _debug = True
 
 def _post(url, query, options):
 
-    request = urllib2.Request(url, urllib.urlencode({
-        "query": query,
-        "header": "yes"
-    }))
-    base64string = base64.b64encode('%s:%s' % (options['username'], options['password']))
-    request.add_header("Authorization", "Basic %s" % base64string)
+    # PYTHON 2 FALLBACK #
+
+    if python == 3:
+        base64string = base64.b64encode(bytes('%s:%s' % (options['username'], options['password']), 'utf-8'))
+        post_data = bytes(urlencode({
+            "query": query,
+            "header": "yes"
+        }), 'utf-8')
+    else:
+        base64string = base64.b64encode('%s:%s' % (options['username'], options['password']))
+        post_data = urlencode({
+            "query": query,
+            "header": "yes"
+        })
+
+    # PYTHON 2 FALLBACK #
+
+    request = Request(url, post_data)
+    request.add_header("Authorization", "Basic %s" % base64string.decode("utf-8"))
     request.get_method = lambda: 'POST'
-    r = urllib2.urlopen(request, context=ctx)
+    r = urlopen(request, context=ctx)
     body = r.read()
     r.close()
 
     if _debug:
         msg = 'Status code: %s' % str(r.code)
 
-        print '\n\t----------- POST FUNCTION -----------'
-        print '\t' + url
-        print '\t' + msg
-        print '\tQuery: ' + query
-        print '\t------- END OF POST FUNCTION -------\n'
+        print('\n\t----------- POST FUNCTION -----------')
+        print('\t' + url)
+        print('\t' + msg)
+        print('\tQuery: ' + query)
+        print('\t------- END OF POST FUNCTION -------\n')
 
     return body
 
 
 def get_list_from_csv(text):
-    f = StringIO.StringIO(text)
+    f = StringIO(text.decode("utf-8"))
     list_ = []
     dict_reader = csv.DictReader(f, quotechar='"', delimiter=',', quoting=csv.QUOTE_ALL, skipinitialspace=True, dialect='excel')
     for item in dict_reader:
@@ -111,7 +135,7 @@ def doql_call(config, query):
 
                 if query['output_format'] == 'csv':
                     file = open('%s_%s_%s.csv' % (query['output_filename'], time.strftime("%Y%m%d%H%M%S"), page + 1 ), 'w+')
-                    file.write(res)
+                    file.write(res.decode("utf-8"))
                 elif query['output_format'] == 'json':
                     file = open('%s_%s_%s.json' % (query['output_filename'], time.strftime("%Y%m%d%H%M%S"), page + 1), 'w+')
                     file.write(json.dumps(csv_list, indent=4, sort_keys=True))
@@ -179,23 +203,23 @@ def main():
         with open('settings.json') as data_file:
             config = json.load(data_file)
     except IOError:
-        print 'File "settings.json" doesn\'t exists.'
+        print('File "settings.json" doesn\'t exists.')
         sys.exit()
 
     try:
         with open(sys.argv[1]) as data_file:
             query = json.loads(data_file.read().replace('\n', '').replace("  ", ' '))
     except IOError:
-        print 'File "%s" doesn\'t exists.' % sys.argv[1]
+        print('File "%s" doesn\'t exists.' % sys.argv[1])
         sys.exit()
     doql_call(config, query)
 
 if __name__ == "__main__":
 
     if len(sys.argv) < 2:
-        print 'Please use "python starter.py query.json".'
+        print('Please use "python starter.py query.json".')
         sys.exit()
 
     main()
-    print 'Done!'
+    print('Done!')
     sys.exit()
