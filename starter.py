@@ -172,30 +172,73 @@ def doql_call(config, query):
 
     elif query['output_format'] == 'database':
 
-        if query['limit']:
-            doql_query = query['query'] + ' LIMIT %s ' % query['limit']
+        if query['offset']:
+            page = 0
+            _next = True
+            while _next:
+
+                doql_offset = page * query['offset']
+                doql_limit = query['offset']
+
+                if query['limit'] and query['limit'] > query['offset']:
+                    if (doql_offset + query['offset']) > query['limit']:
+                        doql_limit = query['limit'] - doql_offset
+                else:
+                    if query['limit']:
+                        doql_limit = query['limit']
+
+                doql_query = query['query'] + ' LIMIT %s OFFSET %s' % (doql_limit, doql_offset)
+
+                res = _post(
+                    'https://%s/services/data/v1.0/query/' % config['host'], doql_query, {
+                        'username': config['username'],
+                        'password': config['password']
+                    }
+                )
+                csv_list, field_order = get_list_from_csv(res)
+
+                cnxn = pyodbc.connect(query['connection_string'], autocommit=True)
+                conn = cnxn.cursor()
+
+                for record in csv_list:
+                    # some special cases for strange DOQL responses ( that may break database such as MySQL )
+                    query_str = "INSERT INTO %s (%s) VALUES (%s)" % (query['table'], ','.join(field_order), ','.join([str("'%s'" % record[x][:-1].replace("'", "\\'")) if record[x].endswith('\\') else str("'%s'" % record[x].replace("'", "\\'")) for x in record]))
+                    conn.execute(query_str)
+
+                print("Added %s records" % len(csv_list))
+
+                if doql_limit != query['offset'] or len(csv_list) != query['offset'] or (doql_offset + doql_limit) == query['limit'] :
+                    conn.close()
+                    break
+
+                page += 1
+
         else:
-            doql_query = query['query']
 
-        res = _post(
-            'https://%s/services/data/v1.0/query/' % config['host'], doql_query, {
-                'username': config['username'],
-                'password': config['password']
-            }
-        )
-        csv_list, field_order = get_list_from_csv(res)
+            if query['limit']:
+                doql_query = query['query'] + ' LIMIT %s ' % query['limit']
+            else:
+                doql_query = query['query']
 
-        cnxn = pyodbc.connect(query['connection_string'], autocommit=True)
-        conn = cnxn.cursor()
+            res = _post(
+                'https://%s/services/data/v1.0/query/' % config['host'], doql_query, {
+                    'username': config['username'],
+                    'password': config['password']
+                }
+            )
+            csv_list, field_order = get_list_from_csv(res)
 
-        for record in csv_list:
-            # some special cases for strange DOQL responses ( that may break database such as MySQL )
-            query_str = "INSERT INTO %s (%s) VALUES (%s)" % (query['table'], ','.join(field_order), ','.join([str("'%s'" % record[x][:-1].replace("'", "\\'")) if record[x].endswith('\\') else str("'%s'" % record[x].replace("'", "\\'")) for x in record]))
-            conn.execute(query_str)
+            cnxn = pyodbc.connect(query['connection_string'], autocommit=True)
+            conn = cnxn.cursor()
 
-        print("Added %s records" % len(csv_list))
+            for record in csv_list:
+                # some special cases for strange DOQL responses ( that may break database such as MySQL )
+                query_str = "INSERT INTO %s (%s) VALUES (%s)" % (query['table'], ','.join(field_order), ','.join([str("'%s'" % record[x][:-1].replace("'", "\\'")) if record[x].endswith('\\') else str("'%s'" % record[x].replace("'", "\\'")) for x in record]))
+                conn.execute(query_str)
 
-        conn.close()
+            print("Added %s records" % len(csv_list))
+
+            conn.close()
 
 
 def main():
