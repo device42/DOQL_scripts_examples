@@ -1,0 +1,48 @@
+{
+  "output_filename": "reports/Service_Dependency_Report",
+  "output_format": "csv",
+  "description": "Service Dependency Report",
+  "query": "select
+    dev.device_pk device_id,
+    dev.name device_name,
+    spip.ip listener_ip,
+    srv.displayname Display_Name,
+    srv.service_name listener_service,
+    sp.port listener_port,
+    os.name listener_os,
+    coalesce(cdev.name, 'N/A') client_name,
+    sprip.ip client_ip,
+    sn.name client_subnet_name,
+    host(sn.network) || '/' || sn.mask_bits client_subnet,
+    csrv.service_name client_service,
+    csrv.displayname client_service_display,
+    csrv.name client_service_name,
+    cos.name client_os,
+    sprips.total_client_connections_detected
+  from view_serviceport_v1 sp
+  join view_serviceportip_v1 spip on spip.serviceport_fk = sp.serviceport_pk
+  join view_serviceportremoteip_v1 sprip on sprip.serviceportip_fk = spip.serviceportip_pk
+  join view_device_v1 dev on dev.device_pk = sp.device_fk
+  join view_serviceinstance_v1 sd on sd.serviceinstance_pk = spip.mapped_serviceinstance_fk
+  join view_service_v1 srv on srv.service_pk = sd.service_fk
+  left join view_os_v1 os on os.os_pk = dev.os_fk
+  left join view_hardware_v1 hdw on hdw.hardware_pk = dev.hardware_fk
+  left join view_ipaddress_v1 ip on ip.ip_address = sprip.ip or case when family(ip.ip_address) = 4 then host(('::ffff:' || ip.ip_address::text)::inet)::inet else null end = sprip.ip
+  left join view_subnet_v1 sn on sn.subnet_pk = ip.subnet_fk
+  left join view_device_v1 cdev on cdev.device_pk = ip.device_fk
+  left join view_os_v1 cos on cos.os_pk = cdev.os_fk
+  left join view_hardware_v1 chdw on chdw.hardware_pk = cdev.hardware_fk
+  left join view_serviceport_v1 csp on csp.device_fk = cdev.device_pk and csp.port = sp.port
+  left join view_serviceportip_v1 cspip on cspip.serviceport_fk = csp.serviceport_pk and cspip.is_listening = 'f'
+  left join view_serviceinstance_v1 csd on csd.serviceinstance_pk = cspip.mapped_serviceinstance_fk
+  left join view_service_v1 csrv on csrv.service_pk = csd.service_fk
+  left join view_serviceportremoteipstats_v1 sprips on sprips.serviceportremoteip_fk = sprip.serviceportremoteip_pk
+  where cdev.name <> '' and spip.is_listening = 't' and srv.service_type <> 'ignored' and sprip.ip <> '127.0.0.1' and sprip.ip <> '::1' and sprip.ip <> '0.0.0.0' and (csrv.service_type is null or csrv.service_type <> 'ignored') and sprips.total_client_connections_detected > 0
+  order by dev.device_pk",
+  "limit": null,
+  "offset": 1048000,
+  "date": {  
+    "column": null,
+    "days_limit": null
+  }
+}

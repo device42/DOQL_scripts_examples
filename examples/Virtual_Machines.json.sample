@@ -1,0 +1,46 @@
+{
+  "output_filename": "reports/Virtual_Machines_Report",
+  "output_format": "csv",
+  "description": "Virtual Machines Report",
+  "query": "select
+    h.device_pk Hypervisor_DeviceID,
+    h.name Hypervisor_DeviceName,
+    h.os_name Hypervisor_os_name,
+    h.os_version Hypervisor_os_version,
+    h.os_version_no Hypervisor_os_version_no,
+    h.cpucount Hypervisor_cpucount,
+    h.cpucore Hypervisor_cpucore,
+    h.cpupower Hypervisor_cpupower,
+    h.hz_id Hypervisor_hz_id,
+    h.hz Hypervisor_hz,
+    h.ram Hypervisor_ram,
+    h.ram_size_type Hypervisor_ram_size_type,
+    h.datastores Hypervisor_datastores,
+    g.device_pk Guest_DeviceID,
+    g.name Guest_Name,
+    g.os_name Guest_os_name,
+    g.os_arch Guest_os_arch,
+    g.os_version Guest_os_version,
+    g.os_version_no Guest_os_version_no,
+    g.dn Guest_Domain_Name,
+    g.cpucount Guest_cpucount,
+    g.cpucore Guest_cpucore,
+    g.cpupower Guest_cpupower,
+    g.hz_id Guest_hz_id,
+    g.hz Guest_hz,
+    g.ram Guest_ram,
+    g.ram_size_type Guest_ram_size_type,
+    g.hard_disk_count Guest_hard_disk_count,
+    case when cd.device_pk is null then 'N' else 'Y' end Guest_Clustered,
+    cd.name Cluster_Name
+    from view_device_v1 g
+    join view_device_v1 h on h.device_pk = g.virtual_host_device_fk
+    left join view_devices_in_cluster_v1 c on c.child_device_fk = g.device_pk
+    left join view_device_v1 cd on cd.device_pk = c.parent_device_fk where g.type_id = '3'",
+  "limit": null,
+  "offset": 1048000,
+  "date": {  
+    "column": null,
+    "days_limit": null
+  }
+}

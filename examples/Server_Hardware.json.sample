@@ -1,0 +1,47 @@
+{
+  "output_filename": "reports/Server_Hardware_Report",
+  "output_format": "csv",
+  "description": "Server Hardware Report",
+  "query": "select 
+  a.last_edited,
+  a.device_pk,
+  a.name,
+  a.serial_no,
+  v.name Hardware_Vendor,
+  h.name Hardware_Model,
+  a.os_name,
+  a.os_arch,
+  a.os_version,
+  a.os_version_no,
+  a.cpucount,
+  a.cpucore,
+  a.cpupower,
+  a.hz_id,
+  a.hz,
+  a.ram,
+  a.ram_size_type,
+  bios_version,
+  bios_revision,
+  bios_release_date,
+  l.start_date,
+  l.end_date,
+  l.contract_id,
+  l.contract_type_name,
+  l.service_type_name,
+  l.start_date Support_Contract_Start,
+  l.end_date Support_Contract_End,
+  h.end_of_life,
+  h.end_of_support
+  from view_device_v1 a 
+  left join view_hardware_v1 h on a.hardware_fk = h.hardware_pk
+  left join view_vendor_v1 v on h.vendor_fk = v.vendor_pk
+  left join view_purchase_v1 p on v.vendor_pk = p.vendor_fk
+  left join view_purchaselineitem_v1 l on p.purchase_pk = l.purchase_fk
+  order by a.last_edited desc",
+  "limit": null,
+  "offset": 1048000,
+  "date": {  
+    "column": null,
+    "days_limit": null
+  }
+}

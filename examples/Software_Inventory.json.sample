@@ -1,0 +1,21 @@
+{
+  "output_filename": "reports/Software_Inventory",
+  "output_format": "csv",
+  "description": "Software Inventory",
+  "query": "select 
+  d.device_pk device_id,
+  d.name device_name, 
+  s.name software_name, 
+  sd.version from view_softwareinuse_v1 sd 
+  join view_software_v1 s on s.software_pk = sd.software_fk 
+  left join view_softwarelicensekey_v1 sk on sk.softwarelicensekey_pk = sd.softwarelicensekey_fk 
+  left join view_device_v1 d on d.device_pk = sd.device_fk 
+  left join view_enduser_v1 e on e.enduser_pk = sd.enduser_fk
+  order by d.device_pk",
+  "limit": null,
+  "offset": 1048000,
+  "date": {  
+    "column": null,
+    "days_limit": null
+  }
+}

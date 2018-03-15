@@ -1,0 +1,36 @@
+{
+  "output_filename": "reports/Service_Schedules_Report",
+  "output_format": "csv",
+  "description": "Service Schedules Report",
+  "query": "select
+  d.device_pk Device_ID,
+  d.name device_name,
+  ss.caption,
+  ss.arguments,
+  ss.description,
+  ss.status,
+  ss.install_date,
+  ss.at_logon,
+  ss.at_start_up,
+  ss.event_based,
+  ss.idle_time,
+  ss.other_trigger,
+  ss.other_type,
+  ss.minutes,
+  ss.hours,
+  ss.days,
+  ss.weeks,
+  ss.days_of_month,
+  ss.month_of_year,
+  ss.day_of_week
+  from view_serviceschedule_v1 ss 
+  left join view_serviceinstance_v1 si on si.serviceinstance_pk = ss.serviceinstance_fk
+  left join view_device_v1 d on si.device_fk = d.device_pk
+  order by ss.serviceinstance_fk",
+  "limit": null,
+  "offset": 1048000,
+  "date": {  
+    "column": null,
+    "days_limit": null
+  }
+}

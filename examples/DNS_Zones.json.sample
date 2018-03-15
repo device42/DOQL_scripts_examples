@@ -1,0 +1,21 @@
+{
+  "output_filename": "reports/DNS_Zones",
+  "output_format": "csv",
+  "description": "DNS Zones",
+  "query": "select
+  z.name Zone_Name,
+  d.name Record_Name,
+  d.type,
+  d.content,
+  d.ttl,
+  d.date_added,
+  d.date_updated
+  from view_dnsrecords_v1 d 
+  left join view_dnszone_v1 z on d.dnszone_fk = z.dnszone_pk",
+  "limit": 100,
+  "offset": 1048000,
+  "date": {  
+    "column": null,
+    "days_limit": null
+  }
+}

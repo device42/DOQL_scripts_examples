@@ -1,0 +1,27 @@
+{
+  "output_filename": "reports/Disk_Usage_Report",
+  "output_format": "csv",
+  "description": "Disk Usage Report",
+  "query": "select 
+  a.last_edited Last_Update,
+  a.device_pk Device_ID, 
+  a.name Device_name, 
+  a.type Hardware_Type, 
+  a.virtual_subtype Virtual_Subtype, 
+  a.os_name OS_Name, 
+  a.os_version OS_Version_No, 
+  c.label Disk_Label, 
+  c.filesystem File_System, 
+  c.fstype_name File_System_Type, 
+  c.capacity Volume_Capacity_in_MB, 
+  c.free_capacity Free_Space_in_MB, 
+  (c.capacity - c.free_capacity) Used_Space_in_MB from view_device_v1 a 
+  left join view_mountpoint_v1 c on c.device_fk = a.device_pk where c.capacity>0
+  order by a.device_pk",
+  "limit": 100,
+  "offset": 1048000,
+  "date": {  
+    "column": null,
+    "days_limit": null
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "output_filename": "reports/Device_Shares_Report",
+  "output_format": "csv",
+  "description": "Device Shares Report",
+  "query": "select
+  d.device_pk device_id, d.name device_name, 
+          ns.name share_name, ns.path, ns.caption, ns.description, ns.type
+          from view_device_v1 d
+          left join view_networkshare_v1 ns on ns.device_fk = d.device_pk
+          order by d.device_pk",
+  "limit": null,
+  "offset": 1048000,
+  "date": {  
+    "column": null,
+    "days_limit": null
+  }
+}

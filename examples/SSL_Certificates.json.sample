@@ -1,0 +1,58 @@
+{
+  "output_filename": "reports/Certificate_Report",
+  "output_format": "csv",
+  "description": "Certificate Report",
+  "query": "with ciphers as (
+    select
+        devicecertificate_pk,
+        certificate_fk,
+        device_pk,
+        devicename,
+        ssl_version,
+        replace(cipher::varchar, '"', '') cipher
+    from
+    (
+        select
+            devicecertificate_pk,
+            certificate_fk,
+            device_pk,
+            devicename,
+            (avals(hstore(cipher_suite)))[1] as ssl_version,
+            --((avals(hstore(cipher_suite)))[2]::varchar)
+            json_array_elements(replace(replace(replace((avals(hstore(cipher_suite)))[2]::varchar, '\\\"', '^'), '"', ''), '^', '"')::json) cipher
+        from (
+            select
+            dc.devicecertificate_pk,
+            dc.certificate_fk,
+            d.device_pk,
+            d.name devicename,
+            json_each(
+            dc.cipher_suites::json) cipher_suite 
+            from 
+                view_devicecertificate_v1 dc
+                join view_device_v1 d on d.device_pk = dc.device_fk
+        ) t
+    ) c
+)
+select 
+  c.certificate_pk,
+  c.issued_to,
+  dc.device_pk,
+  dc.devicename,
+  dc.ssl_version,
+  dc.cipher,
+  c.parent_certificate_fk,
+  c.valid_to expiration_date,
+  c.version ssl_version,
+  c.serial_number,
+  c.subject
+from 
+  view_certificate_v1 c
+  left join ciphers dc on dc.certificate_fk = c.certificate_pk",
+  "limit": null,
+  "offset": 1048000,
+  "date": {  
+    "column": null,
+    "days_limit": null
+  }
+}
