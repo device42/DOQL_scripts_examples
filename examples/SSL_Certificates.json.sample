@@ -9,7 +9,7 @@
         device_pk,
         devicename,
         ssl_version,
-        replace(cipher::varchar, '"', '') cipher
+        replace(cipher::varchar, '\"', '') cipher
     from
     (
         select
@@ -18,8 +18,7 @@
             device_pk,
             devicename,
             (avals(hstore(cipher_suite)))[1] as ssl_version,
-            --((avals(hstore(cipher_suite)))[2]::varchar)
-            json_array_elements(replace(replace(replace((avals(hstore(cipher_suite)))[2]::varchar, '\\\"', '^'), '"', ''), '^', '"')::json) cipher
+            json_array_elements(replace(replace(replace((avals(hstore(cipher_suite)))[2]::varchar, '\\\"', '^'), '\"', ''), '^', '\"')::json) cipher
         from (
             select
             dc.devicecertificate_pk,
@@ -45,9 +44,9 @@ select
   c.valid_to expiration_date,
   c.version ssl_version,
   c.serial_number,
-  c.subject
+  c.subject 
 from 
-  view_certificate_v1 c
+  view_certificate_v1 c 
   left join ciphers dc on dc.certificate_fk = c.certificate_pk",
   "limit": null,
   "offset": 1048000,
