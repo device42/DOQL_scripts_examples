@@ -18,7 +18,7 @@
             device_pk,
             devicename,
             (avals(hstore(cipher_suite)))[1] as ssl_version,
-            json_array_elements(replace(replace(replace((avals(hstore(cipher_suite)))[2]::varchar, '\\\"', '^'), '\"', ''), '^', '\"')::json) cipher
+            json_array_elements(replace(replace(replace((avals(hstore(cipher_suite)))[2]::varchar, '\\\\\\\"', '^'), '\"', ''), '^', '\"')::json) cipher
         from (
             select
             dc.devicecertificate_pk,
