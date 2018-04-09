@@ -1,0 +1,39 @@
+{
+  "output_filename": "reports/Databases_Report",
+  "output_format": "csv",
+  "description": "Databases Report",
+  "query": "SELECT xy.name, xy.instance, xy.data_path, xy.version,
+            d.os_name, d.os_version, d.os_arch, d.cpucount, d.cpucore, d.cpupower, d.ram
+            FROM (
+                SELECT device_fk, name,
+                service->>'instance' AS instance,
+                service->>'data_path' AS data_path,
+                service->>'version' AS version
+                FROM (
+                    SELECT device_fk, name, json_array_elements(json::json->'services') AS service
+                    FROM view_appcomp_v1
+                    WHERE json_array_length(json::json->'services') > 0
+                ) AS x
+                WHERE service->>'instance' <> ''
+                UNION
+                SELECT device_fk, name,
+                trim('\"' FROM instance::text),
+                replace(trim('\"' FROM data_path::text), '\\\\', '\\'),
+                trim('\"' FROM (version->'version')::text )
+                FROM (
+                    SELECT device_fk, name, json_array_elements(json::json->'instances') AS instance,
+                    json_array_elements(json::json->'data_paths') AS data_path,
+                    json_array_elements(json::json->'products') AS version
+                    FROM view_appcomp_v1
+                    WHERE json_array_length(json::json->'instances') > 0
+                    ) AS y
+                ) AS xy
+            LEFT JOIN view_device_v1 AS d
+             ON d.device_pk = xy.device_fk",
+  "limit": null,
+  "offset": 1048000,
+  "date": {
+    "column": null,
+    "days_limit": null
+  }
+}
