@@ -27,7 +27,7 @@ except ImportError:
     from urllib import urlencode
     from urllib2 import urlopen, Request
     from StringIO import StringIO
-    reload(sys)  
+    reload(sys)
     sys.setdefaultencoding('utf8')
     python = 2
 
@@ -92,7 +92,7 @@ def get_list_from_csv(text):
 def doql_call(config, query):
 
     limit = 0
-    query['query'] = ' '.join(query['query'].split()).lower()
+    query['query'] = ' '.join(query['query'].split())
 
     # prepare date-filtered query
     if query['date'] and query['date']['column'] and query['date']['days_limit']:
