@@ -11,7 +11,6 @@
       d.asset_no \"UNIQUE ASSET IDENTIFIER\",
       d.virtual_host \"Virtual\",
       null \"Public\",
-      (select string_agg(f.\"URL\", ', ') from view_device_custom_fields_flat_v1 f where f.device_fk = d.device_pk) \"URL\",
       null \"NetBIOS Name\",
       null \"MAC Address\",
       null \"Authenticated Scan\",
