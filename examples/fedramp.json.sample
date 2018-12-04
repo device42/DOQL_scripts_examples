@@ -32,14 +32,14 @@
       null \"Administrator/ Owner\",
       null \"Application Administrator/ Owner\"
   from
-      view_appcomp_v1 a
-      join view_device_v1 d on d.device_pk = a.device_fk
-      join view_softwareinuse_v1 su on su.device_fk = d.device_pk
+      view_device_v1 d
+      left join view_appcomp_v1 a on a.device_fk = d.device_pk
+      left join view_softwareinuse_v1 su on su.device_fk = d.device_pk
                                    and su.appcomp_fk = a.appcomp_pk
-      join view_software_v1 s on s.software_pk = su.software_fk
-      join view_serviceinstance_v1 si on si.device_fk = d.device_pk
+      left join view_software_v1 s on s.software_pk = su.software_fk
+      left join view_serviceinstance_v1 si on si.device_fk = d.device_pk
                                       and si.appcomp_fk = a.appcomp_pk
-      join view_serviceportip_v1 sip on sip.mapped_serviceinstance_fk = si.serviceinstance_pk
+      left join view_serviceportip_v1 sip on sip.mapped_serviceinstance_fk = si.serviceinstance_pk
       left join view_room_v1 r on r.room_pk = d.calculated_room_fk
       left join view_vendor_v1 v on v.vendor_pk = s.vendor_fk
       left join view_ipaddress_v1 ip on ip.ip_address = sip.ip or case when family(ip.ip_address) = 4 then host(('::ffff:' || ip.ip_address::text)::inet)::inet else null end = sip.ip
