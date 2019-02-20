@@ -5,16 +5,15 @@
   "query": "select
     dev.device_pk,
     dev.name client_name,
-    host(sn.network) || '/' || sn.mask_bits client_subnet,
-    sn.name _client_subnet_name,
+    host(sn.network) || '/' || sn.mask_bits subnet,
+    sn.name subnet_name,
     spip.ip client_ip,
-    srv.displayname client_app_display_name,
-    srv.name client_app_name,
     srv.service_name client_service,
-    coalesce(ldev.name, 'N/A') dst_listner_name,
-    sprip.ip dst_listner_ip,
-    coalesce(csp.port, sp.port) dst_listner_port,
-    coalesce(csrv.service_name, 'N/A') dst_listner_service,
+    sp.port client_port,
+    coalesce(ldev.name, 'N/A') listner_name,
+    sprip.ip listner_ip,
+    coalesce(csp.port, sp.port) listner_port,
+    coalesce(csrv.service_name, 'N/A') listner_service,
     sprips.total_client_connections_detected
   from view_serviceport_v1 sp
   join view_serviceportip_v1 spip on spip.serviceport_fk = sp.serviceport_pk
@@ -22,7 +21,7 @@
   join view_device_v1 dev on dev.device_pk = sp.device_fk
   join view_serviceinstance_v1 sd on sd.serviceinstance_pk = spip.mapped_serviceinstance_fk
   join view_service_v1 srv on srv.service_pk = sd.service_fk
-  join view_ipaddress_v1 ip on ip.ip_address = sprip.ip
+  left outer join view_ipaddress_v1 ip on ip.ip_address = sprip.ip or case when family(ip.ip_address) = 4 then host(('::ffff:' || ip.ip_address::text)::inet)::inet else null end = sprip.ip
   left join view_subnet_v1 sn on sn.subnet_pk = ip.subnet_fk
   left join view_device_v1 ldev on ldev.device_pk = ip.device_fk
   left join view_serviceport_v1 csp on csp.device_fk = ldev.device_pk and csp.port = sp.port
@@ -30,10 +29,10 @@
   left join view_serviceinstance_v1 csd on csd.serviceinstance_pk = cspip.mapped_serviceinstance_fk
   left join view_service_v1 csrv on csrv.service_pk = csd.service_fk
   left join view_serviceportremoteipstats_v1 sprips on sprips.serviceportremoteip_fk = sprip.serviceportremoteip_pk
-  where spip.is_listening = 'f' and srv.service_type <> 'ignored' and (csrv.service_type is null or csrv.service_type <> 'ignored') and sprips.total_client_connections_detected is not null and sprips.total_client_connections_detected <> '0' and family(ip.ip_address) = 4
-  order by dev.device_pk asc",
+  where spip.is_listening = 'f' and srv.service_type <> 'ignored' and (csrv.service_type is null or csrv.service_type <> 'ignored')
+  order by sprip.serviceportremoteip_pk",
   "limit": null,
-  "offset": 1048000,
+  "offset": null,
   "date": {  
     "column": null,
     "days_limit": null
