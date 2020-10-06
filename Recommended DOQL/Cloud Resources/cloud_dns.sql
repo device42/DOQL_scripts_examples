@@ -18,7 +18,7 @@ Select
     ,dz.vrfgroup_fk
  From view_dnszone_v1 dz 
  Join view_cloudinfrastructure_v2 ci on ci.cloudinfrastructure_pk = dz.cloudinfrastructure_fk 	
- )
+ ) 	
 Select 
     tzc."Cloud Infrastructure Name"
     ,tzc."Account ID"

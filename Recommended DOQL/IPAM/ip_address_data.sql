@@ -1,3 +1,9 @@
+/*
+ - Name: IP Address Data
+ - Purpose: Query for all IP Addresses
+ - Date Created: 10/01/20
+ - Changes:
+*/
 Select
    ip.ip_address "IP Address",
    ip.label "IP Address Label",

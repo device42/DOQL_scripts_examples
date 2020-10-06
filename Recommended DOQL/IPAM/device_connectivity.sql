@@ -1,3 +1,9 @@
+/*
+ - Name: Device Connectivity
+ - Purpose: Query that exports the current devices with connections.
+ - Date Created: 10/01/20
+ - Changes:
+*/
 select
     d.name "Device Name",
     hp.hwaddress "Host MAC Address",

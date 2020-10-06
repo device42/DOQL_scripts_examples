@@ -1,3 +1,9 @@
+/*
+ - Name: parts
+ - Purpose: Query that exports the current parts inventory.
+ - Date Created: 10/01/20
+ - Changes:
+*/
 SELECT
 p.pcount "Count",
 pm.name "Part Model",

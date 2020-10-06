@@ -1,3 +1,9 @@
+    /*
+ - Name: All Devices
+ - Purpose: An extensive query to report on all devices and majority of related objects/attributes.
+ - Date Created: 10/01/20
+ - Changes:
+*/
     select
         d.last_edited "Last_Discovered",
         d.name "Device_Name",
