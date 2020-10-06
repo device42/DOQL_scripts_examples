@@ -1,0 +1,215 @@
+<?xml version="1.0"?>
+<DashboardReport xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ParameterPrompts />
+  <FilterPrompts />
+  <Layout>
+    <EmptyItems />
+    <TextItems />
+    <AdvancedReportItems>
+      <DashboardAdvancedReportItem>
+        <Id>1589351135</Id>
+        <Bounds>
+          <height>0.33870967741935482</height>
+          <width>0.51086956521739124</width>
+          <top>0.016120999965697</top>
+          <left>0.010869182009896445</left>
+        </Bounds>
+        <Format>
+          <Title>Dashboards/Dashboard - IPs Association Count</Title>
+          <ShowTitleOnOutput>false</ShowTitleOnOutput>
+          <TileFit>All</TileFit>
+          <TitleFont>Arial</TitleFont>
+          <TitleFontSize>14</TitleFontSize>
+          <TitleFontColor>#545454</TitleFontColor>
+          <TitleFontWeight>Normal</TitleFontWeight>
+          <TitleHorizontalAlign>Center</TitleHorizontalAlign>
+          <TitleUnderline>None</TitleUnderline>
+          <HasTileBackground>true</HasTileBackground>
+          <TileBackgroundColor>#FFFFFF</TileBackgroundColor>
+          <TileBackgroundOpacity>100</TileBackgroundOpacity>
+          <HasTileTitleBackground>true</HasTileTitleBackground>
+          <TileTitleBackgroundColor>#FFFFFF</TileTitleBackgroundColor>
+          <TileTitleBackgroundOpacity>100</TileTitleBackgroundOpacity>
+          <Borders>
+            <UniformBorders>true</UniformBorders>
+            <TopBorderColor>#d7d7d7</TopBorderColor>
+            <TopBorderWeight>0</TopBorderWeight>
+            <BottomBorderColor>#d7d7d7</BottomBorderColor>
+            <BottomBorderWeight>0</BottomBorderWeight>
+            <LeftBorderColor>#d7d7d7</LeftBorderColor>
+            <LeftBorderWeight>0</LeftBorderWeight>
+            <RightBorderColor>#d7d7d7</RightBorderColor>
+            <RightBorderWeight>0</RightBorderWeight>
+            <BorderRadius>3</BorderRadius>
+          </Borders>
+          <HasTileShadow>false</HasTileShadow>
+        </Format>
+        <AllowAlign>false</AllowAlign>
+        <IsAnchor>false</IsAnchor>
+        <IsAnchorable>false</IsAnchorable>
+        <AllowElementInteraction>false</AllowElementInteraction>
+        <Report>Pre-Defined Dashboards\Dashboards\Dashboard - IPs Association Count</Report>
+        <TitleText />
+        <AllowSearching>false</AllowSearching>
+        <AllowScrolling>true</AllowScrolling>
+        <DesignSuppressExecution>false</DesignSuppressExecution>
+        <AutoSizeExecution>true</AutoSizeExecution>
+        <ReloadInterval>0</ReloadInterval>
+        <UdfData />
+        <FilterValues />
+        <ParameterValues />
+        <FilterPrompts />
+        <ParameterPrompts />
+      </DashboardAdvancedReportItem>
+      <DashboardAdvancedReportItem>
+        <Id>1552572763</Id>
+        <Bounds>
+          <height>0.33870164512698731</height>
+          <width>0.46733872910363367</width>
+          <top>0.016129032258064516</top>
+          <left>0.52173913043478248</left>
+        </Bounds>
+        <Format>
+          <Title>Dashboards/Dashboard - Subnet Count</Title>
+          <ShowTitleOnOutput>false</ShowTitleOnOutput>
+          <TileFit>All</TileFit>
+          <TitleFont>Arial</TitleFont>
+          <TitleFontSize>14</TitleFontSize>
+          <TitleFontColor>#545454</TitleFontColor>
+          <TitleFontWeight>Normal</TitleFontWeight>
+          <TitleHorizontalAlign>Center</TitleHorizontalAlign>
+          <TitleUnderline>None</TitleUnderline>
+          <HasTileBackground>true</HasTileBackground>
+          <TileBackgroundColor>#FFFFFF</TileBackgroundColor>
+          <TileBackgroundOpacity>100</TileBackgroundOpacity>
+          <HasTileTitleBackground>true</HasTileTitleBackground>
+          <TileTitleBackgroundColor>#FFFFFF</TileTitleBackgroundColor>
+          <TileTitleBackgroundOpacity>100</TileTitleBackgroundOpacity>
+          <Borders>
+            <UniformBorders>true</UniformBorders>
+            <TopBorderColor>#d7d7d7</TopBorderColor>
+            <TopBorderWeight>0</TopBorderWeight>
+            <BottomBorderColor>#d7d7d7</BottomBorderColor>
+            <BottomBorderWeight>0</BottomBorderWeight>
+            <LeftBorderColor>#d7d7d7</LeftBorderColor>
+            <LeftBorderWeight>0</LeftBorderWeight>
+            <RightBorderColor>#d7d7d7</RightBorderColor>
+            <RightBorderWeight>0</RightBorderWeight>
+            <BorderRadius>3</BorderRadius>
+          </Borders>
+          <HasTileShadow>false</HasTileShadow>
+        </Format>
+        <AllowAlign>false</AllowAlign>
+        <IsAnchor>false</IsAnchor>
+        <IsAnchorable>false</IsAnchorable>
+        <AllowElementInteraction>false</AllowElementInteraction>
+        <Report>Pre-Defined Dashboards\Dashboards\Dashboard - Subnet Count</Report>
+        <TitleText />
+        <AllowSearching>false</AllowSearching>
+        <AllowScrolling>true</AllowScrolling>
+        <DesignSuppressExecution>false</DesignSuppressExecution>
+        <AutoSizeExecution>true</AutoSizeExecution>
+        <ReloadInterval>0</ReloadInterval>
+        <UdfData />
+        <FilterValues />
+        <ParameterValues />
+        <FilterPrompts />
+        <ParameterPrompts />
+      </DashboardAdvancedReportItem>
+      <DashboardAdvancedReportItem>
+        <Id>1025237834</Id>
+        <Bounds>
+          <height>0.62858248300737207</height>
+          <width>0.97789467953421183</width>
+          <top>0.35483870967741937</top>
+          <left>0.010869565217391304</left>
+        </Bounds>
+        <Format>
+          <Title>Dashboards/Dashboard - IP Detailed Info</Title>
+          <ShowTitleOnOutput>false</ShowTitleOnOutput>
+          <TileFit>All</TileFit>
+          <TitleFont>Arial</TitleFont>
+          <TitleFontSize>14</TitleFontSize>
+          <TitleFontColor>#545454</TitleFontColor>
+          <TitleFontWeight>Normal</TitleFontWeight>
+          <TitleHorizontalAlign>Center</TitleHorizontalAlign>
+          <TitleUnderline>None</TitleUnderline>
+          <HasTileBackground>true</HasTileBackground>
+          <TileBackgroundColor>#FFFFFF</TileBackgroundColor>
+          <TileBackgroundOpacity>100</TileBackgroundOpacity>
+          <HasTileTitleBackground>true</HasTileTitleBackground>
+          <TileTitleBackgroundColor>#FFFFFF</TileTitleBackgroundColor>
+          <TileTitleBackgroundOpacity>100</TileTitleBackgroundOpacity>
+          <Borders>
+            <UniformBorders>true</UniformBorders>
+            <TopBorderColor>#d7d7d7</TopBorderColor>
+            <TopBorderWeight>0</TopBorderWeight>
+            <BottomBorderColor>#d7d7d7</BottomBorderColor>
+            <BottomBorderWeight>0</BottomBorderWeight>
+            <LeftBorderColor>#d7d7d7</LeftBorderColor>
+            <LeftBorderWeight>0</LeftBorderWeight>
+            <RightBorderColor>#d7d7d7</RightBorderColor>
+            <RightBorderWeight>0</RightBorderWeight>
+            <BorderRadius>3</BorderRadius>
+          </Borders>
+          <HasTileShadow>false</HasTileShadow>
+        </Format>
+        <AllowAlign>false</AllowAlign>
+        <IsAnchor>false</IsAnchor>
+        <IsAnchorable>false</IsAnchorable>
+        <AllowElementInteraction>false</AllowElementInteraction>
+        <Report>Pre-Defined Dashboards\Dashboards\Dashboard - IP Detailed Info</Report>
+        <TitleText />
+        <AllowSearching>false</AllowSearching>
+        <AllowScrolling>true</AllowScrolling>
+        <DesignSuppressExecution>false</DesignSuppressExecution>
+        <AutoSizeExecution>true</AutoSizeExecution>
+        <ReloadInterval>0</ReloadInterval>
+        <UdfData />
+        <FilterValues />
+        <ParameterValues />
+        <FilterPrompts />
+        <ParameterPrompts />
+      </DashboardAdvancedReportItem>
+    </AdvancedReportItems>
+    <ExpressViewItems />
+    <ImageItems />
+    <UrlItems />
+    <FilterItems />
+  </Layout>
+  <ParameterModels />
+  <CanvasFormat>
+    <CanvasFit>All</CanvasFit>
+    <CanvasHeight>0</CanvasHeight>
+    <CanvasWidth>0</CanvasWidth>
+    <CanvasBackgroundColor>#EFEFEF</CanvasBackgroundColor>
+    <CanvasBackgroundOpacity>100</CanvasBackgroundOpacity>
+    <DefaultTileBackgroundColor>#FFFFFF</DefaultTileBackgroundColor>
+    <DefaultTileBackgroundOpacity>100</DefaultTileBackgroundOpacity>
+    <DefaultTileTitleBackgroundColor>#FFFFFF</DefaultTileTitleBackgroundColor>
+    <DefaultTileTitleBackgroundOpacity>100</DefaultTileTitleBackgroundOpacity>
+    <DefaultTileBorders>
+      <UniformBorders>true</UniformBorders>
+      <TopBorderColor>#d7d7d7</TopBorderColor>
+      <TopBorderWeight>0</TopBorderWeight>
+      <BottomBorderColor>#d7d7d7</BottomBorderColor>
+      <BottomBorderWeight>0</BottomBorderWeight>
+      <LeftBorderColor>#d7d7d7</LeftBorderColor>
+      <LeftBorderWeight>0</LeftBorderWeight>
+      <RightBorderColor>#d7d7d7</RightBorderColor>
+      <RightBorderWeight>0</RightBorderWeight>
+      <BorderRadius>3</BorderRadius>
+    </DefaultTileBorders>
+    <DefaultTileHasShadows>false</DefaultTileHasShadows>
+    <IsGridSnappingEnabled>true</IsGridSnappingEnabled>
+    <IsDashboardReflowEnabled>false</IsDashboardReflowEnabled>
+  </CanvasFormat>
+  <Main>
+    <Id>c4492d18-33ee-4bd3-8fdb-97d91506996f</Id>
+    <Description>IPs and Subnet</Description>
+    <ReportType>Dashboard</ReportType>
+    <ExportType>Html</ExportType>
+  </Main>
+  <Api />
+  <Id>c4492d18-33ee-4bd3-8fdb-97d91506996f</Id>
+</DashboardReport>

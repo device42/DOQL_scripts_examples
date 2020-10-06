@@ -1,0 +1,250 @@
+<report>
+  <main>
+    <id>8499c784-3287-4fc7-820b-3f8695923e9c</id>
+    <version>1</version>
+    <type>Standard</type>
+    <sql_stmt />
+    <show_execute_form>False</show_execute_form>
+    <filter_execution_window>Default</filter_execution_window>
+    <fit_page_width>False</fit_page_width>
+    <suppress_formatting>False</suppress_formatting>
+    <report_tree_shortcut>0</report_tree_shortcut>
+    <output_mode>6</output_mode>
+    <prevent_output />
+    <page_size>Letter</page_size>
+    <page_orientation>Portrait</page_orientation>
+    <include_setup_info>No</include_setup_info>
+    <description />
+    <filter_description />
+    <show_grid>True</show_grid>
+    <pdf_template />
+    <embedded_pdf_template />
+    <simulate_pdf>True</simulate_pdf>
+    <no_data_render_type>ShowMessage</no_data_render_type>
+    <show_interactive_sorts>True</show_interactive_sorts>
+    <allow_column_hide>True</allow_column_hide>
+    <groups_on_separate_worksheets>False</groups_on_separate_worksheets>
+    <enable_cartesian_processing>Default</enable_cartesian_processing>
+    <visualization_report>false</visualization_report>
+    <use_cache_execution>false</use_cache_execution>
+    <excel_freeze_rows>1</excel_freeze_rows>
+    <excel_freeze_columns>1</excel_freeze_columns>
+    <excel_show_gridlines>True</excel_show_gridlines>
+    <suppressfiltersinterface>False</suppressfiltersinterface>
+    <suppresssortsinterface>False</suppresssortsinterface>
+    <row_range_limit>0</row_range_limit>
+    <custom_entities>{"webreports":{"entity":{"entity_name":"Device_OS_data","affinity":"Report","db_name":"Device_OS_data","sql_stmt":"/* All Device Report - Wipro Information Extract */\n/* Inline view of Target CTE (inline views) to streamline the process  - \n        Change - Rewrite  \n         Cluster records are removed\n\t\t*/\nWith \n     target_device  as (\n        Select Distinct\t\t   \n          d.device_pk,\n\t\t  d.rack_fk,\n\t\t  d.hardware_fk,\n\t\t  d.os_fk,\n\t\t  d.first_added \"First_Added\",\n          d.last_edited \"Last_Discovered\",\n\t\t  CASE When d.name &gt; '0.0.0.0' \n                and d.name &lt; '999.255.255.255' \n                and length(regexp_replace(d.name,'[^.]','','g')) = 3\n               THEN d.name\n               ELSE lower(split_part(d.name,'.',1)) \n          End \"Device Name (SN)\",\n          lower(d.name) \"Device Name (LN)\",\n\t\t  lower(deval.alias_name) \"Alias/FQDN\",\n \t\t  CASE When split_part(d.name,'.',2) is Null  \n              THEN Null \n              ELSE substring(lower(d.name) from '\\.(.*)$') \n\t\t  End \"Domain\",  \n\t\t  d.tags \"Device Tag\",\n\t\t  obj.name \"Object Category\",\n          d.in_service \"In Service\",\n          d.service_level \"Service_Level\",\n          d.type \"Device_Type\",\n          d.sub_type \"Device Subtype\",\n          d.virtual_subtype \"Virtual_Subtype\",\n\t\t  d.uuid \"UUID\",\n          d.serial_no \"Device_Serial\",\n\t\t  CASE When lower(d.type) = 'virtual'\n\t\t       then 't'\n\t\t\t   else 'f'\n\t\t  End \"Is Virtual\",\n          d.virtual_host \"Virtual Host\",\n          d.network_device \"Network Device\",\n          d.os_arch \"OS_Arch\",\n          d.cpucount \"CPU Sockets\",\n          d.cpucore \"Cores Per CPU\",\n          d.cpupower \"CPU Speed\",    \n\t      CASE When d.cpucore is Null\n\t            Then d.cpucount\n\t\t\t\tElse d.cpucount * d.cpucore\n\t       /*    When d.corethread is Null or d.corethread in (0,1)\n                Then d.cpucount * d.cpucore\n               Else d.cpucount * d.cpucore * d.corethread  */\n          END \"Total Cores\", \n          /* d.cpucount*d.cpucore \"Total Cores\",  old way */\n\t\t  d.asset_no \"Asset Number\",\n\t\t  d.bios_version \"BIOS Version\",\n          d.bios_revision \"BIOS Revision\",\n          d.bios_release_date \"BIOS Release Date\",\n          sr.name \"Storage Room\",\n          CASE \n           When d.corethread &gt;= 2\n            Then 'YES'\n           Else 'NO'\n          END \"Hyperthreaded\",\n          d.ram \"RAM\",\n          d.os_name \"OS Name\",\n\t\t  CASE d.os_version \n           When'' \n\t\t    Then d.os_name\n          Else coalesce(d.os_name || ' - ' || \n                       d.os_version,d.os_name)\n          END \"Full OS Name\",\n          d.os_version \"OS Version\",\n          d.os_version_no \"OS Version Number\",\n\t/* Normalize - Grp the OS's */\n\t      CASE When position('windows' IN lower(d.os_name)) &gt; 0 or\n\t\t            position('microsoft' IN lower(d.os_name)) &gt; 0 \n\t\t       Then 'Windows'\n\t\t       When position('linux' IN lower(d.os_name)) &gt; 0 or\n\t\t            position('centos' IN lower(d.os_name)) &gt; 0 or\n\t\t            position('redhat' IN lower(d.os_name)) &gt; 0 or\t /* Redhat  */\t\n\t\t            position('ubuntu' IN lower(d.os_name)) &gt; 0 or\n\t\t            position('suse' IN lower(d.os_name)) &gt; 0 or\n\t\t            position('debian' IN lower(d.os_name)) &gt; 0 or\n\t\t            position('freebsd' IN lower(d.os_name)) &gt; 0 \n\t\t       Then 'Linux'\t\t\t\t\t\n\t\t       When position('aix' IN lower(d.os_name)) &gt; 0 \n\t\t       Then 'AIX'\n\t\t       When position('hp' IN lower(d.os_name)) &gt; 0\n\t\t       Then 'HP'\n\t\t       When position('sunos' IN lower(d.os_name)) &gt; 0 or\n\t\t            position('solaris' IN lower(d.os_name)) &gt; 0 \n\t\t       Then 'Apple'\t\t\t\t   \n\t\t       When position('ios' IN lower(d.os_name)) &gt; 0 or\n\t\t            position('mac' IN lower(d.os_name)) &gt; 0 \n\t\t       Then 'Apple'\t\t\t   \n\t\t\t   Else 'Unknown'\n\t\t  End \"OS Group\",\t\n          ose.eol \"OS_End of Life\",\n          ose.eos \"OS_End of Support\",\n          d.cloud_vendor_fk,\n          ci.vendor_fk,\n          ci.account,\n          cv.name \"Cloud Service Provider\",\n          ci.service_name \"Cloud Service Name\",\n          d.cloud_instance_id \"Cloud Instance ID\",\n          ci.instance_name \"Cloud Instance Name\",\n          ci.instance_type \"Cloud Instance Type\",\n          d.cloud_status \"Cloud Instance Status\",\n          d.cloud_location \"Cloud Location\",\n          d.cloud_notes \"Cloud Notes\",\n\t      (Select array_to_string(array(\n                 Select distinct ip.ip_address\n                 From view_ipaddress_v1 ip\n                 Where ip.device_fk = d.device_pk),\n                 ' | ')) all_listener_device_ips,\n          (Select array_to_string(array(\n                 Select Distinct ip.label\n                 From view_ipaddress_v1 ip\n                 Where ip.device_fk = d.device_pk),\n                 ' | ')) all_labels,\n          (Select array_to_string(array(\n              Select Distinct ns.name\n              From view_networkshare_v1 ns\n              Where ns.device_fk = d.device_pk and ns.name != '' ),\n              ' | ')) network_shares,\n          (Select array_to_string(array(\n              Select Distinct mp.mountpoint\n              From view_mountpoint_v1 mp\n              Where mp.device_fk = d.device_pk and mp.mountpoint != '' ),\n              ' | ')) mount_points,\n\t\t\tNull \"DNS Records\"    \t\t  \n       From \n          view_device_v1 d\n\t\t  left join view_devicealias_v1 deval on deval.device_fk = d.device_pk \n          left join view_oseoleos_v1 ose on ose.os_fk = d.os_fk\n          left join view_vendor_v1 cv on d.cloud_vendor_fk = cv.vendor_pk\n\t      left join view_cloudinstance_v1 ci on ci.device_fk = d.device_pk    \n          left join view_room_v1 sr on sr.room_pk = d.storage_room_fk\n\t\t  left join view_objectcategory_v1 obj on obj.objectcategory_pk = d.objectcategory_fk\n\t\t  Where lower(d.type) != 'cluster'\n     ),\n\t target_parts as (\n\t    Select Distinct\n          pt.device_fk,\n          string_agg(distinct pm.name, ',') \"CPU Model\",\n          string_agg(distinct pmv.name, ',') \"CPU Manufacturer\"\n     From \n        view_part_v1 pt\n        left join view_partmodel_v1 pm on pm.partmodel_pk = pt.partmodel_fk and pm.type_id = '1'\n        left join view_vendor_v1 pmv on pmv.vendor_pk = pm.vendor_fk\n      group by \n        pt.device_fk\n      having \n        string_agg(pm.name, ',') is not null and \n        string_agg(pmv.name, ',') is not null\n     ),\n\t target_vendors as (\n        Select Distinct\n          h.hardware_pk,\n\t\t  v.name \"Manufacturer\",\n          h.name \"Hardware Model\",\n\t\t  h.size \"Size (RU)\"\n    \t From \n            view_hardware_v1 h\n            left join view_vendor_v1 v on h.vendor_fk = v.vendor_pk\n     ),\n\t target_OS_category as (\n        Select Distinct\n          osc.os_pk,\n          v2.name \"OS Vendor\",\n          osc.category_name \"OS Category\"\n    \t From \n            view_os_v1 osc\n            left join view_vendor_v1 v2 on v2.vendor_pk = osc.vendor_fk\n     ),\t \n\t target_locations as (\t \n        Select Distinct\n\t\t  r.rack_pk,\n\t\t  b.name \"Building Name\",\n          m.name \"Room Name\",\n          r.row \"Row Name\",\n          r.name \"Rack Name\"\n\t\t From \n\t\t    view_rack_v1 r \n            left join view_room_v1 m on r.room_fk = m.room_pk\n            left join view_building_v1 b on b.building_pk = m.building_fk\t\n     ),\n\t /* Inline view of Target App Component data - Filters down to just the records needed */\n\t target_appcomp as (\t \n        Select Distinct\n\t\t  dev.device_pk,\n\t\t  String_agg (trim(split_part(ac.name , '-',1)),'|') Over(Partition by dev.device_pk) \"App Components\"\n\t\t From \n\t\t    view_device_v1 dev  \n            join view_appcomp_v1 ac on ac.device_fk = dev.device_pk\n      ),\n\t /* Inline view of Target IP_MAC data - Filters down to just the records needed */\n     target_IP_MAC_data as (\n        Select Distinct\n          ip.ip_address,\n          ip.label,\n\t \t  (CASE WHEN sn.mask_bits &lt; 4 or sn.mask_bits &gt; 32\n            THEN 'N/A'\n            ELSE split_part('240.0.0.0,248.0.0.0,252.0.0.0,254.0.0.0,255.0.0.0,255.128.0.0,255.192.0.0,255.224.0.0,255.240.0.0,255.248.0.0,255.252.0.0,255.254.0.0,255.255.0.0,255.255.128.0,255.255.192.0,255.255.224.0,255.255.240.0,255.255.248.0,255.255.252.0,255.255.254.0,255.255.255.0,255.255.255.128,255.255.255.192,255.255.255.224,255.255.255.240,255.255.255.248,255.255.255.252,N/A,255.255.255.255',',',(sn.mask_bits - 3)) \n           END) AS \"Net Mask\",\n\t \t  (CASE WHEN sn.mask_bits &lt; 4 or sn.mask_bits &gt; 32\n            THEN 'N/A'\n            ELSE split_part('268435454,334217726,16777214,33554430,16777214,8388606,4194302,20197150,1048574,524286,262142,131070,65534,32766,16382,8190,4094,2046,1022,510,254,126,62,30,14,6,2,0,1',',',(sn.mask_bits - 3))\n           END) AS \"Prefix Length\", \t\t   \n\t\t  vrf.name,\n\t\t  sn.network,\n\t\t  sn.range_begin,\n\t\t  sn.range_end,\n\t\t  sn.gateway,\n          sn.mask_bits, \t\t  \n          np.netport_pk,\n          np.hwaddress,\n          np.port,\n          ip.device_fk\n         From \n            view_ipaddress_v1 ip \n            left join view_netport_v1 np on np.netport_pk = ip.netport_fk\n\t\t\tleft join view_subnet_v1 sn on sn.subnet_pk = ip.subnet_fk\n\t\t\tleft join view_vrfgroup_v1 vrf on vrf.vrfgroup_pk = sn.vrfgroup_fk\n     ), \n     /* Inline view of Target MAC_Device data - Filters down to just the records needed */\n     target_MAC_Device_data as (\n        Select Distinct\n          tim.device_fk,\n          tim.hwaddress \n         From \n            target_IP_MAC_data tim\n     ), \n     /* Inline view of Target MAC_Count_Device data - Filters down to just the records needed */\n     target_MAC_Count_Device_data as (\n        Select Distinct\n          mcd.device_fk,\n          count (*) over (Partition BY mcd.device_fk) as \"Total MACs per Device\" \n         From \n            target_MAC_Device_data mcd\n     ),\n     /* Inline view of Target Purchase data - Filters down to just the DNS records that are needed in the next step */\t \n\t target_purchases as (\n        Select Distinct\n\t\t  ptd.device_fk,\n          pch.po_date \"PO Date\",\n          pch.cost \"PO Cost\",\n          pli.cost \"Line Item Cost\",\n          pch.order_no \"Order Number\",\n          pch.cc_code \"Cost Center\",\n          pch.cc_description \"Cost Center Description\"\t\t\n\t     From\n            view_purchaselineitems_to_devices_v1 ptd \n            left join view_purchaselineitem_v1 pli on ptd.purchaselineitem_fk = pli.purchaselineitem_pk\n            left join view_purchase_v1 pch on pch.purchase_pk = pli.purchase_fk\n     ),\n    /* Inline view of Target DNS data - Filters down to just the DNS records that are needed in the next step */\n     target_DNS_data as (\n        Select Distinct\n          dr.dnsrecords_pk,\n          dr.name,\n          dr.type,\n          dr.content,\n          dr.dnszone_fk \n        From \n           view_dnsrecords_v1 dr\n           where dr.type IN ('A','AAAA','PTR')\n     ),\n    /* Inline view of Target DNS/DZ data - create the desired DNS field after combining DNS and DZ */\n     target_DNS_DZ_data as (\n        Select Distinct\n          dnsz.device_pk,\n\t\t  dnsz.\"DNS Records\"\n         From\n            (Select \n               d.device_pk,\n               string_agg(dr.name || '.' || dz.name, ' | ') \"DNS Records\"        \n              From\n                 view_device_v1 d\n                 join view_ipaddress_v1 ip on ip.device_fk = d.device_pk\n                 join target_DNS_data dr on dr.content =  host(ip.ip_address) \n                 join view_dnszone_v1 as dz on dz.dnszone_pk = dr.dnszone_fk\n\t\t\t\t GROUP BY d.device_pk) dnsz\n     ),\n \t target_counts as (\t\t\n\t    Select Distinct\n\t      sd1.device_fk,\n\t\t  \"Software Discovered\",\n\t\t  \"Services Discovered\",\n\t\t  \"Application Components Discovered\",\n\t\t  \"Local Disk Count\",\n\t\t  \"Mounts Discovered\",\n\t\t  \"IP Addresses Discovered\",\n\t\t  \"Parts Discovered\",\n\t\t  \"Total Space (GB)\" - \"Total Free Space (GB)\" \"Total Used Space (GB)\",\n\t\t  \"Total Space (GB)\",\n\t\t  \"Total Free Space (GB)\"\n\t     From \n\t\t    (Select sd.device_fk, count(*) \"Software Discovered\" from view_softwaredetails_v1 sd group by sd.device_fk) sd1\n\t        left join (Select si.device_fk, count(*) \"Services Discovered\" from view_serviceinstance_v2 si group by si.device_fk) si1 on si1.device_fk = sd1.device_fk\n\t        left join (Select ac.device_fk, count(*) \"Application Components Discovered\" from view_appcomp_v1 ac group by ac.device_fk) ac1 on ac1.device_fk = sd1.device_fk\n\t        left join (Select m.device_fk, count(*) \"Local Disk Count\" from view_mountpoint_v1 m where m.fstype_name &lt;&gt; 'nfs' and m.fstype_name &lt;&gt; 'nfs4' and m.filesystem not like '\\\\\\\\%' group by m.device_fk) m1 on m1.device_fk = sd1.device_fk\n\t        left join (Select mp.device_fk, count(*) \"Mounts Discovered\" from view_mountpoint_v1 mp group by mp.device_fk) mp1 on mp1.device_fk = sd1.device_fk\n\t        left join (Select ip.device_fk, count(*) \"IP Addresses Discovered\" from view_ipaddress_v1 ip group by ip.device_fk) ip1 on ip1.device_fk = sd1.device_fk\n\t        left join (Select p.device_fk, count(*) \"Parts Discovered\" from view_part_v1 p group by p.device_fk) p1 on p1.device_fk = sd1.device_fk\n\t\t\tleft join (Select m.device_fk, \n\t                 /*         round(sum((m.capacity-m.free_capacity)/1024),2) \"Total Used Space (GB)\", */\n\t\t\t                  round(sum(m.capacity/1024),2) \"Total Space (GB)\",\n\t\t\t                  round(sum(m.free_capacity/1024),2) \"Total Free Space (GB)\"\n\t\t\t           From view_mountpoint_v1 m where m.fstype_name &lt;&gt; 'nfs' and m.fstype_name &lt;&gt; 'nfs4' and m.filesystem not like '\\\\\\\\%' \n                       group by m.device_fk) mu1 on mu1.device_fk = sd1.device_fk\t\n     ),\t\t\t\t\t  \t\t\t\n/*\t\n*/\t\n \t target_categorize as (\t\t\n\t    Select Distinct\n\t      ctd.device_pk,\n\t\t  CASE When lower(ctd.\"Device_Type\") = 'virtual'\n\t\t       Then 'virtual'\n\t\t\t   When lower(ctd.\"Device_Type\") in ( 'physical', 'blade', 'unknown')\n\t\t\t   Then 'physical'\n\t\t\t   Else 'unknown'\n\t\t  End \"Device_Type_Cntr\",\n\t\t  CASE When ctd.\"Virtual Host\"\n\t\t       Then 1\n\t\t\t   Else Null\n\t\t  End \"Hypervisor_Cntr\",\t\n\t\t  CASE When ctd.\"Network Device\"\n\t\t       Then 1\n\t\t\t   Else Null\n\t\t  End \"Network_Cntr\" \t\t\t  \n\t     From \n\t\t    target_device ctd \n     ),\t\t\t\t\t  \t\t\t\n/*\t\n*/\n \t target_DB_info as (\t\t\n            /* v16.0  */\n        Select Distinct\n          d.last_edited \"Last Discovered\",\n          d.device_pk,\n          d.name \"Device Name\",\n          d.in_service \"In Service\",\n          d.service_level \"Service Level\",\n          d.cpucount \"CPU Sockets\",\n          d.cpucore \"Cores Per Processor\",\n          d.cpucore*        d.cpucount \"Total Cores\",\n          d.cpupower  \"CPU Speed\", \n          d.os_name \"OS Name\",\n          d.os_arch \"OS Arch\",\n          d.os_version \"OS Version\",\n          d.os_version_no \"OS Version No\",\n          d.ram \"Memory\",\n          d.ram_size_type \"Memory Size Base\",\n  /*        s.pretty_name \"Service Name\",\n          si.serviceinstance_pk,  */\n          ap.name \"Application Name\",\n\t\t  sw.name \"Software Name\",\n          trim(split_part(ap.name , '-',1)) \"Database Type\",\n  /* App Component Data Extract  */\n  /*   Instances                 */\n         (\n          SELECT string_agg(Distinct trim(JsonString::text, '\"'), ' | ')\n          FROM json_array_elements(json::json-&gt;'instances') JsonString\n         ) AS \"Service Instances\",\n  /*   Paths                    */\n        (\n         SELECT string_agg(Distinct trim(JsonString::text, '\"'), ' | ')\n         FROM json_array_elements(json::json-&gt;'data_paths') JsonString\n        ) AS  \"Database Paths\",\n  /*   DB Versions              */\n       (CASE WHEN json_array_length(json::json-&gt;'products') &gt; 0\n              THEN\n              (SELECT string_agg(Distinct trim(JsonVersion-&gt;&gt;'version', '\"'), ' | ')\n                FROM json_array_elements(json::json-&gt;'products') JsonVersion\n              )\n            WHEN json_array_length(json::json-&gt;'services') &gt; 0\n             THEN \n             (SELECT string_agg(Distinct trim(JsonVersion-&gt;&gt;'version', '\"'), ' | ')\n                FROM json_array_elements(json::json-&gt;'services') JsonVersion\n             )\n            ELSE \n             (SELECT string_agg(Distinct trim(JsonVersion-&gt;&gt;'version', '\"'), ' | ')\n                FROM json_array_elements(json::json-&gt;'protocols') JsonVersion\n             )\n        END)  AS  \"Database Versions\"  \n    From\n       view_device_v1 d\n       left join view_appcomp_v1 ap on ap.device_fk = d.device_pk\n       left join view_ipaddress_v1 i on i.device_fk = ap.device_fk\n       left join view_serviceinstance_appcomp_v2 siapp on siapp.appcomp_fk = ap.appcomp_pk\n       left join view_serviceinstance_v2 si on si.serviceinstance_pk = siapp.serviceinstance_fk\n       left join view_service_v2 s on si.service_fk = s.service_pk\n\t   left join view_softwareinuse_v1 siu on siu.softwareinuse_pk = si.softwareinuse_fk\n       left join view_software_v1 sw on sw.software_pk = siu.software_fk\n     Where \n  /*  Which DBs are we filtering for   */\n       trim(split_part(ap.name , '-',1)) in ('Microsoft SQL Server','MySQL','Oracle Database Server','PostgreSQL','Sybase','MongoDB','MariaDB','Apache Derby','SAP Hana','Hadoop','DB2') \n     order by d.name ASC\t    \n     ),\t\t\t\t\t  \t\t\t\n/*\t\n*/\t\n/*  Pull all the data together   */\n \t target_summary_info as (\t\n   Select Distinct\n          td.device_pk,\n\t\t  td.rack_fk,\n\t\t  td.hardware_fk,\n\t\t  td.os_fk,\n\t\t  td.\"First_Added\",\n          td.\"Last_Discovered\",\n          td.\"Device Name (SN)\",\n\t\t  td.\"Device Name (LN)\",\n/*\t\t  td.\"Alias/FQDN\",\n*/\t\t  td.\"Domain\",\n\t\t  td.\"Device Tag\",\n\t\t  td.\"Object Category\",\t\t  \n          td.\"In Service\",\n          td.\"Service_Level\",\n          td.\"Device_Type\",\n          td.\"Device Subtype\",\n          td.\"Virtual_Subtype\",\n\t\t  td.\"UUID\",\n          td.\"Device_Serial\",\n\t\t  td.\"Is Virtual\",\n\t\t  td.\"Virtual Host\",\n          td.\"Network Device\",\n          td.\"OS_Arch\",\n          td.\"CPU Sockets\",\n          td.\"Cores Per CPU\",\n          td.\"CPU Speed\",\n          td.\"Total Cores\",\n\t\t  td.\"Asset Number\",\n\t\t  td.\"BIOS Version\",\n          td.\"BIOS Revision\",\n          td.\"BIOS Release Date\",\n          td.\"Storage Room\",\n          td.\"Hyperthreaded\",\n          td.\"RAM\",\n\t\t  td.\"OS Group\",\n          td.\"OS Name\",\t\t  \n          td.\"Full OS Name\",\n          td.\"OS Version\",\n          td.\"OS Version Number\",\n          td.cloud_vendor_fk,\n          td.vendor_fk,\n          td.account,\n          td.\"Cloud Service Provider\",\n          td.\"Cloud Service Name\",\n          td.\"Cloud Instance ID\",\n          td.\"Cloud Instance Name\",\n          td.\"Cloud Instance Type\",\n          td.\"Cloud Instance Status\",\n          td.\"Cloud Location\",\n          td.\"Cloud Notes\",\n\t/*\t  (select hwaddress_dashes from f_hwaddress_fixup(tim.hwaddress)) \"MAC Address\",  */\n\t\t  String_agg((select hwaddress_dashes from f_hwaddress_fixup(tim.hwaddress)),'|') over(partition by tim.device_fk) \"MACAddress\",\n/*  Took out the tim.* values because of the possible  challenges when there is a device with a lot of IPs\n  Can be put back by uncommenting the fields below that start with tim.   */\n  /*\t\t  tim.ip_address \"Single IP\",  \n\t\t  tim.name,\n\t\t  tim.network \"Subnet\",\n\t\t  tim.range_begin \"Range Begin\",\n\t\t  tim.range_end \"Range End\",\n\t\t  tim.gateway \"Gateway\",\t\t  \n          tim.mask_bits \"Mask Bits\",\n\t\t  tim.\"Net Mask\" \"Prefix\",\n\t\t  tim.\"Prefix Length\",          */\n\t\t  Left(td.mount_points, 32750) \"Mount Points\",  /* Put a max of 32k len ; excel does not handle well &gt; 32759 in length  */\n\t\t  tdd.\"DNS Records\",\n /*\t\t  tdb.\"Service Name\",  */\n /*         tdb.\"Application Name\" \"DB/Application Name\",  */\n          String_agg (tdb.\"Application Name\",'|') over(partition by tdb.device_pk) \"DB/Application Name\",\t\n\t\t  tac.\"App Components\",\n\t\t  toc.\"OS Vendor\",\n          toc.\"OS Category\",\n\t\t  tv.\"Manufacturer\",\n          tv.\"Hardware Model\",\n\t\t  tv.\"Size (RU)\",\n\t\t  tc.\"Total Used Space (GB)\",\n\t\t  tc.\"Total Space (GB)\",\n\t\t  tc.\"Total Free Space (GB)\",\n\t\t  tc.\"Software Discovered\",\n\t\t  tc.\"Services Discovered\",\n\t\t  tc.\"Application Components Discovered\",\n\t\t  tc.\"Local Disk Count\",\n\t\t  tc.\"Mounts Discovered\",\n\t\t  tc.\"IP Addresses Discovered\",\n\t\t  tc.\"Parts Discovered\",\n\t\t  tct.\"Device_Type_Cntr\",\n\t\t  tct.\"Hypervisor_Cntr\",\t\n\t\t  tct.\"Network_Cntr\"\t\t  \n      From \n         target_device td\n\t\t left join target_IP_MAC_data tim on tim.device_fk = td.device_pk /* (tim.netport_pk = ip.netport_fk) and (td.device_pk = tim.device_fk) */\n\t\t left join target_categorize tct on tct.device_pk = td.device_pk\n         left join target_vendors tv on tv.hardware_pk = td.hardware_fk\n         left join target_OS_category toc on toc.os_pk = td.os_fk  \n         left join target_counts tc on tc.device_fk = td.device_pk\n         left join target_DNS_DZ_data tdd on tdd.device_pk = td.device_pk\n         left join target_DB_info tdb on tdb.device_pk = td.device_pk  \n         left join target_appcomp tac on tac.device_pk = td.device_pk\t \n\t)\n\n/*  Pull all the data together   */\n\t\n   Select Distinct\n          tsi.*,\n\t      CASE When tsi.\"Network_Cntr\" = 1  \n\t\t       Then 'Network Device'\n\t\t       When tsi.\"Hypervisor_Cntr\"  = 1\n\t\t       Then 'Virtual Host'\t\t\t\t\t\n\t\t       When tsi.\"Device_Type_Cntr\" = 'virtual' and tsi.\"OS Group\" = 'Windows' \n\t\t       Then 'Virtual Windows'\n\t\t       When tsi.\"Device_Type_Cntr\" = 'virtual' and tsi.\"OS Group\" IN ('Linux', 'Unix')\n\t\t       Then 'Virtual *NIX'\n\t\t       When tsi.\"Device_Type_Cntr\" = 'virtual'\n\t\t       Then 'Virtual Other'\n\t\t       When tsi.\"Device_Type_Cntr\" = 'physical' and tsi.\"OS Group\" = 'Windows' \n\t\t       Then 'Windows Servers'\n\t\t       When tsi.\"Device_Type_Cntr\" = 'physical' and tsi.\"OS Group\" IN ('Linux', 'Unix')\n\t\t       Then '*NIX Servers'\n\t\t       When tsi.\"Device_Type_Cntr\" = 'physical'\n\t\t       Then 'Other Servers'\t\t\t\t\t   \n\t\t   \t   Else 'Unknown'\n\t\t\t   End \"Summary_Cntr\" \t\n\t\t  From target_summary_info tsi","datasource_id":"0","object_type":"sql","key":{"col_name":"device_pk"}}}}</custom_entities>
+  </main>
+  <entity>
+    <entity_name>Device_OS_data</entity_name>
+    <group_by_flag>False</group_by_flag>
+  </entity>
+  <cell>
+    <id>1265749061</id>
+    <cell_text>Devices by Type</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>0</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <cell_colspan>8</cell_colspan>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>14</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#0D94E2</background_color>
+  </cell>
+  <cell>
+    <id>1428998145</id>
+    <widget_id>33480422</widget_id>
+    <cell_text />
+    <cell_type>widget</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>0</cell_col>
+    <cell_colspan>8</cell_colspan>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>932576011</id>
+    <cell_text>Device_OS_data.Summary_Cntr</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>0</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1365593314</id>
+    <cell_text>Device_OS_data.device_pk</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>4</cell_row>
+    <cell_col>0</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1301548630</id>
+    <cell_text>=bold('Count: ') &amp; GlobalNumericFormat(aggcount({Device_OS_data.Summary_Cntr}))</cell_text>
+    <cell_type>formula</cell_type>
+    <cell_row>5</cell_row>
+    <cell_col>0</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>93455615</id>
+    <cell_text>=aggcount({Device_OS_data.Summary_Cntr})</cell_text>
+    <cell_type>formula</cell_type>
+    <cell_row>6</cell_row>
+    <cell_col>0</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <row>
+    <group_type>Page Header</group_type>
+  </row>
+  <row>
+    <group_type>Report Header</group_type>
+    <row_height>156</row_height>
+  </row>
+  <row>
+    <group_type>Header</group_type>
+    <group_field>Device_OS_data.Summary_Cntr</group_field>
+    <suppress_flag>True</suppress_flag>
+  </row>
+  <row>
+    <group_type>Header</group_type>
+    <group_field>Device_OS_data.Summary_Cntr</group_field>
+    <suppress_flag>True</suppress_flag>
+  </row>
+  <row>
+    <group_type>Detail</group_type>
+    <suppress_flag>True</suppress_flag>
+  </row>
+  <row>
+    <group_type>Footer</group_type>
+    <group_field>Device_OS_data.Summary_Cntr</group_field>
+    <suppress_flag>True</suppress_flag>
+  </row>
+  <row>
+    <group_type>Footer</group_type>
+    <group_field>Device_OS_data.Summary_Cntr</group_field>
+    <suppress_flag>True</suppress_flag>
+  </row>
+  <column>
+    <column_width>100</column_width>
+  </column>
+  <column>
+    <column_width>100</column_width>
+  </column>
+  <column>
+    <column_width>100</column_width>
+  </column>
+  <column>
+    <column_width>100</column_width>
+  </column>
+  <column>
+    <column_width>100</column_width>
+  </column>
+  <column>
+    <column_width>100</column_width>
+  </column>
+  <column>
+    <column_width>100</column_width>
+  </column>
+  <column>
+    <column_width>100</column_width>
+  </column>
+  <sort>
+    <sort_name>Device_OS_data.Summary_Cntr</sort_name>
+    <sort_title />
+    <order_num>0</order_num>
+    <ascending_flag>True</ascending_flag>
+  </sort>
+  <topn>
+    <action>top</action>
+    <use_topn_item>False</use_topn_item>
+    <num_items>10</num_items>
+    <cellId>-1</cellId>
+    <direction>desc</direction>
+  </topn>
+  <widget>
+    <id>33480422</id>
+    <height>150</height>
+    <width>794</width>
+    <fit_to_cell>True</fit_to_cell>
+    <built_in_type>Chart</built_in_type>
+    <name>Chart</name>
+    <data_cell_ids>932576011,93455615,-1,-1,-1</data_cell_ids>
+    <chart>
+      <id>33480422</id>
+      <type>column</type>
+      <is_3d>False</is_3d>
+      <use_scroll>True</use_scroll>
+      <legend_location>Right</legend_location>
+      <point_labels_display_type>DataValues</point_labels_display_type>
+      <title />
+      <axis_count>1</axis_count>
+      <showSecondaryLimits>1</showSecondaryLimits>
+      <showDivLineSecondaryValue>1</showDivLineSecondaryValue>
+      <y_axis_title1 />
+      <y_axis_title2 />
+      <y_axis_title3 />
+      <x_axis_title />
+      <color_type>Default</color_type>
+      <min_data_value />
+      <max_data_value />
+      <axis_lower_bound />
+      <axis_upper_bound />
+      <others_category_percent>0</others_category_percent>
+      <align_data_labels>True</align_data_labels>
+      <theme_name>-2</theme_name>
+      <render_colors>#947584,#A0CDCA,#D2555B,#FCB17A,#E8C7D8,#BCDB6D,#8FB5B1,#FBB9FF,#AEB27F,#7FC971</render_colors>
+      <linear_colors>#fff1e0,Blue</linear_colors>
+      <custom_colors>#ecdfbd,#20457c,#3b3a35,#fb6648,#5e3448</custom_colors>
+      <data_sort_type>SortByDataValues</data_sort_type>
+      <data_sort_direction>Descending</data_sort_direction>
+      <datavalue_decimal_places1>-1</datavalue_decimal_places1>
+      <datavalue_decimal_symbol1 />
+      <datavalue_use_thousands_separator1>False</datavalue_use_thousands_separator1>
+      <datavalue_thousands_separator1 />
+      <datavalue_use_currency_symbol1>False</datavalue_use_currency_symbol1>
+      <datavalue_currency_symbol1 />
+      <datavalue_append_percent_sign1>False</datavalue_append_percent_sign1>
+      <datavalue_decimal_places2>-1</datavalue_decimal_places2>
+      <datavalue_decimal_symbol2 />
+      <datavalue_use_thousands_separator2>False</datavalue_use_thousands_separator2>
+      <datavalue_thousands_separator2 />
+      <datavalue_use_currency_symbol2>False</datavalue_use_currency_symbol2>
+      <datavalue_currency_symbol2 />
+      <datavalue_append_percent_sign2>False</datavalue_append_percent_sign2>
+      <datavalue_decimal_places3>-1</datavalue_decimal_places3>
+      <datavalue_decimal_symbol3 />
+      <datavalue_use_thousands_separator3>False</datavalue_use_thousands_separator3>
+      <datavalue_thousands_separator3 />
+      <datavalue_use_currency_symbol3>False</datavalue_use_currency_symbol3>
+      <datavalue_currency_symbol3 />
+      <datavalue_append_percent_sign3>False</datavalue_append_percent_sign3>
+      <benchmark_lines>[]</benchmark_lines>
+      <label_font>Arial</label_font>
+      <data_method>SeriesInColumns</data_method>
+      <chart_data>{"dataLabelsCellId":932576011,"seriesInfos":[{"dataValuesCellId":93455615,"seriesName":"","yAxis":1,"renderAs":0}]}</chart_data>
+      <fusion_attributes>[]</fusion_attributes>
+      <advanced_fusion_attributes>[]</advanced_fusion_attributes>
+      <conditionalFormats>[]</conditionalFormats>
+      <kpi_value_format>shortScale</kpi_value_format>
+      <error_text />
+      <view_range />
+      <scroll_position />
+      <spc_benchmark_lines>[{"label":"Mean","value":null,"color":"#00ff00","lineStyle":0,"lineFunction":3},{"label":"UCL","value":"3","color":"#ff0000","lineStyle":1,"lineFunction":5},{"label":"LCL","value":"-3","color":"#ff0000","lineStyle":1,"lineFunction":5}]</spc_benchmark_lines>
+      <is_spc>False</is_spc>
+    </chart>
+  </widget>
+  <dynamicfilters />
+</report>

@@ -1,0 +1,269 @@
+<?xml version="1.0"?>
+<DashboardReport xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ParameterPrompts />
+  <FilterPrompts />
+  <Layout>
+    <EmptyItems />
+    <TextItems />
+    <AdvancedReportItems>
+      <DashboardAdvancedReportItem>
+        <Id>1901629545</Id>
+        <Bounds>
+          <height>0.46774193548387094</height>
+          <width>0.5</width>
+          <top>0.016129032258064516</top>
+          <left>0.010869565217391304</left>
+        </Bounds>
+        <Format>
+          <Title>Dashboards/Dashboard - Devices by OS Group</Title>
+          <ShowTitleOnOutput>false</ShowTitleOnOutput>
+          <TileFit>All</TileFit>
+          <TitleFont>Arial</TitleFont>
+          <TitleFontSize>14</TitleFontSize>
+          <TitleFontColor>#545454</TitleFontColor>
+          <TitleFontWeight>Normal</TitleFontWeight>
+          <TitleHorizontalAlign>Center</TitleHorizontalAlign>
+          <TitleUnderline>None</TitleUnderline>
+          <HasTileBackground>true</HasTileBackground>
+          <TileBackgroundColor>#FFFFFF</TileBackgroundColor>
+          <TileBackgroundOpacity>100</TileBackgroundOpacity>
+          <HasTileTitleBackground>true</HasTileTitleBackground>
+          <TileTitleBackgroundColor>#FFFFFF</TileTitleBackgroundColor>
+          <TileTitleBackgroundOpacity>100</TileTitleBackgroundOpacity>
+          <Borders>
+            <UniformBorders>true</UniformBorders>
+            <TopBorderColor>#d7d7d7</TopBorderColor>
+            <TopBorderWeight>0</TopBorderWeight>
+            <BottomBorderColor>#d7d7d7</BottomBorderColor>
+            <BottomBorderWeight>0</BottomBorderWeight>
+            <LeftBorderColor>#d7d7d7</LeftBorderColor>
+            <LeftBorderWeight>0</LeftBorderWeight>
+            <RightBorderColor>#d7d7d7</RightBorderColor>
+            <RightBorderWeight>0</RightBorderWeight>
+            <BorderRadius>3</BorderRadius>
+          </Borders>
+          <HasTileShadow>false</HasTileShadow>
+        </Format>
+        <AllowAlign>false</AllowAlign>
+        <IsAnchor>false</IsAnchor>
+        <IsAnchorable>false</IsAnchorable>
+        <AllowElementInteraction>false</AllowElementInteraction>
+        <Report>Pre-Defined Dashboards\Dashboards\Dashboard - Devices by OS Group</Report>
+        <TitleText />
+        <AllowSearching>false</AllowSearching>
+        <AllowScrolling>true</AllowScrolling>
+        <DesignSuppressExecution>false</DesignSuppressExecution>
+        <AutoSizeExecution>true</AutoSizeExecution>
+        <ReloadInterval>0</ReloadInterval>
+        <UdfData />
+        <FilterValues />
+        <ParameterValues />
+        <FilterPrompts />
+        <ParameterPrompts />
+      </DashboardAdvancedReportItem>
+      <DashboardAdvancedReportItem>
+        <Id>112409635</Id>
+        <Bounds>
+          <height>0.5</height>
+          <width>0.5</width>
+          <top>0.4838709677419355</top>
+          <left>0.010869565217391304</left>
+        </Bounds>
+        <Format>
+          <Title>Dashboards/Dashboard - OS Version Statistics</Title>
+          <ShowTitleOnOutput>false</ShowTitleOnOutput>
+          <TileFit>All</TileFit>
+          <TitleFont>Arial</TitleFont>
+          <TitleFontSize>14</TitleFontSize>
+          <TitleFontColor>#545454</TitleFontColor>
+          <TitleFontWeight>Normal</TitleFontWeight>
+          <TitleHorizontalAlign>Center</TitleHorizontalAlign>
+          <TitleUnderline>None</TitleUnderline>
+          <HasTileBackground>true</HasTileBackground>
+          <TileBackgroundColor>#FFFFFF</TileBackgroundColor>
+          <TileBackgroundOpacity>100</TileBackgroundOpacity>
+          <HasTileTitleBackground>true</HasTileTitleBackground>
+          <TileTitleBackgroundColor>#FFFFFF</TileTitleBackgroundColor>
+          <TileTitleBackgroundOpacity>100</TileTitleBackgroundOpacity>
+          <Borders>
+            <UniformBorders>true</UniformBorders>
+            <TopBorderColor>#d7d7d7</TopBorderColor>
+            <TopBorderWeight>0</TopBorderWeight>
+            <BottomBorderColor>#d7d7d7</BottomBorderColor>
+            <BottomBorderWeight>0</BottomBorderWeight>
+            <LeftBorderColor>#d7d7d7</LeftBorderColor>
+            <LeftBorderWeight>0</LeftBorderWeight>
+            <RightBorderColor>#d7d7d7</RightBorderColor>
+            <RightBorderWeight>0</RightBorderWeight>
+            <BorderRadius>3</BorderRadius>
+          </Borders>
+          <HasTileShadow>false</HasTileShadow>
+        </Format>
+        <AllowAlign>false</AllowAlign>
+        <IsAnchor>false</IsAnchor>
+        <IsAnchorable>false</IsAnchorable>
+        <AllowElementInteraction>false</AllowElementInteraction>
+        <Report>Pre-Defined Dashboards\Dashboards\Dashboard - OS Version Statistics</Report>
+        <TitleText />
+        <AllowSearching>false</AllowSearching>
+        <AllowScrolling>true</AllowScrolling>
+        <DesignSuppressExecution>false</DesignSuppressExecution>
+        <AutoSizeExecution>true</AutoSizeExecution>
+        <ReloadInterval>0</ReloadInterval>
+        <UdfData />
+        <FilterValues />
+        <ParameterValues />
+        <FilterPrompts />
+        <ParameterPrompts />
+      </DashboardAdvancedReportItem>
+      <DashboardAdvancedReportItem>
+        <Id>693673956</Id>
+        <Bounds>
+          <height>0.49969033439154231</height>
+          <width>0.47821403812569629</width>
+          <top>0.48386137242141652</top>
+          <left>0.5108538147373507</left>
+        </Bounds>
+        <Format>
+          <Title>Dashboards/Dashboard - Device by Function</Title>
+          <ShowTitleOnOutput>false</ShowTitleOnOutput>
+          <TileFit>All</TileFit>
+          <TitleFont>Arial</TitleFont>
+          <TitleFontSize>14</TitleFontSize>
+          <TitleFontColor>#545454</TitleFontColor>
+          <TitleFontWeight>Normal</TitleFontWeight>
+          <TitleHorizontalAlign>Center</TitleHorizontalAlign>
+          <TitleUnderline>None</TitleUnderline>
+          <HasTileBackground>true</HasTileBackground>
+          <TileBackgroundColor>#FFFFFF</TileBackgroundColor>
+          <TileBackgroundOpacity>100</TileBackgroundOpacity>
+          <HasTileTitleBackground>true</HasTileTitleBackground>
+          <TileTitleBackgroundColor>#FFFFFF</TileTitleBackgroundColor>
+          <TileTitleBackgroundOpacity>100</TileTitleBackgroundOpacity>
+          <Borders>
+            <UniformBorders>true</UniformBorders>
+            <TopBorderColor>#d7d7d7</TopBorderColor>
+            <TopBorderWeight>0</TopBorderWeight>
+            <BottomBorderColor>#d7d7d7</BottomBorderColor>
+            <BottomBorderWeight>0</BottomBorderWeight>
+            <LeftBorderColor>#d7d7d7</LeftBorderColor>
+            <LeftBorderWeight>0</LeftBorderWeight>
+            <RightBorderColor>#d7d7d7</RightBorderColor>
+            <RightBorderWeight>0</RightBorderWeight>
+            <BorderRadius>3</BorderRadius>
+          </Borders>
+          <HasTileShadow>false</HasTileShadow>
+        </Format>
+        <AllowAlign>false</AllowAlign>
+        <IsAnchor>false</IsAnchor>
+        <IsAnchorable>false</IsAnchorable>
+        <AllowElementInteraction>false</AllowElementInteraction>
+        <Report>Pre-Defined Dashboards\Dashboards\Dashboard - Device by Function</Report>
+        <TitleText />
+        <AllowSearching>false</AllowSearching>
+        <AllowScrolling>true</AllowScrolling>
+        <DesignSuppressExecution>false</DesignSuppressExecution>
+        <AutoSizeExecution>true</AutoSizeExecution>
+        <ReloadInterval>0</ReloadInterval>
+        <UdfData />
+        <FilterValues />
+        <ParameterValues />
+        <FilterPrompts />
+        <ParameterPrompts />
+      </DashboardAdvancedReportItem>
+      <DashboardAdvancedReportItem>
+        <Id>234729297</Id>
+        <Bounds>
+          <height>0.46774193548387094</height>
+          <width>0.4778187206242156</width>
+          <top>0.016112931309251517</top>
+          <left>0.51085854227249139</left>
+        </Bounds>
+        <Format>
+          <Title>Dashboards/Dashboard - DB_Data_Extract</Title>
+          <ShowTitleOnOutput>false</ShowTitleOnOutput>
+          <TileFit>All</TileFit>
+          <TitleFont>Arial</TitleFont>
+          <TitleFontSize>14</TitleFontSize>
+          <TitleFontColor>#545454</TitleFontColor>
+          <TitleFontWeight>Normal</TitleFontWeight>
+          <TitleHorizontalAlign>Center</TitleHorizontalAlign>
+          <TitleUnderline>None</TitleUnderline>
+          <HasTileBackground>true</HasTileBackground>
+          <TileBackgroundColor>#FFFFFF</TileBackgroundColor>
+          <TileBackgroundOpacity>100</TileBackgroundOpacity>
+          <HasTileTitleBackground>true</HasTileTitleBackground>
+          <TileTitleBackgroundColor>#FFFFFF</TileTitleBackgroundColor>
+          <TileTitleBackgroundOpacity>100</TileTitleBackgroundOpacity>
+          <Borders>
+            <UniformBorders>true</UniformBorders>
+            <TopBorderColor>#d7d7d7</TopBorderColor>
+            <TopBorderWeight>0</TopBorderWeight>
+            <BottomBorderColor>#d7d7d7</BottomBorderColor>
+            <BottomBorderWeight>0</BottomBorderWeight>
+            <LeftBorderColor>#d7d7d7</LeftBorderColor>
+            <LeftBorderWeight>0</LeftBorderWeight>
+            <RightBorderColor>#d7d7d7</RightBorderColor>
+            <RightBorderWeight>0</RightBorderWeight>
+            <BorderRadius>3</BorderRadius>
+          </Borders>
+          <HasTileShadow>false</HasTileShadow>
+        </Format>
+        <AllowAlign>false</AllowAlign>
+        <IsAnchor>false</IsAnchor>
+        <IsAnchorable>false</IsAnchorable>
+        <AllowElementInteraction>false</AllowElementInteraction>
+        <Report>Pre-Defined Dashboards\Dashboards\Dashboard - DB_Data_Extract</Report>
+        <TitleText />
+        <AllowSearching>false</AllowSearching>
+        <AllowScrolling>true</AllowScrolling>
+        <DesignSuppressExecution>false</DesignSuppressExecution>
+        <AutoSizeExecution>true</AutoSizeExecution>
+        <ReloadInterval>0</ReloadInterval>
+        <UdfData />
+        <FilterValues />
+        <ParameterValues />
+        <FilterPrompts />
+        <ParameterPrompts />
+      </DashboardAdvancedReportItem>
+    </AdvancedReportItems>
+    <ExpressViewItems />
+    <ImageItems />
+    <UrlItems />
+    <FilterItems />
+  </Layout>
+  <ParameterModels />
+  <CanvasFormat>
+    <CanvasFit>All</CanvasFit>
+    <CanvasHeight>0</CanvasHeight>
+    <CanvasWidth>0</CanvasWidth>
+    <CanvasBackgroundColor>#EFEFEF</CanvasBackgroundColor>
+    <CanvasBackgroundOpacity>100</CanvasBackgroundOpacity>
+    <DefaultTileBackgroundColor>#FFFFFF</DefaultTileBackgroundColor>
+    <DefaultTileBackgroundOpacity>100</DefaultTileBackgroundOpacity>
+    <DefaultTileTitleBackgroundColor>#FFFFFF</DefaultTileTitleBackgroundColor>
+    <DefaultTileTitleBackgroundOpacity>100</DefaultTileTitleBackgroundOpacity>
+    <DefaultTileBorders>
+      <UniformBorders>true</UniformBorders>
+      <TopBorderColor>#d7d7d7</TopBorderColor>
+      <TopBorderWeight>0</TopBorderWeight>
+      <BottomBorderColor>#d7d7d7</BottomBorderColor>
+      <BottomBorderWeight>0</BottomBorderWeight>
+      <LeftBorderColor>#d7d7d7</LeftBorderColor>
+      <LeftBorderWeight>0</LeftBorderWeight>
+      <RightBorderColor>#d7d7d7</RightBorderColor>
+      <RightBorderWeight>0</RightBorderWeight>
+      <BorderRadius>3</BorderRadius>
+    </DefaultTileBorders>
+    <DefaultTileHasShadows>false</DefaultTileHasShadows>
+    <IsGridSnappingEnabled>true</IsGridSnappingEnabled>
+    <IsDashboardReflowEnabled>false</IsDashboardReflowEnabled>
+  </CanvasFormat>
+  <Main>
+    <Id>8f7f061a-84f8-486d-b1a7-ef402291c44f</Id>
+    <ReportType>Dashboard</ReportType>
+    <ExportType>Html</ExportType>
+  </Main>
+  <Api />
+  <Id>8f7f061a-84f8-486d-b1a7-ef402291c44f</Id>
+</DashboardReport>

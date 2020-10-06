@@ -1,0 +1,469 @@
+<report>
+  <main>
+    <id>cf7c0d62-1f90-4932-a804-a738774bcc93</id>
+    <version>1</version>
+    <type>Standard</type>
+    <sql_stmt />
+    <show_execute_form>False</show_execute_form>
+    <filter_execution_window>Default</filter_execution_window>
+    <fit_page_width>False</fit_page_width>
+    <suppress_formatting>False</suppress_formatting>
+    <report_tree_shortcut>2</report_tree_shortcut>
+    <output_mode>1</output_mode>
+    <prevent_output />
+    <page_size>Letter</page_size>
+    <page_orientation>Landscape</page_orientation>
+    <include_setup_info>No</include_setup_info>
+    <description />
+    <filter_description />
+    <show_grid>True</show_grid>
+    <pdf_template />
+    <embedded_pdf_template />
+    <simulate_pdf>True</simulate_pdf>
+    <no_data_render_type>ShowMessage</no_data_render_type>
+    <show_interactive_sorts>True</show_interactive_sorts>
+    <allow_column_hide>True</allow_column_hide>
+    <groups_on_separate_worksheets>False</groups_on_separate_worksheets>
+    <enable_cartesian_processing>Default</enable_cartesian_processing>
+    <visualization_report>false</visualization_report>
+    <use_cache_execution>false</use_cache_execution>
+    <excel_freeze_rows>2</excel_freeze_rows>
+    <excel_freeze_columns>1</excel_freeze_columns>
+    <excel_show_gridlines>True</excel_show_gridlines>
+    <suppressfiltersinterface>False</suppressfiltersinterface>
+    <suppresssortsinterface>False</suppresssortsinterface>
+    <row_range_limit>0</row_range_limit>
+    <custom_entities>{"webreports":{"entity":{"entity_name":"zOS","affinity":"Report","db_name":"zOS","sql_stmt":"/* Mainframe  Report - 05042020 \n*/\n/* Inline view of Target CTE (inline views) to streamline the process  - \n   Get all devices that we need or the rest of the processing */\nWith \n     target_device  as (\n        Select Distinct        \n          dev.device_pk,\n          dev.name,\n          dev.type \"Device Type\",\n          dev.serial_no \"Device_Serial\",        \n          dev.os_name \"OS Name\",\n          CASE \n           When dev.os_version != ''\n            Then dev.os_version\n           When dev.os_version_no != ''\n            Then dev.os_version_no          \n           Else ''\n          END \"OS Version\",       \n          dev.service_level,\n          dev.cpucount \"CPU Count\",\n          mu1.\"Used Space (TB)\",\n          mu1.\"Total Space (TB)\",\n          mu1.\"Total Free Space (TB)\",\n    /* Get TP  */\n          (Select array_to_string(array(\n                 Select distinct sr.displayname \n                 From view_serviceinstance_v2 si\n                 left join view_service_v2 sr on sr.service_pk = si.service_fk\n                 Where si.device_fk = dev.device_pk and Position('CICS' IN sr.displayname) &gt; 0),' | ')) all_tp,\n    /* Get all non-tp Services */\n          (Select array_to_string(array(\n                 Select distinct sr.displayname \n                 From view_serviceinstance_v2 si\n                 left join view_service_v2 sr on sr.service_pk = si.service_fk\n                 Where si.device_fk = dev.device_pk and Position('CICS' IN sr.displayname) = 0),' | ')) all_non_tp,\n          (Select array_to_string(array(\n                 Select distinct ip.ip_address\n                 From view_ipaddress_v1 ip\n                 Where ip.device_fk = dev.device_pk),\n                 ' | ')) all_device_ips,\n          (Select array_to_string(array(\n                 Select Distinct ip.label\n                 From view_ipaddress_v1 ip\n                 Where ip.device_fk = dev.device_pk and ip.label != ''),\n                 ' | ')) all_ip_labels               \n       From \n         view_device_v1 dev\n         left join (Select m.device_fk, \n             /* have to convert from MB to TB, the division is by 1048576   */\n                              round(sum((m.capacity-m.free_capacity)/1048576),6) \"Used Space (TB)\", \n                              round(sum(m.capacity/1048576),6) \"Total Space (TB)\",\n                              round(sum(m.free_capacity/1048576),6) \"Total Free Space (TB)\"\n                       From view_mountpoint_v1 m \n                       group by m.device_fk) mu1 on mu1.device_fk = dev.device_pk\n         Where dev.os_name in ('z/OS')\n     ),\n   /* \n      Parse out the extra_fields string into separate fields \n   */\n     target_extra_field_info as (   \n        Select         \n         def.device_fk,\n         extra_fields::varchar\n         from view_device_extrafields_v1 def\n         join target_device td\n               on td.device_pk = def.device_fk \n    ),\n     parse_1 as (\n     Select\n       tef.device_fk,    \n       split_part(split_part(split_part(tef.extra_fields , ',',1), '=&gt;',1), '\"',2) part111,\n       split_part(split_part(split_part(tef.extra_fields , ',',1), '=&gt;',2), '\"',2) part121,\n       split_part(split_part(split_part(tef.extra_fields , ',',2), '=&gt;',1), '\"',2) part211,\n       split_part(split_part(split_part(tef.extra_fields , ',',2), '=&gt;',2), '\"',2) part221,\n       split_part(split_part(split_part(tef.extra_fields , ',',3), '=&gt;',1), '\"',2) part311,\n       split_part(split_part(split_part(tef.extra_fields , ',',3), '=&gt;',2), '\"',2) part321   \n     From target_extra_field_info tef\n    ),\n/* Get the values  */\n   combine_extra_fields as ( \n    Select\n    p1.device_fk,   \n    Case When p1.part111 = 'TSO Users'\n          Then p1.part121::int\n         When p1.part211 = 'TSO Users'\n          Then p1.part221::int\n         When p1.part311 = 'TSO Users'\n          Then p1.part321::int       \n    End \"TSO Count\",\n    Case When p1.part111 = 'TN3270 Connections'\n          Then p1.part121::int\n         When p1.part211 = 'TN3270 Connections'\n          Then p1.part221::int\n         When p1.part311 = 'TN3270 Connections'\n          Then p1.part321::int       \n    End \"TN3270 Count\",           \n    Case When p1.part111 = 'GCP Capacity'\n          Then p1.part121\n         When p1.part211 = 'GCP Capacity'\n          Then p1.part221\n         When p1.part311 = 'GCP Capacity'\n          Then p1.part321        \n    End \"GCP_MIPS\"        \n    From parse_1 p1\n   ),\n   /* \n     Get the HDW model and vendor\n  */   \n     target_hardware_model as (\n        Select Distinct\n          dev.device_pk,\n          hdw.name \"Device Model\",\n          vnd.name \"Device Manufacturer\"\n     From \n        view_device_v1 dev\n        left join view_hardware_v1 hdw on hdw.hardware_pk = dev.hardware_fk\n        left join view_vendor_v1 vnd on vnd.vendor_pk = hdw.vendor_fk\n        Where dev.os_name in ('z/OS')\n     ),   \n   /* \n     Get the zIIP and zAAP CPU counts\n  */   \n     target_CPU_parts as (\n        Select Distinct\n          dev.device_pk,\n          pt.pcount,\n          ptm.name,\n          concat(pt.pcount,' - ',ptm.name) cpu_count\n     From \n        view_device_v1 dev\n        join view_part_v1 pt on pt.device_fk = dev.device_pk\n        join view_partmodel_v1 ptm on ptm.partmodel_pk = pt.partmodel_fk\n        Where dev.os_name in ('z/OS') and ptm.name in ('zIIP', 'zAAP')\n     ),   \n   /* \n     Put in placeholder values until we figure out where they come from..\n  */\n     target_business_app  as (\n        Select         \n         bae.device_fk,\n         bae.element_name\n         from view_businessapplicationelement_v1 bae\n         join view_businessapplication_v1 ba on ba.businessapplication_pk = bae.businessapplication_fk\n         join target_device td on td.device_pk = bae.device_fk \n    ),\n/* Inline view of  Target IP_MAC data  - Filters down to just the records needed   */\n     target_IP_MAC_data as (\n        Select Distinct\n        ip.ip_address,\n        ip.label,\n        np.netport_pk,\n        np.hwaddress,\n        np.port,\n        np.device_fk                             \n       From\n          target_device tdm    \n          join view_ipaddress_v1 ip on ip.device_fk = tdm.device_pk\n          join view_netport_v1 np on np.netport_pk = ip.netport_fk\n    ),         \n/* Inline view of  Target MAC_Device data  - Filters down to just the records needed   */\n     target_MAC_Device_data as (\n        Select Distinct\n        tim.device_fk,\n       (select hwaddress_dashes from f_hwaddress_fixup(tim.hwaddress))  \"MAC Address\"        \n       From \n          target_IP_MAC_data tim\n    ),  \n  /* \n     Put in placeholder values until we figure out where they come from..\n  */\n     target_custom_fields as (  \n        Select \n          td.device_pk,     \n          'Manual/User Defined' \"Workload Acronym\",\n          'Manual/User Defined' \"Business Function(s)\",\n          'Manual/User Defined' \"Business Importance\",\n          'Manual/User Defined' \"Supporting Environments\",\n          'Manual/User Defined' \"Stabilized or Strategic\", \n          'Manual/User Defined' \"No of Supporting Developers\",\n          'Manual/User Defined' \"No of Supporting System Programmers Operators\",\n          'Manual/User Defined' \"Additional Comments\"  \n          From \n           target_device td           \n    )\n/*  \n*/  \n/*  Pull all the data together   */ \n   Select Distinct\n          tba.element_name \"Business App\",\n          cu.\"Workload Acronym\",\n          cu.\"Business Function(s)\",\n          cu.\"Business Importance\",\n          td.name \"Device Name\",\n          Null \"Online Programming Languages\",\n          Null \"Batch Languages\",\n          Null \"Number of Lines of Code\",\n          td.all_tp \"Transaction Monitor and Version\",\n          Null \"Data Store Version\",\n          td.\"OS Name\",\n          td.\"OS Version\",\n          td.all_non_tp  \"Dependencies, Utilities, Tools\",\n          'TBD 1'  \"User Client  - communication protocol\",\n          cu.\"Supporting Environments\",\n          'TBD 2' \"Inbound users clients applications\",\n          'TBD' \"Outbound Applications Systems\",\n          Concat(Substring(cef.\"GCP_MIPS\",1,Length(cef.\"GCP_MIPS\")-1),' ; ',\n                (Select array_to_string(array(\n                 Select tcp.cpu_count\n                 From target_CPU_parts tcp\n                 Where tcp.device_pk = td.device_pk),\n                 ' ; '))) \"MIPS\",\n          td.\"Used Space (TB)\" \"Disk Hot Storage - TB\",\n          Null \"Used Tape Cold Storage\",\n          cef.\"TN3270 Count\" + cef.\"TSO Count\" \"Users\",\n          Null \"Average TPS\",\n          Null \"Max TPS\",\n          cu.\"Stabilized or Strategic\", \n          cu.\"No of Supporting Developers\",\n          cu.\"No of Supporting System Programmers Operators\",\n          cu.\"Additional Comments\",\n          hm.\"Device Model\",\n          hm.\"Device Manufacturer\",         \n          td.\"Device_Serial\",\n          td.all_device_ips \"All Device IPs\",\n          td.all_ip_labels \"All IP Labels\",\n          td.device_pk \"Device ID\",\n          td.service_level \"Device Service Level\",\n          td.\"CPU Count\",\n          td.\"Device Type\",\n          (Select array_to_string(array(\n               Select Distinct tmd.\"MAC Address\"\n                From target_MAC_Device_data tmd\n                Where tmd.device_fk = td.device_pk),\n                 ' | ')) all_macs         \n       From \n         target_device td\n         left join target_custom_fields cu on cu.device_pk = td.device_pk        \n         left join combine_extra_fields cef on cef.device_fk = td.device_pk\n         left join target_business_app tba on tba.device_fk = td.device_pk\n         left join target_hardware_model hm on hm.device_pk = td.device_pk","datasource_id":"0","object_type":"sql","key":{"col_name":"Device ID"}}}}</custom_entities>
+  </main>
+  <entity>
+    <entity_name>zOS</entity_name>
+    <group_by_flag>False</group_by_flag>
+  </entity>
+  <cell>
+    <id>1801851595</id>
+    <cell_text>Device Name</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>0</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>489790613</id>
+    <cell_text>Serial No</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>1</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1621399865</id>
+    <cell_text>Device Manufacturer</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>2</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>313148326</id>
+    <cell_text>Device Model</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>3</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1343996885</id>
+    <cell_text>Service Level</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>4</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>768382013</id>
+    <cell_text>Operating System</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>5</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1265402087</id>
+    <cell_text>OS Version</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>6</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>688064223</id>
+    <cell_text>CPU Count</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>7</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1318175567</id>
+    <cell_text>MIPS</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>8</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>841441391</id>
+    <cell_text>Disk/Hot Storage (TB)</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>9</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>2004682298</id>
+    <cell_text>Transaction Monitor</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>10</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1070132349</id>
+    <cell_text>Dependencies, Utilities, Tools</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>11</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1560002370</id>
+    <cell_text>Users</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>12</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1506268779</id>
+    <cell_text>Business Application</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>13</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>513197783</id>
+    <cell_text>All Device IPs</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>14</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>424704860</id>
+    <cell_text>zOS.Device Name</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>0</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+  </cell>
+  <cell>
+    <id>1830278879</id>
+    <cell_text>zOS.Device_Serial</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>1</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+  </cell>
+  <cell>
+    <id>457581789</id>
+    <cell_text>zOS.Device Manufacturer</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>2</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+  </cell>
+  <cell>
+    <id>225621750</id>
+    <cell_text>zOS.Device Model</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>3</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+  </cell>
+  <cell>
+    <id>319907919</id>
+    <cell_text>zOS.Device Service Level</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>4</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+  </cell>
+  <cell>
+    <id>357396230</id>
+    <cell_text>zOS.OS Name</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>5</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+  </cell>
+  <cell>
+    <id>734366567</id>
+    <cell_text>zOS.OS Version</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>6</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+  </cell>
+  <cell>
+    <id>420102001</id>
+    <cell_text>zOS.CPU Count</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>7</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+  </cell>
+  <cell>
+    <id>862570779</id>
+    <cell_text>zOS.MIPS</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>8</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+  </cell>
+  <cell>
+    <id>534401550</id>
+    <cell_text>zOS.Disk Hot Storage - TB</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>9</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+  </cell>
+  <cell>
+    <id>1143536592</id>
+    <cell_text>zOS.Transaction Monitor and Version</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>10</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+  </cell>
+  <cell>
+    <id>1450253338</id>
+    <cell_text>zOS.Dependencies, Utilities, Tools</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>11</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+  </cell>
+  <cell>
+    <id>440811280</id>
+    <cell_text>zOS.Users</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>12</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+  </cell>
+  <cell>
+    <id>346787505</id>
+    <cell_text>zOS.Business App</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>13</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+  </cell>
+  <cell>
+    <id>1884916220</id>
+    <cell_text>zOS.All Device IPs</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>14</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+  </cell>
+  <row>
+    <group_type>Page Header</group_type>
+    <row_height>30</row_height>
+  </row>
+  <row>
+    <group_type>Detail</group_type>
+    <row_height>30</row_height>
+    <shading>
+      <color>#FFFFFF</color>
+    </shading>
+    <shading>
+      <color>#E2E2E2</color>
+    </shading>
+  </row>
+  <column>
+    <column_width>275</column_width>
+    <column_label>Device Name</column_label>
+  </column>
+  <column>
+    <column_width>275</column_width>
+    <column_label>Serial No</column_label>
+  </column>
+  <column>
+    <column_width>275</column_width>
+    <column_label>Device Manufacturer</column_label>
+  </column>
+  <column>
+    <column_width>275</column_width>
+    <column_label>Device Model</column_label>
+  </column>
+  <column>
+    <column_width>275</column_width>
+    <column_label>Service Level</column_label>
+  </column>
+  <column>
+    <column_width>275</column_width>
+    <column_label>Operating System</column_label>
+  </column>
+  <column>
+    <column_width>275</column_width>
+    <column_label>OS Version</column_label>
+  </column>
+  <column>
+    <column_width>275</column_width>
+    <column_label>CPU Count</column_label>
+  </column>
+  <column>
+    <column_width>275</column_width>
+    <column_label>MIPS</column_label>
+  </column>
+  <column>
+    <column_width>275</column_width>
+    <column_label>Disk/Hot Storage (TB)</column_label>
+  </column>
+  <column>
+    <column_width>275</column_width>
+    <column_label>Transaction Monitor</column_label>
+  </column>
+  <column>
+    <column_width>275</column_width>
+    <column_label>Dependencies, Utilities, Tools</column_label>
+  </column>
+  <column>
+    <column_width>275</column_width>
+    <column_label>Users</column_label>
+  </column>
+  <column>
+    <column_width>275</column_width>
+    <column_label>Business Application</column_label>
+  </column>
+  <column>
+    <column_width>275</column_width>
+    <column_label>All Device IPs</column_label>
+  </column>
+  <dynamicfilters />
+</report>

@@ -1,0 +1,704 @@
+<report>
+  <main>
+    <id>a9ce2a8a-2c91-46c8-99d9-8d9782936075</id>
+    <version>1</version>
+    <type>Standard</type>
+    <sql_stmt />
+    <show_execute_form>False</show_execute_form>
+    <filter_execution_window>Default</filter_execution_window>
+    <fit_page_width>False</fit_page_width>
+    <suppress_formatting>False</suppress_formatting>
+    <report_tree_shortcut>2</report_tree_shortcut>
+    <output_mode>1</output_mode>
+    <prevent_output />
+    <page_size>Letter</page_size>
+    <page_orientation>Landscape</page_orientation>
+    <include_setup_info>No</include_setup_info>
+    <description />
+    <filter_description />
+    <show_grid>True</show_grid>
+    <pdf_template />
+    <embedded_pdf_template />
+    <simulate_pdf>True</simulate_pdf>
+    <no_data_render_type>ShowMessage</no_data_render_type>
+    <show_interactive_sorts>True</show_interactive_sorts>
+    <allow_column_hide>True</allow_column_hide>
+    <groups_on_separate_worksheets>False</groups_on_separate_worksheets>
+    <enable_cartesian_processing>Default</enable_cartesian_processing>
+    <visualization_report>false</visualization_report>
+    <use_cache_execution>false</use_cache_execution>
+    <show_html_toolbar>Always</show_html_toolbar>
+    <excel_freeze_rows>2</excel_freeze_rows>
+    <excel_freeze_columns>1</excel_freeze_columns>
+    <excel_show_gridlines>True</excel_show_gridlines>
+    <suppressfiltersinterface>False</suppressfiltersinterface>
+    <suppresssortsinterface>False</suppresssortsinterface>
+    <row_range_limit>0</row_range_limit>
+    <custom_entities>{"webreports":{"entity":{"entity_name":"Host_Guest","affinity":"Report","db_name":"Host_Guest","sql_stmt":"/* Virtual Inventory    \nUpdated - 3/3/20 - consolidated the query and re-orged\nUpdated - 12/23/2019\n          - added Core Threads and total compute capacity based upon CPUS * Core/Cpu * # of hyperthreads \n          - compute Compute Power dependent on what values are avail (for Host and Guest)\t\t  */\nSelect\n    vmm.name \"VM Manager\",\n  /*  Assemble Host information   */\n    h.device_pk \"Host Device ID\",\n    h.name \"Host Device Name\",\n    h.type \"Host Hardware Type\",\n    h.os_name \"Host OS Name\",\n    h.os_arch \"Host OS Arch\",\n    h.os_version \"Host OS Version\",\n    h.os_version_no \"Host OS Version No\",\n    CASE When h.corethread &gt; 1\n          Then 'YES'\n          Else 'NO'\n    END \"Host Hyperthreaded?\",\n    h.cpucount \"Host CPU Count\",\n    h.cpucore \"Host CPU Cores\",\n    h.cpupower \"Host CPU Speed GHz\",\n    h.ram \"Host RAM GB\",\n  /* Additional Host info      */\n    h.corethread \"Host Core Threads\",\n    CASE When h.cpucore is Null\n          Then h.cpucount\n\t When h.corethread &gt; 1\n          Then h.cpucount * h.cpucore * h.corethread\n\t  Else h.cpucount * h.cpucore\n    END \"Host Compute Power\",\t\n  /* Assemble Guest information   */\n    g.device_pk \"Guest Device ID\",\n    g.name \"Guest Name\",\n    split_part(g.name,'.',1) \"Guest Name (SN)\",\n    (SELECT array_to_string(array(\n      select ip.ip_address\n      from view_ipaddress_v1 ip\n       where ip.device_fk = g.device_pk),\n     '; ')) as \"Guest IP Address\",\n    g.os_name \"Guest OS Name\",\n    g.in_service \"Guest In Service?\",\n    g.os_arch \"Guest OS Arch\",\n    g.os_version \"Guest OS Version\",\n    g.os_version_no \"Guest OS Version No\",\n    CASE \n       When g.corethread &gt; 1\n        Then 'YES'\n        Else 'NO'\n    END \"Guest Hyperthreaded?\",\n    g.cpucount \"Guest CPU Count\",\n    g.cpucore \"Guest CPU Cores\",\n    g.cpupower \"Guest CPU Speed GHz\",\n    g.ram \"Guest RAM GB\",\n    g.hard_disk_count \"Guest Disk Count\",\n    g.datastores \"Datastores\",\n    CASE When c.parent_device_fk is null\n      \tThen 'N' \n\tElse 'Y' \n    END \"Guest Clustered\",\n    c.parent_device_name \"Cluster Name\",\n /* Additonal info available - for Hosts and Guests */\n    g.corethread \"Guest Core Threads\",\n    CASE When g.cpucore is Null\n\t  Then g.cpucount\n\t When g.corethread &gt; 1\n          Then g.cpucount * g.cpucore * g.corethread\n\t  Else g.cpucount * g.cpucore\n    END \"Guest Compute Power\",\n    h.last_edited \"Host Last Update\", \n    g.last_edited \"Guest Last Update\", \n    (select hmp.last_updated from view_mountpoint_v1 hmp where hmp.device_fk = h.device_pk Limit 1) \"Host MP Last Update\",\n    (select gmp.last_updated from view_mountpoint_v1 gmp where gmp.device_fk = g.device_pk Limit 1) \"Guest MP Last Update\",\n    (select count(*) from view_softwaredetails_v1 sd where sd.device_fk = h.device_pk) \"Host Software Discovered\",   \n    (select count(*) from view_softwaredetails_v1 sd where sd.device_fk = g.device_pk) \"Guest Software Discovered\"\n/*   Get the Hosts that have virtual_host flag on - sub-query */\n    from (Select * from view_device_v1 hsq \n            where hsq.virtual_host and hsq.os_name NOT IN ('f5','netscaler'))h\n/*   Get the virtual devices that are not part of the network OSes - sub-query*/            \n    left join (Select * from view_device_v1 gsq \n            where gsq.type_id = '3') g  on h.device_pk = g.virtual_host_device_fk\n    left join view_device_v1 vmm on vmm.device_pk = h.vm_manager_device_fk\n    left join view_devices_in_cluster_v1 c on c.child_device_fk = h.device_pk  \n    Order by h.name ASC","datasource_id":"0","object_type":"sql","key":{"col_name":"Guest Device ID"}}}}</custom_entities>
+  </main>
+  <entity>
+    <entity_name>Host_Guest</entity_name>
+    <group_by_flag>False</group_by_flag>
+  </entity>
+  <cell>
+    <id>701625760</id>
+    <cell_text>VM Manager</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>0</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>53000809</id>
+    <cell_text>Host Device Name</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>1</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1939474097</id>
+    <cell_text>Host Hardware Type</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>2</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>2140590877</id>
+    <cell_text>Host OS Name</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>3</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>77991697</id>
+    <cell_text>Host OS Version</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>4</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1286365855</id>
+    <cell_text>Host OS Version No</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>5</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>518770383</id>
+    <cell_text>Host Hyperthreaded?</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>6</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1554095405</id>
+    <cell_text>Host CPU Cores</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>7</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>802241407</id>
+    <cell_text>Host CPU Count</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>8</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>296380613</id>
+    <cell_text>Host CPU Speed</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>9</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1747352235</id>
+    <cell_text>Host RAM</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>10</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>802540972</id>
+    <cell_text>Guest Device Name</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>11</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>966509820</id>
+    <cell_text>Guest In Service?</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>12</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>621270198</id>
+    <cell_text>Guest OS Name</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>13</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1312192432</id>
+    <cell_text>Guest OS Version</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>14</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>112009697</id>
+    <cell_text>Guest OS Version No</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>15</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1570674164</id>
+    <cell_text>Guest Hyperthreaded?</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>16</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1425739064</id>
+    <cell_text>Guest CPU Cores</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>17</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1253215025</id>
+    <cell_text>Guest CPU Count</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>18</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>659940977</id>
+    <cell_text>Guest CPU Speed</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>19</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>723150989</id>
+    <cell_text>Guest RAM</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>20</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>158100746</id>
+    <cell_text>Guest Disk Count</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>21</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>639063222</id>
+    <cell_text>Datastores</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>22</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>2067606394</id>
+    <cell_text>Host_Guest.VM Manager</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>0</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <format_type>Text</format_type>
+  </cell>
+  <cell>
+    <id>1695117421</id>
+    <cell_text>Host_Guest.Host Device Name</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>1</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <format_type>Text</format_type>
+  </cell>
+  <cell>
+    <id>2030719224</id>
+    <cell_text>Host_Guest.Host Hardware Type</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>2</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <format_type>Text</format_type>
+  </cell>
+  <cell>
+    <id>914770516</id>
+    <cell_text>Host_Guest.Host OS Name</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>3</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <format_type>Text</format_type>
+  </cell>
+  <cell>
+    <id>115906962</id>
+    <cell_text>Host_Guest.Host OS Version</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>4</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <format_type>Text</format_type>
+  </cell>
+  <cell>
+    <id>1714685099</id>
+    <cell_text>Host_Guest.Host OS Version No</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>5</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <format_type>Text</format_type>
+  </cell>
+  <cell>
+    <id>1287592198</id>
+    <cell_text>Host_Guest.Host Hyperthreaded?</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>6</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+  </cell>
+  <cell>
+    <id>1850790940</id>
+    <cell_text>Host_Guest.Host CPU Cores</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>7</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <format_type>Text</format_type>
+  </cell>
+  <cell>
+    <id>192241158</id>
+    <cell_text>Host_Guest.Host CPU Count</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>8</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <format_type>Text</format_type>
+  </cell>
+  <cell>
+    <id>1122206287</id>
+    <cell_text>Host_Guest.Host CPU Speed GHz</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>9</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <format_type>Text</format_type>
+  </cell>
+  <cell>
+    <id>1145158683</id>
+    <cell_text>Host_Guest.Host RAM GB</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>10</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <format_type>Text</format_type>
+  </cell>
+  <cell>
+    <id>1848906192</id>
+    <cell_text>Host_Guest.Guest Name</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>11</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <format_type>Text</format_type>
+  </cell>
+  <cell>
+    <id>513280105</id>
+    <cell_text>Host_Guest.Guest In Service?</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>12</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <format_type>Text</format_type>
+  </cell>
+  <cell>
+    <id>153937650</id>
+    <cell_text>Host_Guest.Guest OS Name</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>13</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <format_type>Text</format_type>
+  </cell>
+  <cell>
+    <id>1237319355</id>
+    <cell_text>Host_Guest.Guest OS Version</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>14</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <format_type>Text</format_type>
+  </cell>
+  <cell>
+    <id>1341357598</id>
+    <cell_text>Host_Guest.Guest OS Version No</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>15</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <format_type>Text</format_type>
+  </cell>
+  <cell>
+    <id>1806250732</id>
+    <cell_text>Host_Guest.Guest Hyperthreaded?</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>16</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+  </cell>
+  <cell>
+    <id>990409850</id>
+    <cell_text>Host_Guest.Guest CPU Cores</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>17</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <format_type>Text</format_type>
+  </cell>
+  <cell>
+    <id>693627579</id>
+    <cell_text>Host_Guest.Guest CPU Count</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>18</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <format_type>Text</format_type>
+  </cell>
+  <cell>
+    <id>1658011360</id>
+    <cell_text>Host_Guest.Guest CPU Speed GHz</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>19</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <format_type>Text</format_type>
+  </cell>
+  <cell>
+    <id>549512662</id>
+    <cell_text>Host_Guest.Guest RAM GB</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>20</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <format_type>Text</format_type>
+  </cell>
+  <cell>
+    <id>1719121479</id>
+    <cell_text>Host_Guest.Guest Disk Count</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>21</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <format_type>Text</format_type>
+  </cell>
+  <cell>
+    <id>36712235</id>
+    <cell_text>Host_Guest.Datastores</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>22</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+  </cell>
+  <row>
+    <group_type>Page Header</group_type>
+    <row_height>30</row_height>
+  </row>
+  <row>
+    <group_type>Detail</group_type>
+    <row_height>30</row_height>
+    <shading>
+      <color>#FFFFFF</color>
+    </shading>
+    <shading>
+      <color>#E2E2E2</color>
+    </shading>
+  </row>
+  <column>
+    <column_width>250</column_width>
+    <column_label>VM Manager</column_label>
+  </column>
+  <column>
+    <column_width>250</column_width>
+    <column_label>Host Device Name</column_label>
+  </column>
+  <column>
+    <column_width>250</column_width>
+    <column_label>Host Hardware Type</column_label>
+  </column>
+  <column>
+    <column_width>250</column_width>
+    <column_label>Host OS Name</column_label>
+  </column>
+  <column>
+    <column_width>250</column_width>
+    <column_label>Host OS Version</column_label>
+  </column>
+  <column>
+    <column_width>250</column_width>
+    <column_label>Host OS Version No</column_label>
+  </column>
+  <column>
+    <column_width>250</column_width>
+    <column_label>Host Hyperthreaded?</column_label>
+  </column>
+  <column>
+    <column_width>250</column_width>
+    <column_label>Host CPU Cores</column_label>
+  </column>
+  <column>
+    <column_width>250</column_width>
+    <column_label>Host CPU Count</column_label>
+  </column>
+  <column>
+    <column_width>250</column_width>
+    <column_label>Host CPU Speed</column_label>
+  </column>
+  <column>
+    <column_width>250</column_width>
+    <column_label>Host RAM</column_label>
+  </column>
+  <column>
+    <column_width>250</column_width>
+    <column_label>Guest Device Name</column_label>
+  </column>
+  <column>
+    <column_width>250</column_width>
+    <column_label>Guest In Service?</column_label>
+  </column>
+  <column>
+    <column_width>250</column_width>
+    <column_label>Guest OS Name</column_label>
+  </column>
+  <column>
+    <column_width>250</column_width>
+    <column_label>Guest OS Version</column_label>
+  </column>
+  <column>
+    <column_width>250</column_width>
+    <column_label>Guest OS Version No</column_label>
+  </column>
+  <column>
+    <column_width>250</column_width>
+    <column_label>Guest Hyperthreaded?</column_label>
+  </column>
+  <column>
+    <column_width>250</column_width>
+    <column_label>Guest CPU Cores</column_label>
+  </column>
+  <column>
+    <column_width>250</column_width>
+    <column_label>Guest CPU Count</column_label>
+  </column>
+  <column>
+    <column_width>250</column_width>
+    <column_label>Guest CPU Speed</column_label>
+  </column>
+  <column>
+    <column_width>250</column_width>
+    <column_label>Guest RAM</column_label>
+  </column>
+  <column>
+    <column_width>250</column_width>
+    <column_label>Guest Disk Count</column_label>
+  </column>
+  <column>
+    <column_width>250</column_width>
+    <column_label>Datastores</column_label>
+  </column>
+  <dynamicfilters />
+</report>

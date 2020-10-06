@@ -1,0 +1,377 @@
+<report>
+  <main>
+    <id>cd0f9c16-5989-47d5-8ffe-2ba2c7928b79</id>
+    <version>1</version>
+    <type>Standard</type>
+    <sql_stmt />
+    <show_execute_form>False</show_execute_form>
+    <filter_execution_window>Default</filter_execution_window>
+    <fit_page_width>False</fit_page_width>
+    <suppress_formatting>False</suppress_formatting>
+    <report_tree_shortcut>0</report_tree_shortcut>
+    <output_mode>6</output_mode>
+    <prevent_output />
+    <page_size>Letter</page_size>
+    <page_orientation>Portrait</page_orientation>
+    <include_setup_info>No</include_setup_info>
+    <description />
+    <filter_description />
+    <show_grid>True</show_grid>
+    <pdf_template />
+    <embedded_pdf_template />
+    <simulate_pdf>True</simulate_pdf>
+    <no_data_render_type>ShowMessage</no_data_render_type>
+    <show_interactive_sorts>True</show_interactive_sorts>
+    <allow_column_hide>True</allow_column_hide>
+    <groups_on_separate_worksheets>False</groups_on_separate_worksheets>
+    <enable_cartesian_processing>Default</enable_cartesian_processing>
+    <visualization_report>false</visualization_report>
+    <use_cache_execution>false</use_cache_execution>
+    <excel_freeze_rows>1</excel_freeze_rows>
+    <excel_freeze_columns>1</excel_freeze_columns>
+    <excel_show_gridlines>True</excel_show_gridlines>
+    <suppressfiltersinterface>False</suppressfiltersinterface>
+    <suppresssortsinterface>False</suppresssortsinterface>
+    <row_range_limit>0</row_range_limit>
+    <custom_entities>{"webreports":{"entity":{"entity_name":"IP_detailed_ifo","affinity":"Report","db_name":"IP_detailed_ifo","sql_stmt":"/* IPAM Enhancement   \n     Created - 10/15/2019 \n     Updated - 12/11/19 - added mac address and DNS info       \n\t Updated - 01/20/20 - removed DNS info and counted the # addresses in subnet in outer loop to  get correct count after duplicates are removed\n     Updated - 3/12/20  - added gateway value                                                              \t */\n/* Inline view of  Target DNS data  - Filters down to just the DNS records that are needed in the next step  */\n   With target_DNS_data as (\n        Select Distinct\n\t\t\tdr.dnsrecords_pk,\n\t\t\tdr.name,\n\t\t\tdr.type,\n\t\t\tdr.content,\n\t\t\tdr.dnszone_fk          \n       From \n            view_dnsrecords_v1 dr\n            Where dr.type = 'A'\n    ),\n/* Inline view of  Target IP_MAC data  - Filters down to just the records needed   */\n   target_IP_MAC_data as (\n        Select Distinct\n\t\t\tip.ip_address,\n\t\t\tip.label,\n\t\t\tnp.netport_pk,\n\t\t\tnp.hwaddress,\n\t\t\tnp.port,\n\t\t\tnp.device_fk                             \n       From \n            view_ipaddress_v1 ip \n            Left Join view_netport_v1 np on np.netport_pk = ip.netport_fk\n    ),         \n/* Inline view of  Target MAC_Device data  - Filters down to just the records needed   */\n   target_MAC_Device_data as (\n        Select Distinct\n\t\t\ttim.device_fk,\n\t\t\ttim.hwaddress                         \n       From \n            target_IP_MAC_data tim\n    ),         \n/* Inline view of  Target MAC_Count_Device data  - Filters down to just the records needed   */\n   target_MAC_Count_Device_data as (\n        Select Distinct\n\t\t\tmcd.device_fk,\n\t\t\tcount (*) over (Partition BY mcd.device_fk) as \"Total MACs per Device\"                          \n       From \n            target_MAC_Device_data mcd\n    )\n/* Pull the data together for the final report   */\n\n\tSelect \n\t   xx.\"IP Address\",\n\t   xx.\"IP Address Label\",\n\t   xx.\"Subnet Name\",\n\t   xx.\"Subnet Description\",\n\t   xx.\"Subnet\",\n\t   xx.\"CIDR\",\n\t   xx.\"Subnet Service Level\",\n\t   xx.\"VLAN Name\",\n\t   xx.\"VLAN Number\",\n\t   xx.\"Range Begin\",\n\t   xx.\"Range End\",\n\t   xx.\"Associated Device\",\n\t   xx.\"Device Name (SN)\",\n\t   xx.\"Device Tags\",\n\t   xx.\"Port\",\n\t   xx.\"VRF Group\",\n\t   xx.\"VRF Description\",\n\t   xx.\"First Added\",\n\t   xx.\"Last Updated\",\n\t   xx.\"# of Addresses\",\n\t   xx.\"Count\",\n\t   /*  Do count here after duplicates removed*/\n\t   count (*) over (Partition BY xx.\"Subnet\") as \"Total within Subnet\",   \n\t   /*   */\n\t   CASE WHEN xx.\"# of Addresses\" = 0\n\t\t   THEN 0\n\t\t   ELSE Round((count (*) over (Partition BY xx.\"Subnet\")::numeric(10,2)/xx.\"# of Addresses\"::numeric(10,2))*100.00)\n\t   END  AS \"% Used\",\n\t   /*  */\n\t   xx.\"MAC Address\",\n\t   xx.\"DNS Record Name\", \n\t   xx.\"Total MACs per Device\",\n\t   xx.\"Gateway\"\n\t   From \n\t   (Select Distinct\n\t\t   ip.ip_address \"IP Address\",\n\t\t   ip.label \"IP Address Label\",\n\t\t   s.name \"Subnet Name\",\n\t\t   s.description \"Subnet Description\",\n\t\t   s.network \"Subnet\",\n\t\t   concat (s.network, '/', s.mask_bits)  \"CIDR\",\n\t\t   s.service_level \"Subnet Service Level\",\n\t\t   v.name \"VLAN Name\",\n\t\t   v.number \"VLAN Number\",\n\t\t   s.range_begin \"Range Begin\",\n\t\t   s.range_end \"Range End\",\n\t\t   lower(d.name) \"Associated Device\",\n\t\t   lower(CASE WHEN host(ip.ip_address) = d.name\n\t\t\t   THEN NULL\n\t\t\t   ELSE split_part(d.name,'.',1)\n\t\t   END)  AS  \"Device Name (SN)\",\n\t\t   d.tags \"Device Tags\",\n\t\t   im.port \"Port\",\n\t\t   vr.name \"VRF Group\",\n\t\t   vr.description \"VRF Description\",\n\t\t   ip.first_added \"First Added\",\n\t\t   ip.last_changed \"Last Updated\",\n\t\t /* this works great for IPV4, but needs to be enhanced for IPV6   */     \n\t\t   CASE WHEN s.mask_bits is Null\n\t\t\t   Then 0  \n\t\t\t   WHEN s.mask_bits::int &lt; 8\n\t\t\t\t   or s.mask_bits::int &gt; 32  \t   \n\t\t\t   THEN 0\n\t\t\t   ELSE split_part('16777214,8388606,4194302,20197150,1048574,524286,262142,131070,65534,32766,16382,8190,4094,2046,1022,510,254,126,62,30,14,6,2,0,1',',',(s.mask_bits-7))::int\n\t\t\tEND AS  \"# of Addresses\", \n\t\t/*\t0 as  \"# of Addresses\", */\n\t\t   CASE WHEN s.network is NULL or s.mask_bits = 0\n\t\t\t   THEN 0\n\t\t\t   ELSE 1\n\t\t\tEND  AS  \"Count\",\n\t\t\t(select hwaddress_dashes from f_hwaddress_fixup(im.hwaddress))  \"MAC Address\",\n\t\t\tNull \"DNS Record Name\", /* removed DNSinfo for now - causing multiple records and skewing counts within subnet.  */\n\t\t\tmcdd.\"Total MACs per Device\",\n\t\t\ts.gateway \"Gateway\" \t\n\t  From view_ipaddress_v1 ip\n\t  Left Join view_subnet_v1 s on s.subnet_pk = ip.subnet_fk\n\t  Left Join view_device_v1 d on d.device_pk = ip.device_fk\n\t  Left Join target_IP_MAC_data im on (im.netport_pk = ip.netport_fk) and (d.device_pk = im.device_fk)\n\t  Left Join target_DNS_data dz on host(ip.ip_address) =  dz.content\n\t  Left Join target_MAC_Count_Device_data mcdd on (mcdd.device_fk = d.device_pk) \n\t  Left Join view_vlan_v1 v on v.vlan_pk = s.parent_vlan_fk\n\t  Left Join view_vrfgroup_v1 vr on vr.vrfgroup_pk = s.vrfgroup_fk\n\t  )xx\n\t\tOrder by xx.\"IP Address\" ASC","datasource_id":"0","object_type":"sql","key":{"col_name":"IP Address"}}}}</custom_entities>
+  </main>
+  <entity>
+    <entity_name>IP_detailed_ifo</entity_name>
+    <group_by_flag>False</group_by_flag>
+  </entity>
+  <cell>
+    <id>598389513</id>
+    <cell_text />
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>0</cell_col>
+    <cell_colspan>11</cell_colspan>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1191777676</id>
+    <cell_text>IP Address</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>0</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>870336726</id>
+    <cell_text>Subnet</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>1</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>2120059882</id>
+    <cell_text>CIDR</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>2</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1564242000</id>
+    <cell_text>VLAN Name</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>3</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>203487</id>
+    <cell_text>Associated Device</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>4</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1190675341</id>
+    <cell_text>VRF Group</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>5</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>517252169</id>
+    <cell_text>Range Begin</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>6</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>34793865</id>
+    <cell_text>Range End</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>7</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>850971</id>
+    <cell_text>Gateway</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>8</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>845960016</id>
+    <cell_text># of Addresses</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>9</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>561948412</id>
+    <cell_text>% Used</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>10</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>210153699</id>
+    <cell_text>IP_detailed_ifo.IP Address</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>0</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1470657026</id>
+    <cell_text>IP_detailed_ifo.Subnet</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>1</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>892406699</id>
+    <cell_text>IP_detailed_ifo.CIDR</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>2</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>572097625</id>
+    <cell_text>IP_detailed_ifo.VLAN Name</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>3</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>87229627</id>
+    <cell_text>IP_detailed_ifo.Associated Device</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>4</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1321348930</id>
+    <cell_text>IP_detailed_ifo.VRF Group</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>5</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>918096235</id>
+    <cell_text>IP_detailed_ifo.Range Begin</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>6</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>645410716</id>
+    <cell_text>IP_detailed_ifo.Range End</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>7</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>849253678</id>
+    <cell_text>IP_detailed_ifo.Gateway</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>8</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1080124029</id>
+    <cell_text>IP_detailed_ifo.# of Addresses</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>9</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1951225423</id>
+    <cell_text>IP_detailed_ifo.% Used</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>10</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <row>
+    <group_type>Page Header</group_type>
+  </row>
+  <row>
+    <group_type>Page Header</group_type>
+  </row>
+  <row>
+    <group_type>Detail</group_type>
+  </row>
+  <column>
+    <column_width>132</column_width>
+    <column_label>IP Address</column_label>
+  </column>
+  <column>
+    <column_width>120</column_width>
+    <column_label>Subnet</column_label>
+  </column>
+  <column>
+    <column_width>128</column_width>
+    <column_label>CIDR</column_label>
+  </column>
+  <column>
+    <column_width>126</column_width>
+    <column_label>VLAN Name</column_label>
+  </column>
+  <column>
+    <column_width>179</column_width>
+    <column_label>Associated Device</column_label>
+  </column>
+  <column>
+    <column_width>123</column_width>
+    <column_label>VRF Group</column_label>
+  </column>
+  <column>
+    <column_width>138</column_width>
+    <column_label>Range Begin</column_label>
+  </column>
+  <column>
+    <column_width>124</column_width>
+    <column_label>Range End</column_label>
+  </column>
+  <column>
+    <column_width>126</column_width>
+    <column_label>Gateway</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label># of Addresses</column_label>
+  </column>
+  <column>
+    <column_width>131</column_width>
+    <column_label>% Used</column_label>
+  </column>
+  <sort>
+    <sort_name>IP_detailed_ifo.IP Address</sort_name>
+    <sort_title />
+    <order_num>0</order_num>
+    <ascending_flag>True</ascending_flag>
+  </sort>
+  <dynamicfilters />
+</report>
