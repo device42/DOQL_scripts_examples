@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<ChainedReport xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ParameterPrompts />
+  <FilterPrompts />
+  <Main>
+    <Id>9515d302-3a93-4a73-9285-13b54174e726</Id>
+    <Description>How are the device utilization numbers look per data center</Description>
+    <ReportType>Chained</ReportType>
+    <ExportType>Default</ExportType>
+    <OutputType>Default</OutputType>
+    <AllowHtml>false</AllowHtml>
+    <CollateColumn>RU_Data.Location</CollateColumn>
+  </Main>
+  <Api />
+  <ReportItems>
+    <ReportItem>
+      <ReportType>Advanced</ReportType>
+      <Report>SAs\AAA - Insights\ZZ_Reports\RD42_RU_Data_DC</Report>
+      <ParameterValues />
+      <FilterValues />
+      <ParameterPrompts />
+      <FilterPrompts />
+      <Id>0</Id>
+      <UdfData />
+      <TileBoundsTop>0</TileBoundsTop>
+      <TileBoundsLeft>0</TileBoundsLeft>
+    </ReportItem>
+  </ReportItems>
+</ChainedReport>

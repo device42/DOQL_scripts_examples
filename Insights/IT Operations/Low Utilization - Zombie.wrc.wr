@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<ChainedReport xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ParameterPrompts />
+  <FilterPrompts />
+  <Main>
+    <Id>368916f9-92b6-44c6-b960-4e77a78a8d80</Id>
+    <Description>Report on all devices and CPU utilization. Looking for devices with low utilization.</Description>
+    <ReportType>Chained</ReportType>
+    <ExportType>Excel</ExportType>
+    <OutputType>Excel</OutputType>
+    <AllowHtml>false</AllowHtml>
+    <CollateColumn>Zombie_Data_Extract.device_pk</CollateColumn>
+  </Main>
+  <Api />
+  <ReportItems>
+    <ReportItem>
+      <ReportType>Advanced</ReportType>
+      <Report>SAs\Insights\ZZ_Reports\RD42_Zombie</Report>
+      <ParameterValues />
+      <FilterValues />
+      <ParameterPrompts />
+      <FilterPrompts />
+      <Id>0</Id>
+      <UdfData />
+      <TileBoundsTop>0</TileBoundsTop>
+      <TileBoundsLeft>0</TileBoundsLeft>
+    </ReportItem>
+  </ReportItems>
+</ChainedReport>

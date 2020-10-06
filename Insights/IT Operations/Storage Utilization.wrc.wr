@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<ChainedReport xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ParameterPrompts />
+  <FilterPrompts />
+  <Main>
+    <Id>5862c39d-fefe-42d0-9178-e882051c3ab2</Id>
+    <Description>How well is the storage utilization?</Description>
+    <ReportType>Chained</ReportType>
+    <ExportType>Excel</ExportType>
+    <OutputType>Excel</OutputType>
+    <AllowHtml>false</AllowHtml>
+    <CollateColumn>Storage_Totals.Device_Name</CollateColumn>
+  </Main>
+  <Api />
+  <ReportItems>
+    <ReportItem>
+      <ReportType>Advanced</ReportType>
+      <Report>SAs\AAA - Insights\ZZ_Reports\RD42_Storage_Util</Report>
+      <ParameterValues />
+      <FilterValues />
+      <ParameterPrompts />
+      <FilterPrompts />
+      <Id>0</Id>
+      <UdfData />
+      <TileBoundsTop>0</TileBoundsTop>
+      <TileBoundsLeft>0</TileBoundsLeft>
+    </ReportItem>
+  </ReportItems>
+</ChainedReport>

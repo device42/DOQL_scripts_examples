@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<ChainedReport xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ParameterPrompts />
+  <FilterPrompts />
+  <Main>
+    <Id>b6fb6b1b-e92e-4723-9b8b-42a91f2602a3</Id>
+    <Description>Report on basic device discovery success or not </Description>
+    <ReportType>Chained</ReportType>
+    <ExportType>Excel</ExportType>
+    <OutputType>Excel</OutputType>
+    <AllowHtml>false</AllowHtml>
+  </Main>
+  <Api />
+  <ReportItems>
+    <ReportItem>
+      <ReportType>Advanced</ReportType>
+      <Report>SAs\Insights\ZZ_Reports\RD42_Disc_Success</Report>
+      <ParameterValues />
+      <FilterValues />
+      <ParameterPrompts />
+      <FilterPrompts />
+      <Id>0</Id>
+      <UdfData />
+      <TileBoundsTop>0</TileBoundsTop>
+      <TileBoundsLeft>0</TileBoundsLeft>
+    </ReportItem>
+  </ReportItems>
+</ChainedReport>

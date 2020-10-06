@@ -1,0 +1,403 @@
+<report>
+  <main>
+    <id>9e140dea-694b-4a6f-ae58-8f8811e6f307</id>
+    <version>1</version>
+    <type>Standard</type>
+    <sql_stmt />
+    <show_execute_form>False</show_execute_form>
+    <filter_execution_window>Default</filter_execution_window>
+    <fit_page_width>False</fit_page_width>
+    <suppress_formatting>False</suppress_formatting>
+    <report_tree_shortcut>0</report_tree_shortcut>
+    <output_mode>6</output_mode>
+    <prevent_output />
+    <page_size>Letter</page_size>
+    <page_orientation>Portrait</page_orientation>
+    <include_setup_info>No</include_setup_info>
+    <description />
+    <filter_description />
+    <show_grid>True</show_grid>
+    <pdf_template />
+    <embedded_pdf_template />
+    <simulate_pdf>True</simulate_pdf>
+    <no_data_render_type>ShowMessage</no_data_render_type>
+    <show_interactive_sorts>True</show_interactive_sorts>
+    <allow_column_hide>True</allow_column_hide>
+    <groups_on_separate_worksheets>False</groups_on_separate_worksheets>
+    <enable_cartesian_processing>Default</enable_cartesian_processing>
+    <visualization_report>false</visualization_report>
+    <use_cache_execution>false</use_cache_execution>
+    <excel_freeze_rows>1</excel_freeze_rows>
+    <excel_freeze_columns>1</excel_freeze_columns>
+    <excel_show_gridlines>True</excel_show_gridlines>
+    <suppressfiltersinterface>False</suppressfiltersinterface>
+    <suppresssortsinterface>False</suppresssortsinterface>
+    <row_range_limit>0</row_range_limit>
+    <custom_entities>{"webreports":{"entity":{"entity_name":"Count_for_Detailed_Discovery_Data","affinity":"Report","db_name":"Count_for_Detailed_Discovery_Data","sql_stmt":"/*\nWill give a count of all detailed discovery data to help identify hosts with or without detailed child objects.\n*/\n Select \n\tdh.*\n    ,lower(deval.alias_name) \"Alias/FQDN\"\n    From(\n      Select\n       d.device_pk \"Device_ID\"\n       ,lower(split_part(d.name,'.',1)) \"Device Name (SN)\"\n       ,lower(d.name) \"Device Name\"\n       ,d.os_name \"Operating System\"\n       ,(Select count(*) From view_softwaredetails_v1 sd Where sd.device_fk = d.device_pk) \"Software Discovered\"\n       ,(Select count(*) From view_serviceinstance_v2 si Where si.device_fk = d.device_pk) \"Services Discovered\"\n\t   ,(Select count(*) From view_servicecommunication_v2 sc Where sc.listener_device_fk = d.device_pk) \"Service Connections Discovered\"\n       ,(Select count(*) From view_mountpoint_v1 m Where m.device_fk = d.device_pk) \"Mounts Discovered\"\n       ,(Select count(*) From view_appcomp_v1 a Where a.device_fk = d.device_pk) \"Application components Discovered\"\n       ,d.first_added \"First Added\"\n       ,d.last_edited \"Last Updated\"\n     From\n       view_device_v1 d) dh\n       Left Join view_devicealias_v1 deval On deval.device_fk = dh.\"Device_ID\"","datasource_id":"0","object_type":"sql","key":{"col_name":"Device_ID"}}}}</custom_entities>
+  </main>
+  <entity>
+    <entity_name>Count_for_Detailed_Discovery_Data</entity_name>
+    <group_by_flag>False</group_by_flag>
+  </entity>
+  <cell>
+    <id>1513540374</id>
+    <cell_text>Device_ID</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>0</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1034336966</id>
+    <cell_text>Device Name (SN)</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>1</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>172791366</id>
+    <cell_text>Device Name</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>2</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1230666990</id>
+    <cell_text>Operating System</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>3</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>926180160</id>
+    <cell_text>Software Discovered</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>4</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1731763830</id>
+    <cell_text>Services Discovered</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>5</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1144311064</id>
+    <cell_text>Service Connections Discovered</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>6</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1101223563</id>
+    <cell_text>Mounts Discovered</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>7</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>803152993</id>
+    <cell_text>Application components Discovered</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>8</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1217348263</id>
+    <cell_text>First Added</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>9</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>697169871</id>
+    <cell_text>Last Updated</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>10</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>196982927</id>
+    <cell_text>Alias/FQDN</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>11</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1813676882</id>
+    <cell_text>Count_for_Detailed_Discovery_Data.Device_ID</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>0</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+  </cell>
+  <cell>
+    <id>120116029</id>
+    <cell_text>Count_for_Detailed_Discovery_Data.Device Name (SN)</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>1</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+  </cell>
+  <cell>
+    <id>82035935</id>
+    <cell_text>Count_for_Detailed_Discovery_Data.Device Name</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>2</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+  </cell>
+  <cell>
+    <id>704590735</id>
+    <cell_text>Count_for_Detailed_Discovery_Data.Operating System</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>3</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+  </cell>
+  <cell>
+    <id>516946744</id>
+    <cell_text>Count_for_Detailed_Discovery_Data.Software Discovered</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>4</cell_col>
+    <cell_horizontal_align>Right</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+    <format_type>Number</format_type>
+    <format_negative_symbol_flag>True</format_negative_symbol_flag>
+  </cell>
+  <cell>
+    <id>1380535048</id>
+    <cell_text>Count_for_Detailed_Discovery_Data.Services Discovered</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>5</cell_col>
+    <cell_horizontal_align>Right</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+    <format_type>Number</format_type>
+    <format_negative_symbol_flag>True</format_negative_symbol_flag>
+  </cell>
+  <cell>
+    <id>1525421221</id>
+    <cell_text>Count_for_Detailed_Discovery_Data.Service Connections Discovered</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>6</cell_col>
+    <cell_horizontal_align>Right</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+    <format_type>Number</format_type>
+    <format_negative_symbol_flag>True</format_negative_symbol_flag>
+  </cell>
+  <cell>
+    <id>1275859346</id>
+    <cell_text>Count_for_Detailed_Discovery_Data.Mounts Discovered</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>7</cell_col>
+    <cell_horizontal_align>Right</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+    <format_type>Number</format_type>
+    <format_negative_symbol_flag>True</format_negative_symbol_flag>
+  </cell>
+  <cell>
+    <id>2043491217</id>
+    <cell_text>Count_for_Detailed_Discovery_Data.Application components Discovered</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>8</cell_col>
+    <cell_horizontal_align>Right</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+    <format_type>Number</format_type>
+    <format_negative_symbol_flag>True</format_negative_symbol_flag>
+  </cell>
+  <cell>
+    <id>1763385388</id>
+    <cell_text>Count_for_Detailed_Discovery_Data.First Added</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>9</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+  </cell>
+  <cell>
+    <id>1349494486</id>
+    <cell_text>Count_for_Detailed_Discovery_Data.Last Updated</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>10</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+  </cell>
+  <cell>
+    <id>764916838</id>
+    <cell_text>Count_for_Detailed_Discovery_Data.Alias/FQDN</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>11</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+  </cell>
+  <row>
+    <group_type>Page Header</group_type>
+  </row>
+  <row>
+    <group_type>Detail</group_type>
+  </row>
+  <column>
+    <column_width>111</column_width>
+    <column_label>Device_ID</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Device Name (SN)</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Device Name</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Operating System</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Software Discovered</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Services Discovered</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Service Connections Discovered</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Mounts Discovered</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Application components Discovered</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>First Added</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Last Updated</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Alias/FQDN</column_label>
+  </column>
+  <dynamicfilters />
+</report>
