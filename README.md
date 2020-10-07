@@ -1,7 +1,13 @@
 [Device42](http://www.device42.com/) is a Continuous Discovery software for your IT Infrastructure. It helps you automatically maintain an up-to-date inventory of your physical, virtual, and cloud servers and containers, network components, software/services/applications, and their inter-relationships and inter-dependencies.
 
+### Device42 Recommended DOQL and Reports
+-----------------------------
+This repository includes our SQL files for DOQL, scripts, and Report/Dashboard files that are recommended by the team to access common and useful data discovered by Device42.
 
-This repository contains scripts that helps you create CSV, JSON files or send data direct to the database from DOQL queries. It also contains an example folder with some complex queries.
+These files come in three forms and are intended to be used in different ways:
+* .sql files found in "Recommended DOQL" and "Affinity Group DOQL". These .sql files can be downloaded or copied then added as [Saved DOQL](https://docs.device42.com/device42-doql/#section-9) or [DOQL](https://docs.device42.com/device42-doql/) to use.
+* .wr and .wrc files found in "Pre-Defined Reports", "Pre-Defined Dashboards", and "Insights". These are intended to be uploaded to [Advanced Reports](https://docs.device42.com/reports/advanced-reporting/), create a new folder if one doesn't exist and use the "Upload" option to navigate to the import file.
+* .json files found in "Script JSON Examples". These can be used along with the `starter.py` script and usage instructions below.
 
 
 ### Device42 DOQL to JSON/CSV file
