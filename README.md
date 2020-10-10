@@ -9,6 +9,11 @@ These files come in three forms and are intended to be used in different ways:
 * `.wr` and `.wrc` files found in "Pre-Defined Reports", "Pre-Defined Dashboards", and "Insights". These are intended to be uploaded to [Advanced Reports](https://docs.device42.com/reports/advanced-reporting/), create a new folder if one doesn't exist and use the "Upload" option to navigate to the import file.
 * `.json` files found in "Script JSON Examples". These can be used along with the `starter.py` script and usage instructions below.
 
+### Device42 Report Files
+-----------------------------
+The `.wr` and `.wrc` files in order to use reference names and locations. If the report file is uploaded to a different location or a Chained report that references a report that was renamed you may need to Edit the report in Advanced Reporting to point to the directory and report names modified in your instance.
+
+If the directories and report names are kept the same as this github you will be able to use them consistently without additional modifications.
 
 ### Device42 DOQL to JSON/CSV file
 -----------------------------
