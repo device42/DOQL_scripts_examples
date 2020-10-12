@@ -59,4 +59,3 @@ Call script from command line : `python starter.py query.json` ( You may specify
 ### Support
 -----------------------------
 This Device42 DOQL to JSON/CSV script is provided as-is without any support. We do provide fee-based engineering time blocks if you need help with this script.  To find out more please email sales@device42.com with subject Device42 DOQL to JSON/CSV script support.
-
