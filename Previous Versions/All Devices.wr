@@ -1,6 +1,6 @@
 <report>
   <main>
-    <id>f3eaccbd-1928-4636-a617-0369a2575ff4</id>
+    <id>7b8f9572-a983-450a-99d8-4bdc93b46911</id>
     <version>1</version>
     <type>Standard</type>
     <sql_stmt />
@@ -33,7 +33,7 @@
     <suppressfiltersinterface>False</suppressfiltersinterface>
     <suppresssortsinterface>False</suppresssortsinterface>
     <row_range_limit>0</row_range_limit>
-    <custom_entities>{"webreports":{"entity":{"entity_name":"full_device_export","affinity":"Report","db_name":"full_device_export","sql_stmt":"    /*\n - Name: All Devices\n - Purpose: An extensive query to report on all devices and majority of related objects/attributes.\n - Date Created: 10/01/20\n - Changes: 10/12/20 Updated to use new subtypes and view_device_v2 introduced in 16.19\n*/\n    select\n        d.last_edited \"Last_Discovered\",\n        d.name \"Device_Name\",\n        d.in_service \"In Service\",\n        d.service_level \"Service_Level\",\n        d.type \"Device_Type\",\n        COALESCE(d.physicalsubtype, '') || COALESCE(d.virtualsubtype, '') \"Device Subtype\",\n        d.serial_no \"Device_Serial\",\n        d.virtual_host \"Virtual Host\",\n        d.network_device \"Network Device\",\n        d.os_architecture \"OS Architecture\",\n        d.total_cpus \"Total CPUs\",\n        d.core_per_cpu \"Cores Per CPU\",\n        d.threads_per_core \"Threads Per Core\",\n        d.cpu_speed \"CPU Speed\",\n        d.total_cpus*d.core_per_cpu \"Total Cores\",\n        d.ram \"RAM\",\n        v2.name \"OS Vendor\",\n        osc.category_name \"OS Category\",\n        CASE d.os_version \n            WHEN '' then d.os_name\n            ELSE coalesce(d.os_name || ' - ' || \n            d.os_version,d.os_name)\n        END \"OS Name\",\n        d.os_version \"OS Version\",\n        d.os_version_no \"OS Version Number\",\n        ose.eol \"OS_End of Life\",\n\t    ose.eos \"OS_End of Support\",\n        v.name \"Manufacturer\",\n        h.name \"Hardware Model\",\n        d.asset_no \"Asset Number\",\n(select count(*) from view_softwaredetails_v1 sd where sd.device_fk = d.device_pk) \"Software Discovered\",\n(select count(*) from view_serviceinstance_v2 si where si.device_fk = d.device_pk) \"Services Discovered\",\n(select count(*) from view_appcomp_v1 a where a.device_fk = d.device_pk) \"Application Components Discovered\",\n(select count(*) from view_mountpoint_v1 m where m.device_fk = d.device_pk and m.fstype_name &lt;&gt; 'nfs' and m.fstype_name &lt;&gt; 'nfs4' and m.filesystem not like '\\\\\\\\%')\"Local Disk Count\",\n(select count(*) from view_mountpoint_v1 mp where mp.device_fk = d.device_pk) \"Mounts Discovered\",\n(select count(*) from view_ipaddress_v1 ip where ip.device_fk = d.device_pk) \"IP Addresses Discovered\",\n(select count(*) from view_part_v1 p where p.device_fk = d.device_pk) \"Parts Discovered\",\n        d.bios_version \"BIOS Version\",\n        d.bios_revision \"BIOS Revision\",\n        d.bios_release_date \"BIOS Release Date\",\n        sr.name \"Storage Room\",\n        b.name \"Building Name\",\n        m.name \"Room Name\",\n        r.row \"Row Name\",\n        r.name \"Rack Name\",\n        h.size \"Size (RU)\",\n        (SELECT array_to_string(array(\n                  select ns.name\n                  from view_networkshare_v1 ns\n                  where ns.device_fk = d.device_pk),\n                  ' | ')) network_shares,\n        (SELECT array_to_string(array(\n                  select mp.filesystem\n                  from view_mountpoint_v1 mp\n                  where mp.device_fk = d.device_pk),\n                  ' | ')) mount_points,\n        ci.account,\n        cv.name \"Cloud Service Provider\",\n        ci.service_name \"Cloud Service Name\",\n        ci.instance_id \"Cloud Instance ID\",\n        ci.instance_name \"Cloud Instance Name\",\n        ci.instance_type \"Cloud Instance Type\",\n        ci.status \"Cloud Instance Status\",\n        ci.location \"Cloud Location\",\n        ci.notes \"Cloud Notes\",\n        pch.po_date \"PO Date\",\n        pch.cost \"PO Cost\",\n        pli.cost \"Line Item Cost\",\n        pch.order_no \"Order Number\",\n        pch.cc_code \"Cost Center\",\n        pch.cc_description \"Cost Center Description\",\n        (SELECT array_to_string(array(\n                      select ip.ip_address\n                      from view_ipaddress_v1 ip\n                      where ip.device_fk = d.device_pk),\n                      ' | ')) all_listener_device_ips,\n        (SELECT array_to_string(array(\n                      select ip.label\n                      from view_ipaddress_v1 ip\n                      where ip.device_fk = d.device_pk),\n                      ' | ')) all_labels,\n       round(((select sum(m.capacity-m.free_capacity)/1024 from view_mountpoint_v1 m where m.device_fk = d.device_pk and m.fstype_name &lt;&gt; 'nfs' and m.fstype_name &lt;&gt; 'nfs4' and m.filesystem not like '\\\\\\\\%')), 2)\"Used Space\",\n       round(((select sum(m.capacity/1024) from view_mountpoint_v1 m where m.device_fk = d.device_pk and m.fstype_name &lt;&gt; 'nfs' and m.fstype_name &lt;&gt; 'nfs4' and m.filesystem not like '\\\\\\\\%')), 2)\"Total Space\",\n       round(((select sum(m.free_capacity/1024) from view_mountpoint_v1 m where m.device_fk = d.device_pk and m.fstype_name &lt;&gt; 'nfs' and m.fstype_name &lt;&gt; 'nfs4' and m.filesystem not like '\\\\\\\\%')), 2)\"Total Free Space\"\n        from view_device_v2 d\n        left join view_purchaselineitems_to_devices_v1 ptd on ptd.device_fk = d.device_pk\n        left join view_purchaselineitem_v1 pli on ptd.purchaselineitem_fk = pli.purchaselineitem_pk\n        left join view_purchase_v1 pch on pch.purchase_pk = pli.purchase_fk\n        left join view_oseoleos_v1 ose on ose.os_fk = d.os_fk\n        left join view_hardware_v1 h on d.hardware_fk = h.hardware_pk\n        left join view_vendor_v1 v on h.vendor_fk = v.vendor_pk\n        left join view_room_v1 sr on sr.room_pk = d.storage_room_fk \n        left join view_rack_v1 r on d.rack_fk = r.rack_pk\n        left join view_room_v1 m on r.room_fk = m.room_pk\n        left join view_building_v1 b on b.building_pk = m.building_fk\n        left join view_os_v1 osc on osc.os_pk = d.os_fk\n        left join view_vendor_v1 v2 on osc.vendor_fk = v2.vendor_pk\n        left join view_device_custom_fields_flat_v1 dcf on dcf.device_fk = d.device_pk\n        left join view_cloudinstance_v1 ci on ci.device_fk = d.device_pk\n        left join view_vendor_v1 cv on cv.vendor_pk = ci.vendor_fk\n        order by d.name ASC","datasource_id":"0","object_type":"sql","key":{"col_name":"Device_Name"}}}}</custom_entities>
+    <custom_entities>{"webreports":{"entity":{"entity_name":"full_device_export","affinity":"Report","db_name":"full_device_export","sql_stmt":"select DISTINCT\n    d.device_pk,\n    d.last_edited \"Last_Discovered\",\n    d.name \"Device_Name\",\n    d.in_service \"In Service\",\n    d.service_level \"Service_Level\",\n    d.type \"Device_Type\",\n    d.sub_type \"Device Subtype\",\n    d.virtual_subtype \"Virtual_Subtype\",\n    d.serial_no \"Device_Serial\",\n    d.virtual_host \"Virtual Host\",\n    d.network_device \"Network Device\",\n    d.os_arch \"OS_Arch\",\n    d.cpucount \"CPU Sockets\",\n    d.cpucore \"Cores Per CPU\",\n    d.cpupower \"CPU Speed\",\n    d.cpucount*d.cpucore \"Total Cores\",\n    CASE \n       When d.corethread &gt;= 2\n        Then 'YES'\n        Else 'NO'\n       END \"Hyperthreaded\",\n    d.ram \"RAM\",\n    v2.name \"OS Vendor\",\n    osc.category_name \"OS Category\",\n    CASE d.os_version \n        WHEN '' then d.os_name\n        ELSE coalesce(d.os_name || ' - ' || \n        d.os_version,d.os_name)\n    END \"OS Name\",\n    d.os_version \"OS Version\",\n    d.os_version_no \"OS Version Number\",\n    ose.eol \"OS_End of Life\",\n    ose.eos \"OS_End of Support\",\n    v.name \"Manufacturer\",\n    h.name \"Hardware Model\",\n    d.asset_no \"Asset Number\",\n    (select count(*) from view_softwaredetails_v1 sd where sd.device_fk = d.device_pk) \"Software Discovered\",\n    (select count(*) from view_serviceinstance_v2 si where si.device_fk = d.device_pk) \"Services Discovered\",\n    (select count(*) from view_appcomp_v1 a where a.device_fk = d.device_pk) \"Application Components Discovered\",\n    (select count(*) from view_mountpoint_v1 m where m.device_fk = d.device_pk and m.fstype_name &lt;&gt; 'nfs' and m.fstype_name &lt;&gt; 'nfs4' and m.filesystem not like '\\\\\\\\%')\"Local Disk Count\",\n    (select count(*) from view_mountpoint_v1 mp where mp.device_fk = d.device_pk) \"Mounts Discovered\",\n    (select count(*) from view_ipaddress_v1 ip where ip.device_fk = d.device_pk) \"IP Addresses Discovered\",\n    (select count(*) from view_part_v1 p where p.device_fk = d.device_pk) \"Parts Discovered\",\n    d.bios_version \"BIOS Version\",\n    d.bios_revision \"BIOS Revision\",\n    d.bios_release_date \"BIOS Release Date\",\n    sr.name \"Storage Room\",\n    b.name \"Building Name\",\n    m.name \"Room Name\",\n    r.row \"Row Name\",\n    r.name \"Rack Name\",\n    h.size \"Size (RU)\",\n    (SELECT array_to_string(array(\n              select ns.name\n              from view_networkshare_v1 ns\n              where ns.device_fk = d.device_pk),\n              ' | ')) network_shares,\n    (SELECT array_to_string(array(\n              select mp.filesystem\n              from view_mountpoint_v1 mp\n              where mp.device_fk = d.device_pk),\n              ' | ')) mount_points,\n    d.cloud_vendor_fk,\n    ci.vendor_fk,\n    ci.account,\n    cv.name \"Cloud Service Provider\",\n    ci.service_name \"Cloud Service Name\",\n    d.cloud_instance_id \"Cloud Instance ID\",\n    ci.instance_name \"Cloud Instance Name\",\n    ci.instance_type \"Cloud Instance Type\",\n    d.cloud_status \"Cloud Instance Status\",\n    d.cloud_location \"Cloud Location\",\n    d.cloud_notes \"Cloud Notes\",\n    pch.po_date \"PO Date\",\n    pch.cost \"PO Cost\",\n    pli.cost \"Line Item Cost\",\n    pch.order_no \"Order Number\",\n    pch.cc_code \"Cost Center\",\n    pch.cc_description \"Cost Center Description\",\n    (SELECT array_to_string(array(\n                  select ip.ip_address\n                  from view_ipaddress_v1 ip\n                  where ip.device_fk = d.device_pk),\n                  ' | ')) all_listener_device_ips,\n    (SELECT array_to_string(array(\n                  select ip.label\n                  from view_ipaddress_v1 ip\n                  where ip.device_fk = d.device_pk),\n                  ' | ')) all_labels,\n    (\n        select \n            string_agg(dr.name || '.' || dz.name, ' | ')\n        from\n            view_ipaddress_v1 ip\n            join view_dnsrecords_v1 dr on dr.content like '%' || host(ip.ip_address) || '%'\n            join view_dnszone_v1 as dz on dz.dnszone_pk = dr.dnszone_fk\n        where\n            ip.device_fk = d.device_pk\n    ) \"DNS Records\",\n    round(((select sum(m.capacity-m.free_capacity)/1024 from view_mountpoint_v1 m where m.device_fk = d.device_pk and m.fstype_name &lt;&gt; 'nfs' and m.fstype_name &lt;&gt; 'nfs4' and m.filesystem not like '\\\\\\\\%')), 2)\"Used Space\",\n    round(((select sum(m.capacity/1024) from view_mountpoint_v1 m where m.device_fk = d.device_pk and m.fstype_name &lt;&gt; 'nfs' and m.fstype_name &lt;&gt; 'nfs4' and m.filesystem not like '\\\\\\\\%')), 2)\"Total Space\",\n    round(((select sum(m.free_capacity/1024) from view_mountpoint_v1 m where m.device_fk = d.device_pk and m.fstype_name &lt;&gt; 'nfs' and m.fstype_name &lt;&gt; 'nfs4' and m.filesystem not like '\\\\\\\\%')), 2)\"Total Free Space\",\n    parts.\"CPU Model\",\n    parts.\"CPU Manufacturer\"\nfrom view_device_v1 d\n    left join view_purchaselineitems_to_devices_v1 ptd on ptd.device_fk = d.device_pk\n    left join view_purchaselineitem_v1 pli on ptd.purchaselineitem_fk = pli.purchaselineitem_pk\n    left join view_purchase_v1 pch on pch.purchase_pk = pli.purchase_fk\n    left join view_oseoleos_v1 ose on ose.os_fk = d.os_fk\n    left join view_hardware_v1 h on d.hardware_fk = h.hardware_pk\n    left join view_vendor_v1 v on h.vendor_fk = v.vendor_pk\n    left join view_vendor_v1 cv on d.cloud_vendor_fk = cv.vendor_pk\n    left join view_room_v1 sr on sr.room_pk = d.storage_room_fk \n    left join view_rack_v1 r on d.rack_fk = r.rack_pk\n    left join view_room_v1 m on r.room_fk = m.room_pk\n    left join view_building_v1 b on b.building_pk = m.building_fk\n    left join view_os_v1 osc on osc.os_pk = d.os_fk\n    left join view_vendor_v1 v2 on osc.vendor_fk = v2.vendor_pk\n    left join view_device_custom_fields_flat_v1 dcf on dcf.device_fk = d.device_pk\n    left join view_cloudinstance_v1 ci on ci.device_fk = d.device_pk\n    left join (select distinct\n        pt.device_fk,\n        string_agg(distinct pm.name, ',') \"CPU Model\",\n        string_agg(distinct pmv.name, ',') \"CPU Manufacturer\"\n    from \n        view_part_v1 pt\n        left join view_partmodel_v1 pm on pm.partmodel_pk = pt.partmodel_fk and pm.type_id = '1'\n        left join view_vendor_v1 pmv on pmv.vendor_pk = pm.vendor_fk\n    group by \n        pt.device_fk\n    having \n        string_agg(pm.name, ',') is not null and \n        string_agg(pmv.name, ',') is not null\n    ) parts on parts.device_fk = d.device_pk\norder by d.name ASC","datasource_id":"0","object_type":"sql","key":{"col_name":"Last_Discovered"}}}}</custom_entities>
   </main>
   <entity>
     <entity_name>full_device_export</entity_name>
@@ -118,11 +118,25 @@
     <background_color>#000000</background_color>
   </cell>
   <cell>
+    <id>1802871869</id>
+    <cell_text>Virtual Subtype</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>6</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
     <id>1213818514</id>
     <cell_text>Serial No</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
-    <cell_col>6</cell_col>
+    <cell_col>7</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -135,7 +149,7 @@
     <cell_text>Virtual Host</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
-    <cell_col>7</cell_col>
+    <cell_col>8</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -148,8 +162,36 @@
     <cell_text>Network Device</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
-    <cell_col>8</cell_col>
+    <cell_col>9</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>18739155</id>
+    <cell_text>CPU Manufacturer</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>10</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>2004682298</id>
+    <cell_text>CPU Model</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>11</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
     <font_bold_flag>True</font_bold_flag>
@@ -161,7 +203,7 @@
     <cell_text>CPU Sockets</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
-    <cell_col>9</cell_col>
+    <cell_col>12</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -174,7 +216,7 @@
     <cell_text>CPU Cores Per Socket</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
-    <cell_col>10</cell_col>
+    <cell_col>13</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -187,7 +229,7 @@
     <cell_text>Total Cores</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
-    <cell_col>11</cell_col>
+    <cell_col>14</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -197,10 +239,10 @@
   </cell>
   <cell>
     <id>485712043</id>
-    <cell_text>Threads Per Core</cell_text>
+    <cell_text>Hyperthreaded</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
-    <cell_col>12</cell_col>
+    <cell_col>15</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
@@ -214,7 +256,7 @@
     <cell_text>CPU Speed</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
-    <cell_col>13</cell_col>
+    <cell_col>16</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -227,7 +269,7 @@
     <cell_text>RAM</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
-    <cell_col>14</cell_col>
+    <cell_col>17</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -240,7 +282,7 @@
     <cell_text>OS Category</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
-    <cell_col>15</cell_col>
+    <cell_col>18</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -253,7 +295,7 @@
     <cell_text>OS Arch</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
-    <cell_col>16</cell_col>
+    <cell_col>19</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -266,7 +308,7 @@
     <cell_text>OS Name</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
-    <cell_col>17</cell_col>
+    <cell_col>20</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -279,7 +321,7 @@
     <cell_text>OS Version</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
-    <cell_col>18</cell_col>
+    <cell_col>21</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -292,7 +334,7 @@
     <cell_text>OS Version No</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
-    <cell_col>19</cell_col>
+    <cell_col>22</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -305,7 +347,7 @@
     <cell_text>OS End of Life</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
-    <cell_col>20</cell_col>
+    <cell_col>23</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -318,7 +360,7 @@
     <cell_text>OS End of Support</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
-    <cell_col>21</cell_col>
+    <cell_col>24</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -331,7 +373,7 @@
     <cell_text>Total Disk Allocated</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
-    <cell_col>22</cell_col>
+    <cell_col>25</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -344,7 +386,7 @@
     <cell_text>Total Disk Consumed</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
-    <cell_col>23</cell_col>
+    <cell_col>26</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -357,7 +399,7 @@
     <cell_text>Total Disk Free</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
-    <cell_col>24</cell_col>
+    <cell_col>27</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -370,7 +412,7 @@
     <cell_text>Local Disk Count</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
-    <cell_col>25</cell_col>
+    <cell_col>28</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
@@ -384,7 +426,7 @@
     <cell_text>Mountpoints</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
-    <cell_col>26</cell_col>
+    <cell_col>29</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -397,7 +439,7 @@
     <cell_text>Network Shares</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
-    <cell_col>27</cell_col>
+    <cell_col>30</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -410,7 +452,7 @@
     <cell_text>App Comp Count</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
-    <cell_col>28</cell_col>
+    <cell_col>31</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
@@ -424,7 +466,7 @@
     <cell_text>Services Count</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
-    <cell_col>29</cell_col>
+    <cell_col>32</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
@@ -438,7 +480,7 @@
     <cell_text>Software Count</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
-    <cell_col>30</cell_col>
+    <cell_col>33</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
@@ -452,7 +494,7 @@
     <cell_text>Parts Count</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
-    <cell_col>31</cell_col>
+    <cell_col>34</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
@@ -466,7 +508,21 @@
     <cell_text>IP Address Count</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
-    <cell_col>32</cell_col>
+    <cell_col>35</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1337130370</id>
+    <cell_text>DNS Records</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>36</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
@@ -480,7 +536,7 @@
     <cell_text>All Device IP Addresses</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
-    <cell_col>33</cell_col>
+    <cell_col>37</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <font_name>Arial</font_name>
     <font_size>10</font_size>
@@ -493,7 +549,7 @@
     <cell_text>Device Manufacturer</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
-    <cell_col>34</cell_col>
+    <cell_col>38</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -506,7 +562,7 @@
     <cell_text>Device Model</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
-    <cell_col>35</cell_col>
+    <cell_col>39</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -519,7 +575,7 @@
     <cell_text>Asset No</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
-    <cell_col>36</cell_col>
+    <cell_col>40</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -532,7 +588,7 @@
     <cell_text>Storage Room</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
-    <cell_col>37</cell_col>
+    <cell_col>41</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -545,7 +601,7 @@
     <cell_text>Building</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
-    <cell_col>38</cell_col>
+    <cell_col>42</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -558,7 +614,7 @@
     <cell_text>Room Name</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
-    <cell_col>39</cell_col>
+    <cell_col>43</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -571,7 +627,7 @@
     <cell_text>Row Name</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
-    <cell_col>40</cell_col>
+    <cell_col>44</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -584,7 +640,7 @@
     <cell_text>Rack Name</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
-    <cell_col>41</cell_col>
+    <cell_col>45</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -597,7 +653,7 @@
     <cell_text>BIOS Version</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
-    <cell_col>42</cell_col>
+    <cell_col>46</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <font_name>Arial</font_name>
     <font_size>10</font_size>
@@ -610,7 +666,7 @@
     <cell_text>BIOS Revision</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
-    <cell_col>43</cell_col>
+    <cell_col>47</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <font_name>Arial</font_name>
     <font_size>10</font_size>
@@ -623,7 +679,7 @@
     <cell_text>BIOS Release Date</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
-    <cell_col>44</cell_col>
+    <cell_col>48</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <font_name>Arial</font_name>
     <font_size>10</font_size>
@@ -636,7 +692,7 @@
     <cell_text>Cloud Service Name</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
-    <cell_col>45</cell_col>
+    <cell_col>49</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -649,7 +705,7 @@
     <cell_text>Cloud Instance Location</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
-    <cell_col>46</cell_col>
+    <cell_col>50</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -662,7 +718,7 @@
     <cell_text>Cloud Instance Name</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
-    <cell_col>47</cell_col>
+    <cell_col>51</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -675,7 +731,7 @@
     <cell_text>Cloud Instance Status</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
-    <cell_col>48</cell_col>
+    <cell_col>52</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -688,7 +744,7 @@
     <cell_text>Cloud Instance ID</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
-    <cell_col>49</cell_col>
+    <cell_col>53</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -701,7 +757,7 @@
     <cell_text>Cloud Notes</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
-    <cell_col>50</cell_col>
+    <cell_col>54</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -714,7 +770,7 @@
     <cell_text>PO Date</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
-    <cell_col>51</cell_col>
+    <cell_col>55</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -727,7 +783,7 @@
     <cell_text>Order Number</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
-    <cell_col>52</cell_col>
+    <cell_col>56</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -740,7 +796,7 @@
     <cell_text>PO Cost</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
-    <cell_col>53</cell_col>
+    <cell_col>57</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -753,7 +809,7 @@
     <cell_text>Line Item Cost</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
-    <cell_col>54</cell_col>
+    <cell_col>58</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -766,7 +822,7 @@
     <cell_text>Cost Center</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
-    <cell_col>55</cell_col>
+    <cell_col>59</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -779,7 +835,7 @@
     <cell_text>Cost Center Description</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
-    <cell_col>56</cell_col>
+    <cell_col>60</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -849,11 +905,22 @@
     <format_type>Text</format_type>
   </cell>
   <cell>
+    <id>591306602</id>
+    <cell_text>full_device_export.Virtual_Subtype</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>6</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <format_type>Text</format_type>
+  </cell>
+  <cell>
     <id>2015138932</id>
     <cell_text>full_device_export.Device_Serial</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
-    <cell_col>6</cell_col>
+    <cell_col>7</cell_col>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -863,7 +930,7 @@
     <cell_text>full_device_export.Virtual Host</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
-    <cell_col>7</cell_col>
+    <cell_col>8</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
@@ -874,28 +941,51 @@
     <cell_text>full_device_export.Network Device</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
-    <cell_col>8</cell_col>
+    <cell_col>9</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
   </cell>
   <cell>
-    <id>30140404</id>
-    <cell_text>full_device_export.Total CPUs</cell_text>
+    <id>724249542</id>
+    <cell_text>full_device_export.CPU Manufacturer</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
-    <cell_col>9</cell_col>
+    <cell_col>10</cell_col>
     <wrap_text_flag>True</wrap_text_flag>
-    <font_name>Arial</font_name>
-    <font_size>8</font_size>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <format_type>Text</format_type>
+  </cell>
+  <cell>
+    <id>1854806478</id>
+    <cell_text>full_device_export.CPU Model</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>11</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <format_type>Text</format_type>
+  </cell>
+  <cell>
+    <id>502189578</id>
+    <cell_text>full_device_export.CPU Sockets</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>12</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
   </cell>
   <cell>
     <id>399190944</id>
     <cell_text>full_device_export.Cores Per CPU</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
-    <cell_col>10</cell_col>
+    <cell_col>13</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
@@ -906,28 +996,29 @@
     <cell_text>full_device_export.Total Cores</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
-    <cell_col>11</cell_col>
+    <cell_col>14</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
   </cell>
   <cell>
-    <id>243220225</id>
-    <cell_text>full_device_export.Threads Per Core</cell_text>
+    <id>1937363726</id>
+    <cell_text>full_device_export.Hyperthreaded</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
-    <cell_col>12</cell_col>
+    <cell_col>15</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
     <wrap_text_flag>True</wrap_text_flag>
-    <font_name>Arial</font_name>
-    <font_size>8</font_size>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
   </cell>
   <cell>
     <id>567641688</id>
     <cell_text>full_device_export.CPU Speed</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
-    <cell_col>13</cell_col>
+    <cell_col>16</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
@@ -938,7 +1029,7 @@
     <cell_text>full_device_export.RAM</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
-    <cell_col>14</cell_col>
+    <cell_col>17</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
@@ -949,27 +1040,27 @@
     <cell_text>full_device_export.OS Category</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
-    <cell_col>15</cell_col>
+    <cell_col>18</cell_col>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
   </cell>
   <cell>
-    <id>1975129666</id>
-    <cell_text>full_device_export.OS Architecture</cell_text>
+    <id>803616712</id>
+    <cell_text>full_device_export.OS_Arch</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
-    <cell_col>16</cell_col>
+    <cell_col>19</cell_col>
     <wrap_text_flag>True</wrap_text_flag>
-    <font_name>Arial</font_name>
-    <font_size>8</font_size>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
   </cell>
   <cell>
     <id>866713714</id>
     <cell_text>full_device_export.OS Name</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
-    <cell_col>17</cell_col>
+    <cell_col>20</cell_col>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -979,7 +1070,7 @@
     <cell_text>full_device_export.OS Version</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
-    <cell_col>18</cell_col>
+    <cell_col>21</cell_col>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -990,7 +1081,7 @@
     <cell_text>full_device_export.OS Version Number</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
-    <cell_col>19</cell_col>
+    <cell_col>22</cell_col>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -1001,7 +1092,7 @@
     <cell_text>full_device_export.OS_End of Life</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
-    <cell_col>20</cell_col>
+    <cell_col>23</cell_col>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -1011,7 +1102,7 @@
     <cell_text>full_device_export.OS_End of Support</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
-    <cell_col>21</cell_col>
+    <cell_col>24</cell_col>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -1021,7 +1112,7 @@
     <cell_text>full_device_export.Total Space</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
-    <cell_col>22</cell_col>
+    <cell_col>25</cell_col>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -1031,7 +1122,7 @@
     <cell_text>full_device_export.Used Space</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
-    <cell_col>23</cell_col>
+    <cell_col>26</cell_col>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -1041,7 +1132,7 @@
     <cell_text>full_device_export.Total Free Space</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
-    <cell_col>24</cell_col>
+    <cell_col>27</cell_col>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -1051,7 +1142,7 @@
     <cell_text>full_device_export.Local Disk Count</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
-    <cell_col>25</cell_col>
+    <cell_col>28</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
@@ -1063,7 +1154,7 @@
     <cell_text>full_device_export.mount_points</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
-    <cell_col>26</cell_col>
+    <cell_col>29</cell_col>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -1073,7 +1164,7 @@
     <cell_text>full_device_export.network_shares</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
-    <cell_col>27</cell_col>
+    <cell_col>30</cell_col>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -1083,7 +1174,7 @@
     <cell_text>full_device_export.Application Components Discovered</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
-    <cell_col>28</cell_col>
+    <cell_col>31</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
@@ -1094,7 +1185,7 @@
     <cell_text>full_device_export.Services Discovered</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
-    <cell_col>29</cell_col>
+    <cell_col>32</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
@@ -1105,7 +1196,7 @@
     <cell_text>full_device_export.Software Discovered</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
-    <cell_col>30</cell_col>
+    <cell_col>33</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
@@ -1116,7 +1207,7 @@
     <cell_text>full_device_export.Parts Discovered</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
-    <cell_col>31</cell_col>
+    <cell_col>34</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
@@ -1128,8 +1219,19 @@
     <cell_text>full_device_export.IP Addresses Discovered</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
-    <cell_col>32</cell_col>
+    <cell_col>35</cell_col>
     <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <format_type>Text</format_type>
+  </cell>
+  <cell>
+    <id>1967262678</id>
+    <cell_text>full_device_export.DNS Records</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>36</cell_col>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -1140,7 +1242,7 @@
     <cell_text>full_device_export.all_listener_device_ips</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
-    <cell_col>33</cell_col>
+    <cell_col>37</cell_col>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -1151,7 +1253,7 @@
     <cell_text>full_device_export.Manufacturer</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
-    <cell_col>34</cell_col>
+    <cell_col>38</cell_col>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -1161,7 +1263,7 @@
     <cell_text>full_device_export.Hardware Model</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
-    <cell_col>35</cell_col>
+    <cell_col>39</cell_col>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -1171,7 +1273,7 @@
     <cell_text>full_device_export.Asset Number</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
-    <cell_col>36</cell_col>
+    <cell_col>40</cell_col>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -1181,7 +1283,7 @@
     <cell_text>full_device_export.Storage Room</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
-    <cell_col>37</cell_col>
+    <cell_col>41</cell_col>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -1191,7 +1293,7 @@
     <cell_text>full_device_export.Building Name</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
-    <cell_col>38</cell_col>
+    <cell_col>42</cell_col>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -1201,7 +1303,7 @@
     <cell_text>full_device_export.Room Name</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
-    <cell_col>39</cell_col>
+    <cell_col>43</cell_col>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -1211,7 +1313,7 @@
     <cell_text>full_device_export.Row Name</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
-    <cell_col>40</cell_col>
+    <cell_col>44</cell_col>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -1221,7 +1323,7 @@
     <cell_text>full_device_export.Rack Name</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
-    <cell_col>41</cell_col>
+    <cell_col>45</cell_col>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -1231,7 +1333,7 @@
     <cell_text>full_device_export.BIOS Version</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
-    <cell_col>42</cell_col>
+    <cell_col>46</cell_col>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -1241,7 +1343,7 @@
     <cell_text>full_device_export.BIOS Revision</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
-    <cell_col>43</cell_col>
+    <cell_col>47</cell_col>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -1251,7 +1353,17 @@
     <cell_text>full_device_export.BIOS Release Date</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
-    <cell_col>44</cell_col>
+    <cell_col>48</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+  </cell>
+  <cell>
+    <id>1279648963</id>
+    <cell_text>full_device_export.cloud_vendor_fk</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>49</cell_col>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -1261,7 +1373,7 @@
     <cell_text>full_device_export.Cloud Location</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
-    <cell_col>46</cell_col>
+    <cell_col>50</cell_col>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -1271,7 +1383,7 @@
     <cell_text>full_device_export.Cloud Instance Name</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
-    <cell_col>47</cell_col>
+    <cell_col>51</cell_col>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -1281,7 +1393,7 @@
     <cell_text>full_device_export.Cloud Instance Status</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
-    <cell_col>48</cell_col>
+    <cell_col>52</cell_col>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -1291,7 +1403,7 @@
     <cell_text>full_device_export.Cloud Instance ID</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
-    <cell_col>49</cell_col>
+    <cell_col>53</cell_col>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -1301,7 +1413,7 @@
     <cell_text>full_device_export.Cloud Notes</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
-    <cell_col>50</cell_col>
+    <cell_col>54</cell_col>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -1311,7 +1423,7 @@
     <cell_text>full_device_export.PO Date</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
-    <cell_col>51</cell_col>
+    <cell_col>55</cell_col>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -1321,7 +1433,7 @@
     <cell_text>full_device_export.Order Number</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
-    <cell_col>52</cell_col>
+    <cell_col>56</cell_col>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -1331,7 +1443,7 @@
     <cell_text>full_device_export.PO Cost</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
-    <cell_col>53</cell_col>
+    <cell_col>57</cell_col>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -1341,7 +1453,7 @@
     <cell_text>full_device_export.Line Item Cost</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
-    <cell_col>54</cell_col>
+    <cell_col>58</cell_col>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -1351,7 +1463,7 @@
     <cell_text>full_device_export.Cost Center</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
-    <cell_col>55</cell_col>
+    <cell_col>59</cell_col>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -1361,7 +1473,7 @@
     <cell_text>full_device_export.Cost Center Description</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
-    <cell_col>56</cell_col>
+    <cell_col>60</cell_col>
     <wrap_text_flag>True</wrap_text_flag>
     <font_name>Helvetica</font_name>
     <font_size>10</font_size>
@@ -1406,6 +1518,10 @@
   </column>
   <column>
     <column_width>275</column_width>
+    <column_label>Virtual Subtype</column_label>
+  </column>
+  <column>
+    <column_width>275</column_width>
     <column_label>Serial No</column_label>
   </column>
   <column>
@@ -1415,6 +1531,14 @@
   <column>
     <column_width>275</column_width>
     <column_label>Network Device</column_label>
+  </column>
+  <column>
+    <column_width>275</column_width>
+    <column_label>CPU Manufacturer</column_label>
+  </column>
+  <column>
+    <column_width>275</column_width>
+    <column_label>CPU Model</column_label>
   </column>
   <column>
     <column_width>275</column_width>
@@ -1511,6 +1635,10 @@
   <column>
     <column_width>275</column_width>
     <column_label>IP Address Count</column_label>
+  </column>
+  <column>
+    <column_width>275</column_width>
+    <column_label>DNS Records</column_label>
   </column>
   <column>
     <column_width>275</column_width>

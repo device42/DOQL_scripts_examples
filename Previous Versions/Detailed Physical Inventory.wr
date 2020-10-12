@@ -1,6 +1,6 @@
 <report>
   <main>
-    <id>2d89fcb0-4718-4c94-accf-5799a79cb2f1</id>
+    <id>3a944e3a-d75e-46e5-97f3-d2f4c37901dd</id>
     <version>1</version>
     <type>Standard</type>
     <sql_stmt />
@@ -33,7 +33,7 @@
     <suppressfiltersinterface>False</suppressfiltersinterface>
     <suppresssortsinterface>False</suppresssortsinterface>
     <row_range_limit>0</row_range_limit>
-    <custom_entities>{"webreports":{"entity":{"entity_name":"detailed_physical_inventory","affinity":"Report","db_name":"detailed_physical_inventory","sql_stmt":"select d.name \"Device Name\",\nd.physicalsubtype \"Physical Subtype\",\nd.serial_no \"Serial No\",\nd.os_name \"OS Name\",\nd.os_version \"OS Version\",\nd.os_version_no \"OS Version No\",\nd.os_architecture \"OS Arch\",\nd.total_cpus \"CPU Count\",\nd.core_per_cpu \"CPU Core\",\nd.cpu_speed \"CPU Speed\",\nd.ram \"RAM\",\npm.name \"Part Name\",\nv.name \"Part Mfr\",\npm.partmodel_pk \"Part Model ID\",\npm.type_name \"Part Type\",\np.pcount \"Part Count\",\np.firmware \"Part Firmware\",\np.serial_no \"Part Serial No\",\np.slot \"Part Slot\",\npm.cores \"Part Cores\",\npm.threads \"Part Threads\",\npm.speed \"Part Speed\",\npm.ramsize \"Part RAM\",\npm.ramspeed \"Part RAM Speed\",\nnp.hwaddress2 \"Part HW Address\",\npm.hdsize \"Part HDD Size\",\npm.hdsize_unit \"Part HDD Size Unit\",\npm.hddtype_name \"Part HDD Type\"\nfrom view_device_v2 d\nleft join view_part_v1 p on p.device_fk = d.device_pk\nleft join view_partmodel_v1 pm on pm.partmodel_pk = p.partmodel_fk\nleft join view_vendor_v1 v on pm.vendor_fk = v.vendor_pk\nleft join view_netport_v1 np on p.netport_fk = np.netport_pk\nwhere d.type_id = '2'\norder by d.name, pm.name","datasource_id":"0","object_type":"sql","key":{"col_name":"Device Name"}}}}</custom_entities>
+    <custom_entities>{"webreports":{"entity":{"entity_name":"detailed_physical_inventory","cloned_from":null,"affinity":"Report","db_name":"detailed_physical_inventory","sql_stmt":"select d.name \"Device Name\",\nd.type \"Device Type\",\nd.serial_no \"Serial No\",\nd.os_name \"OS Name\",\nd.os_version \"OS Version\",\nd.os_version_no \"OS Version No\",\nd.os_arch \"OS Arch\",\nd.cpucount \"CPU Count\",\nd.cpucore \"CPU Core\",\nd.cpupower \"CPU Speed\",\nd.ram \"RAM\",\npm.name \"Part Name\",\nv.name \"Part Mfr\",\npm.partmodel_pk \"Part Model ID\",\npm.type_name \"Part Type\",\np.pcount \"Part Count\",\np.firmware \"Part Firmware\",\np.serial_no \"Part Serial No\",\np.slot \"Part Slot\",\npm.cores \"Part Cores\",\npm.threads \"Part Threads\",\npm.speed \"Part Speed\",\npm.ramsize \"Part RAM\",\npm.ramspeed \"Part RAM Speed\",\nnp.hwaddress2 \"Part HW Address\",\npm.hdsize \"Part HDD Size\",\npm.hdsize_unit \"Part HDD Size Unit\",\npm.hddtype_name \"Part HDD Type\"\nfrom view_device_v1 d\nleft join view_part_v1 p on p.device_fk = d.device_pk\nleft join view_partmodel_v1 pm on pm.partmodel_pk = p.partmodel_fk\nleft join view_vendor_v1 v on pm.vendor_fk = v.vendor_pk\nleft join view_netport_v1 np on p.netport_fk = np.netport_pk\nwhere d.type_id = 2 or d.type_id = 4\norder by d.name, pm.name","datasource_id":"0","object_type":"sql","key":{"col_name":"Part Model ID"}}}}</custom_entities>
   </main>
   <entity>
     <entity_name>detailed_physical_inventory</entity_name>
@@ -54,7 +54,7 @@
   </cell>
   <cell>
     <id>886402612</id>
-    <cell_text>Physical Subtype</cell_text>
+    <cell_text>Device Type</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
     <cell_col>1</cell_col>
@@ -401,14 +401,14 @@
     <font_size>10</font_size>
   </cell>
   <cell>
-    <id>1765347083</id>
-    <cell_text>detailed_physical_inventory.Physical Subtype</cell_text>
+    <id>1741358255</id>
+    <cell_text>detailed_physical_inventory.Device Type</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
     <cell_col>1</cell_col>
     <wrap_text_flag>True</wrap_text_flag>
-    <font_name>Arial</font_name>
-    <font_size>8</font_size>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
   </cell>
   <cell>
     <id>680672276</id>
@@ -798,7 +798,6 @@
     <use_topn_item>False</use_topn_item>
     <num_items>10</num_items>
     <cellId>-1</cellId>
-    <direction>desc</direction>
   </topn>
   <dynamicfilters />
 </report>

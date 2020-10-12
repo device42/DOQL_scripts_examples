@@ -1,6 +1,6 @@
 <report>
   <main>
-    <id>6c275d59-cad3-4fe8-99e0-03051a5a7938</id>
+    <id>45193b4c-b458-4fd9-9d0f-e6c3047715cc</id>
     <version>1</version>
     <type>Standard</type>
     <sql_stmt />
@@ -33,7 +33,7 @@
     <suppressfiltersinterface>False</suppressfiltersinterface>
     <suppresssortsinterface>False</suppresssortsinterface>
     <row_range_limit>0</row_range_limit>
-    <custom_entities>{"webreports":{"entity":{"entity_name":"hardware_profile_summary","affinity":"Report","db_name":"hardware_profile_summary","sql_stmt":"select count (*) \"Quantity\",\nv.name \"Manufacturer\",\nh.name \"Model\",\nd.physicalsubtype \"Physical Subtype\",\nh.size \"RU Size\",\nh.depth \"Depth\",\nh.end_of_life \"End of Life\",\nh.end_of_support \"End of Support\",\nd.total_cpus \"Total CPUs\",\nd.core_per_cpu \"Cores Per CPU\",\nd.ram \"Memory\"\nfrom view_device_v2 d\njoin view_hardware_v1 h on d.hardware_fk = h.hardware_pk\nleft join view_vendor_v1 v on v.vendor_pk = h.vendor_fk\ngroup by d.physicalsubtype,d.total_cpus,d.core_per_cpu,d.ram,h.name,v.name,h.size,h.depth,h.end_of_life,h.end_of_support\norder by v.name,h.name ASC","datasource_id":"0","object_type":"sql","key":{"col_name":"Model"}}}}</custom_entities>
+    <custom_entities>{"webreports":{"entity":{"entity_name":"hardware_profile_summary","cloned_from":null,"affinity":"Report","db_name":"hardware_profile_summary","sql_stmt":"select count (*) \"Quantity\",\nv.name \"Manufacturer\",\nh.name \"Model\",\nd.type \"Device Type\",\nh.size \"RU Size\",\nh.depth \"Depth\",\nh.end_of_life \"End of Life\",\nh.end_of_support \"End of Support\",\nd.cpucount \"CPU Sockets\",\nd.cpucore \"CPU Cores\",\nd.ram \"Memory\"\nfrom view_device_v1 d\njoin view_hardware_v1 h on d.hardware_fk = h.hardware_pk\nleft join view_vendor_v1 v on v.vendor_pk = h.vendor_fk\ngroup by d.type,d.cpucount,d.cpucore,d.ram,h.name,v.name,h.size,h.depth,h.end_of_life,h.end_of_support\norder by v.name,h.name ASC","datasource_id":"0","object_type":"sql","key":{"col_name":"Model"}}}}</custom_entities>
   </main>
   <entity>
     <entity_name>hardware_profile_summary</entity_name>
@@ -83,7 +83,7 @@
   </cell>
   <cell>
     <id>2001921931</id>
-    <cell_text>Physical Subtype</cell_text>
+    <cell_text>Device Type</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
     <cell_col>3</cell_col>
@@ -214,14 +214,15 @@
     <format_type>Text</format_type>
   </cell>
   <cell>
-    <id>773032698</id>
-    <cell_text>hardware_profile_summary.Physical Subtype</cell_text>
+    <id>598241705</id>
+    <cell_text>hardware_profile_summary.Device Type</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
     <cell_col>3</cell_col>
     <wrap_text_flag>True</wrap_text_flag>
-    <font_name>Arial</font_name>
-    <font_size>8</font_size>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <format_type>Text</format_type>
   </cell>
   <cell>
     <id>395058213</id>
@@ -258,24 +259,26 @@
     <format_type>Text</format_type>
   </cell>
   <cell>
-    <id>766148807</id>
-    <cell_text>hardware_profile_summary.Total CPUs</cell_text>
+    <id>433105718</id>
+    <cell_text>hardware_profile_summary.CPU Sockets</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
     <cell_col>7</cell_col>
     <wrap_text_flag>True</wrap_text_flag>
-    <font_name>Arial</font_name>
-    <font_size>8</font_size>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <format_type>Text</format_type>
   </cell>
   <cell>
-    <id>696958548</id>
-    <cell_text>hardware_profile_summary.Cores Per CPU</cell_text>
+    <id>1606360921</id>
+    <cell_text>hardware_profile_summary.CPU Cores</cell_text>
     <cell_type>data</cell_type>
     <cell_row>1</cell_row>
     <cell_col>8</cell_col>
     <wrap_text_flag>True</wrap_text_flag>
-    <font_name>Arial</font_name>
-    <font_size>8</font_size>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <format_type>Text</format_type>
   </cell>
   <cell>
     <id>1577044390</id>

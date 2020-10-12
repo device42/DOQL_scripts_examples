@@ -96,7 +96,6 @@
         left join view_oseoleos_v1 ose on ose.os_fk = d.os_fk
         left join view_hardware_v1 h on d.hardware_fk = h.hardware_pk
         left join view_vendor_v1 v on h.vendor_fk = v.vendor_pk
-        /*left join view_vendor_v1 cv on d.cloud_vendor_fk = cv.vendor_pk */ --- old for view_device_v1
         left join view_room_v1 sr on sr.room_pk = d.storage_room_fk 
         left join view_rack_v1 r on d.rack_fk = r.rack_pk
         left join view_room_v1 m on r.room_fk = m.room_pk
