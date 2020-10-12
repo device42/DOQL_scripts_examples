@@ -15,6 +15,12 @@ The `.wr` and `.wrc` files in order to use reference names and locations. If the
 
 If the directories and report names are kept the same as this github you will be able to use them consistently without additional modifications.
 
+### Device42 Upload Reports
+-----------------------------
+For `.wr` files in order to use them select the "User Defined Reports" folder or create a new custom folder, click the "burger" menu to the right in line with the folder when selected, this will open a drop down to "Upload" the report `.wr` or `.wrc` file.
+
+`.wrc` files are  chained reports, they will link to other reports that will be required to upload as well. When running a chained report if any is missing an error will be included that mentions any required reports if they do not exist. `.wrc` files will refer to other `.wr` files in the same directory in most all cases.
+​
 ### Device42 DOQL to JSON/CSV file
 -----------------------------
 * Please rename `settings.json.sample` to `settings.json`.
