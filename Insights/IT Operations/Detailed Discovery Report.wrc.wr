@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<ChainedReport xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ParameterPrompts />
+  <FilterPrompts />
+  <Main>
+    <Id>58063215-f452-47d7-81ed-65fcb8704eb7</Id>
+    <Description>Detailed Discovery Report - Last 7 Days</Description>
+    <ReportType>Chained</ReportType>
+    <ExportType>Excel</ExportType>
+    <OutputType>Excel</OutputType>
+    <AllowHtml>false</AllowHtml>
+  </Main>
+  <Api />
+  <ReportItems>
+    <ReportItem>
+      <ReportType>Advanced</ReportType>
+      <Report>SAs\Insights\ZZ_Reports\RD42_Detailed_Disc_Data_Count</Report>
+      <ParameterValues />
+      <FilterValues />
+      <ParameterPrompts />
+      <FilterPrompts />
+      <Id>0</Id>
+      <UdfData />
+      <TileBoundsTop>0</TileBoundsTop>
+      <TileBoundsLeft>0</TileBoundsLeft>
+    </ReportItem>
+  </ReportItems>
+</ChainedReport>

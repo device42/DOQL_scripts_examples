@@ -1,0 +1,506 @@
+<report>
+  <main>
+    <id>064d2580-2570-472b-8e87-f499ded35ab5</id>
+    <version>1</version>
+    <type>Standard</type>
+    <sql_stmt />
+    <show_execute_form>False</show_execute_form>
+    <filter_execution_window>Default</filter_execution_window>
+    <fit_page_width>False</fit_page_width>
+    <suppress_formatting>False</suppress_formatting>
+    <report_tree_shortcut>0</report_tree_shortcut>
+    <output_mode>6</output_mode>
+    <prevent_output />
+    <page_size>Letter</page_size>
+    <page_orientation>Portrait</page_orientation>
+    <include_setup_info>No</include_setup_info>
+    <description />
+    <filter_description />
+    <show_grid>True</show_grid>
+    <pdf_template />
+    <embedded_pdf_template />
+    <simulate_pdf>True</simulate_pdf>
+    <no_data_render_type>ShowMessage</no_data_render_type>
+    <show_interactive_sorts>True</show_interactive_sorts>
+    <allow_column_hide>True</allow_column_hide>
+    <groups_on_separate_worksheets>False</groups_on_separate_worksheets>
+    <enable_cartesian_processing>Default</enable_cartesian_processing>
+    <visualization_report>false</visualization_report>
+    <use_cache_execution>false</use_cache_execution>
+    <excel_freeze_rows>1</excel_freeze_rows>
+    <excel_freeze_columns>1</excel_freeze_columns>
+    <excel_show_gridlines>True</excel_show_gridlines>
+    <suppressfiltersinterface>False</suppressfiltersinterface>
+    <suppresssortsinterface>False</suppresssortsinterface>
+    <row_range_limit>0</row_range_limit>
+    <custom_entities>{"webreports":{"entity":{"entity_name":"SVC_Comms","affinity":"Report","db_name":"SVC_Comms","sql_stmt":"/*\nQuery for all discovered connections to service instances.\n  - Update 9/16/2020\n  - Add affinity group to the client as well as the listener\n  - Add Business Apps to listener and client\n  - Add device obj category to listener and client\n*/\n/* Get all the Device info required for this report once.  */\nWith \n    target_device_data  as (\n        Select\n            dev.device_pk\n            ,dev.name \"Device\"\n            ,oc.name \"Object Category\"\n            ,ag.name \"Affinity Group\"\n            ,ba.name \"Business App\"       \n        From    \n            view_device_v1 dev\n /* get Object Category for  for both listener and client  */   \n            Left Join view_objectcategory_v1 oc On oc.objectcategory_pk = dev.objectcategory_fk\n /* get affinity Group for both listener and client  */ \n            Left Join view_affinitygroup_v2 ag On ag.primary_device_fk = dev.device_pk\n /* get Business Apps for both listener and client  */  \n        Left Join view_businessapplicationelement_v1 bae on bae.device_fk = dev.device_pk\n        Left Join view_businessapplication_v1 ba on ba.businessapplication_pk = bae.businessapplication_fk\n    )\n /*Pull all the data together for the report  */        \nSelect\n    ldev.\"Device\" \"Listener Device\"\n    ,ldev.\"Affinity Group\" \"Listener Affinity Group\"\n    ,ldev.\"Business App\" \"Listener Business App\"  /* Can comment out this row if you do not want Business App in Rpt  */\n    ,ldev.\"Object Category\" \"Listener Object Category\"  /* Can comment out this row if you do not want Object Category in Rpt */\n    ,sc.listener_ip \"Listening IP\"\n    ,lp.port \"Listening Port\"\n    ,s.displayname \"Listening Service\"\n    ,sc.port \"Port Communication\"\n    ,sc.protocol \"Protocol\"\n    ,cdev.\"Device\" \"Client Device\"\n    ,cdev.\"Affinity Group\" \"Client Affinity Group\"   /* Can comment out this row if you do not want Affinity Grp in Rpt  */\n    ,cdev.\"Business App\" \"Client Business App\"   /* Can comment out this row if you do not want Business App in Rpt */\n    ,cdev.\"Object Category\" \"Client Object Category\"    /* Can comment out this row if you do not want Object Category in Rpt  */\n    ,sc.client_ip \"Client IP\"\n    ,sc.port \"Client Port Communication\"\n    ,sc.client_process_display_name \"Process Display Name\"\n    ,sc.client_process_name \"Process Name\"\n    ,sc.last_detected \"Communication Last Detected\"\n    ,sc.netstat_active_samples \"Netstat # Times Port Actively Connected at Discovery\"\n    ,sc.netstat_total_samples \"Netstat # Times Discovery Checked for Connection\"\n    ,sc.netstat_total_eports \"Netstat Total # Port Connections at Discovery\"\n    ,sc.netstat_all_first_stat \"Netstat Time First Time Port Connected at Discovery\"\n    ,sc.netstat_all_last_stat \"Netstat Last Time Port Connected at Discovery\"\nFrom \n        view_servicecommunication_v2 sc\n    Join target_device_data ldev On ldev.device_pk = sc.listener_device_fk\n    Join view_servicelistenerport_v2 lp On lp.servicelistenerport_pk = sc.servicelistenerport_fk\n    Join view_serviceinstance_v2 si On si.serviceinstance_pk = lp.discovered_serviceinstance_fk\n    Join view_service_v2 s On s.service_pk = si.service_fk\n    Left Join target_device_data cdev On cdev.device_pk = sc.client_device_fk\nWhere sc.client_ip != '127.0.0.1' and sc.client_ip != '::1'","datasource_id":"0","object_type":"sql","key":{"col_name":"Listener Device"}}}}</custom_entities>
+  </main>
+  <entity>
+    <entity_name>SVC_Comms</entity_name>
+    <group_by_flag>False</group_by_flag>
+  </entity>
+  <cell>
+    <id>179464544</id>
+    <cell_text>Listener Device</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>0</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>788304447</id>
+    <cell_text>Listener Affinity Group</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>1</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>237836466</id>
+    <cell_text>Listening IP</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>2</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1176985223</id>
+    <cell_text>Listening Port</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>3</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1034368754</id>
+    <cell_text>Listening Service</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>4</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1784770075</id>
+    <cell_text>Protocol</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>5</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>920305800</id>
+    <cell_text>Client Service</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>6</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>940129078</id>
+    <cell_text>Client IP</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>7</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1242163066</id>
+    <cell_text>Client Affinity Group</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>8</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1622452185</id>
+    <cell_text>Client Device</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>9</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1626878224</id>
+    <cell_text>Communication Last Detected</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>10</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>60496096</id>
+    <cell_text>Netstat # Times Port Actively Connected at Discovery</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>11</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>842581037</id>
+    <cell_text>Netstat # Times Discovery Checked for Connection</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>12</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>309132218</id>
+    <cell_text>Netstat Total # Port Connections at Discovery</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>13</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>747183717</id>
+    <cell_text>Netstat Time First Time Port Connected at Discovery</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>14</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>221242487</id>
+    <cell_text>Netstat Last Time Port Connected at Discovery</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>15</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>2073951010</id>
+    <cell_text>SVC_Comms.Listener Device</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>0</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+  </cell>
+  <cell>
+    <id>1639093336</id>
+    <cell_text>SVC_Comms.Listener Affinity Group</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>1</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+  </cell>
+  <cell>
+    <id>1196366177</id>
+    <cell_text>SVC_Comms.Listening IP</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>2</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+  </cell>
+  <cell>
+    <id>1460291244</id>
+    <cell_text>SVC_Comms.Listening Port</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>3</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+  </cell>
+  <cell>
+    <id>1978006235</id>
+    <cell_text>SVC_Comms.Listening Service</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>4</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+  </cell>
+  <cell>
+    <id>2131926783</id>
+    <cell_text>SVC_Comms.Protocol</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>5</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+  </cell>
+  <cell>
+    <id>863898526</id>
+    <cell_text>SVC_Comms.Process Display Name</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>6</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+  </cell>
+  <cell>
+    <id>1762493042</id>
+    <cell_text>SVC_Comms.Client IP</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>7</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+  </cell>
+  <cell>
+    <id>1645012593</id>
+    <cell_text>SVC_Comms.Client Affinity Group</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>8</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+  </cell>
+  <cell>
+    <id>1886010995</id>
+    <cell_text>SVC_Comms.Client Device</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>9</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+  </cell>
+  <cell>
+    <id>1930236765</id>
+    <cell_text>SVC_Comms.Communication Last Detected</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>10</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+  </cell>
+  <cell>
+    <id>878601307</id>
+    <cell_text>SVC_Comms.Netstat # Times Port Actively Connected at Discovery</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>11</cell_col>
+    <cell_horizontal_align>Right</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+    <format_type>Number</format_type>
+    <format_negative_symbol_flag>True</format_negative_symbol_flag>
+  </cell>
+  <cell>
+    <id>646103324</id>
+    <cell_text>SVC_Comms.Netstat # Times Discovery Checked for Connection</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>12</cell_col>
+    <cell_horizontal_align>Right</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+    <format_type>Number</format_type>
+    <format_negative_symbol_flag>True</format_negative_symbol_flag>
+  </cell>
+  <cell>
+    <id>450266647</id>
+    <cell_text>SVC_Comms.Netstat Total # Port Connections at Discovery</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>13</cell_col>
+    <cell_horizontal_align>Right</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+    <format_type>Number</format_type>
+    <format_negative_symbol_flag>True</format_negative_symbol_flag>
+  </cell>
+  <cell>
+    <id>526804467</id>
+    <cell_text>SVC_Comms.Netstat Time First Time Port Connected at Discovery</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>14</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+  </cell>
+  <cell>
+    <id>42198513</id>
+    <cell_text>SVC_Comms.Netstat Last Time Port Connected at Discovery</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>15</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+  </cell>
+  <row>
+    <group_type>Page Header</group_type>
+  </row>
+  <row>
+    <group_type>Detail</group_type>
+  </row>
+  <column>
+    <column_width>124</column_width>
+    <column_label>Listener Device</column_label>
+  </column>
+  <column>
+    <column_width>115</column_width>
+    <column_label>Listener Affinity Group</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Listening IP</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Listening Port</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Listening Service</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Protocol</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Process Display Name</column_label>
+  </column>
+  <column>
+    <column_width>123</column_width>
+    <column_label>Client IP</column_label>
+  </column>
+  <column>
+    <column_width>120</column_width>
+    <column_label>Client Affinity Group</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Client Device</column_label>
+  </column>
+  <column>
+    <column_width>114</column_width>
+    <column_label>Communication Last Detected</column_label>
+  </column>
+  <column>
+    <column_width>154</column_width>
+    <column_label>Netstat # Times Port Actively Connected at Discovery</column_label>
+  </column>
+  <column>
+    <column_width>156</column_width>
+    <column_label>Netstat # Times Discovery Checked for Connection</column_label>
+  </column>
+  <column>
+    <column_width>153</column_width>
+    <column_label>Netstat Total # Port Connections at Discovery</column_label>
+  </column>
+  <column>
+    <column_width>178</column_width>
+    <column_label>Netstat Time First Time Port Connected at Discovery</column_label>
+  </column>
+  <column>
+    <column_width>144</column_width>
+    <column_label>Netstat Last Time Port Connected at Discovery</column_label>
+  </column>
+  <dynamicfilters />
+</report>

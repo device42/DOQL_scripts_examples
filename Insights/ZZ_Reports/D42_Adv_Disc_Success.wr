@@ -1,0 +1,1752 @@
+<report>
+  <main>
+    <id>84347d61-cf3e-4185-8ead-ca3f7d6dc735</id>
+    <version>1</version>
+    <type>Standard</type>
+    <sql_stmt />
+    <show_execute_form>False</show_execute_form>
+    <filter_execution_window>Default</filter_execution_window>
+    <fit_page_width>False</fit_page_width>
+    <suppress_formatting>False</suppress_formatting>
+    <report_tree_shortcut>0</report_tree_shortcut>
+    <output_mode>6</output_mode>
+    <prevent_output />
+    <page_size>Letter</page_size>
+    <page_orientation>Portrait</page_orientation>
+    <include_setup_info>No</include_setup_info>
+    <description />
+    <filter_description />
+    <show_grid>True</show_grid>
+    <pdf_template />
+    <embedded_pdf_template />
+    <simulate_pdf>True</simulate_pdf>
+    <no_data_render_type>ShowMessage</no_data_render_type>
+    <show_interactive_sorts>True</show_interactive_sorts>
+    <allow_column_hide>True</allow_column_hide>
+    <groups_on_separate_worksheets>False</groups_on_separate_worksheets>
+    <enable_cartesian_processing>Default</enable_cartesian_processing>
+    <visualization_report>false</visualization_report>
+    <use_cache_execution>false</use_cache_execution>
+    <excel_freeze_rows>1</excel_freeze_rows>
+    <excel_freeze_columns>1</excel_freeze_columns>
+    <excel_show_gridlines>True</excel_show_gridlines>
+    <suppressfiltersinterface>False</suppressfiltersinterface>
+    <suppresssortsinterface>False</suppresssortsinterface>
+    <row_range_limit>0</row_range_limit>
+    <custom_entities>{"webreports":{"entity":{"entity_name":"Adv_Disc_Success","affinity":"Report","db_name":"Adv_Disc_Success","sql_stmt":"/*\nDOQL for detailed data of Devices related to Discovery Scores and Job Scores.\n*/\nSelect \n\tds.discoveryscores_pk \"Discovery Score ID\"\n\t,vsd.vserverdiscovery_pk \"Job ID\"\n\t,vsd.job_name \"Job Name\"\n\t,vsd.platform \"Platform\"\n\t,ds.port \"TCP Port\"\n\t,ds.discovery_server \"Discovery Target\"\n\t,ds.username \"Username\"\n\t,CASE\n\t  WHEN ds.port_check = 't'\n\t  THEN\n\t  'PASS'\n\t  ELSE\n\t  'FAIL'\n\tEND \"Port Check\"\n\t,CASE\n\t  WHEN ds.authorization = 't'\n\t  THEN\n\t  'PASS'\n\t  ELSE\n\t  'FAIL'\n\tEND \"Auth Check\"\n\t,CASE\n\t  WHEN ds.is_sudo_failed = 't'\n\t  THEN\n\t  'FAIL'\n\t  ELSE\n\t  'PASS'\n\tEND \"Sudo Check\"\n\t,CASE\n\t  WHEN ds.supported_os = 't'\n\t  THEN\n\t  'PASS'\n\t  ELSE\n\t  'FAIL'\n\tEND \"OS Support\"\n\t,ds.sudo_error_message \"Sudo Error Message\"\n\t,ds.discovery_exception_message \"Exception Message\"\n\t,ds.updated \"Discovery Timestamp\"\n\t,d.first_added \"First Discovered\"\n\t,d.last_edited \"Last Updated\"\n\t,ds.device_fk \"Device ID\"\n\t,d.name \"Device Name\"\n\t,d.os_name \"Operating System\"\n\t,d.os_version \"OS Version\"\n\t,(Select count(*) From view_softwaredetails_v1 sd Where sd.device_fk = d.device_pk) \"Software Count\"\n\t,(Select count(*) From view_serviceinstance_v2 si Where si.device_fk = d.device_pk) \"Services Count\"\n\t,(Select count(*) From view_mountpoint_v1 m Where m.device_fk = d.device_pk) \"Mounts Count\"\n\t,(Select count(*) From view_appcomp_v1 a Where a.device_fk = d.device_pk) \"Application Components Count\"\n\t,(Select count(*) From view_networkshare_v1 ns Where ns.device_fk = d.device_pk) \"Network Shares Count\"\n\t,(Select count(*) From view_part_v1 pt Where pt.device_fk = d.device_pk) \"Parts Count\"\n\t,(Select count(*) From view_rudata_v1 ru Where ru.device_fk = ds.device_fk) \"RU Count\"\n\t,CASE\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'device.os'  = 'ok'\n\t  THEN\n\t  'PASS'\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'device.os'  = 'partial'\n\t  THEN\n\t  'PARTIAL'\n\t  ELSE\n\t  'FAIL'\n\tEND \"Device OS\"\n\t,CASE\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'device.osmanufacturer'  = 'ok'\n\t  THEN\n\t  'PASS'\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'device.osmanufacturer'  = 'partial'\n\t  THEN\n\t  'PARTIAL'\n\t  ELSE\n\t  'FAIL'\n\tEND \"Device OS Manufacturer\"\n\t,CASE\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'device.osserial'  = 'ok'\n\t  THEN\n\t  'PASS'\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'device.osserial'  = 'partial'\n\t  THEN\n\t  'PARTIAL'\n\t  ELSE\n\t  'FAIL'\n\tEND \"Device OS Serial\"\n\t,CASE\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'device.osver'  = 'ok'\n\t  THEN\n\t  'PASS'\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'device.osver'  = 'partial'\n\t  THEN\n\t  'PARTIAL'\n\t  ELSE\n\t  'FAIL'\n\tEND \"Device OS Ver\"\n\t,CASE\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'device.osverno'  = 'ok'\n\t  THEN\n\t  'PASS'\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'device.osverno'  = 'partial'\n\t  THEN\n\t  'PARTIAL'\n\t  ELSE\n\t  'FAIL'\n\tEND \"Device OS Ver No\"\n\t,CASE\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'device.ostype'  = 'ok'\n\t  THEN\n\t  'PASS'\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'device.ostype'  = 'partial'\n\t  THEN\n\t  'PARTIAL'\n\t  ELSE\n\t  'FAIL'\n\tEND \"Device OS Type\"\n\t,CASE\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'device.domain'  = 'ok'\n\t  THEN\n\t  'PASS'\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'device.domain'  = 'partial'\n\t  THEN\n\t  'PARTIAL'\n\t  ELSE\n\t  'FAIL'\n\tEND \"Device Domain\"\n\t,CASE\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'device.hardware'  = 'ok'\n\t  THEN\n\t  'PASS'\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'device.hardware'  = 'partial'\n\t  THEN\n\t  'PARTIAL'\n\t  ELSE\n\t  'FAIL'\n\tEND \"Device Hardware\"\n\t,CASE\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'device.manufacturer'  = 'ok'\n\t  THEN\n\t  'PASS'\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'device.manufacturer'  = 'partial'\n\t  THEN\n\t  'PARTIAL'\n\t  ELSE\n\t  'FAIL'\n\tEND \"Device Manufacturer\"\n\t,CASE\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'device.serial_no'  = 'ok'\n\t  THEN\n\t  'PASS'\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'device.serial_no'  = 'partial'\n\t  THEN\n\t  'PARTIAL'\n\t  ELSE\n\t  'FAIL'\n\tEND \"Device Serial No\"\n\t,CASE\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'device.uuid'  = 'ok'\n\t  THEN\n\t  'PASS'\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'device.uuid'  = 'partial'\n\t  THEN\n\t  'PARTIAL'\n\t  ELSE\n\t  'FAIL'\n\tEND \"Device UUID\"\n\t,CASE\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'device.bios_vendor'  = 'ok'\n\t  THEN\n\t  'PASS'\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'device.bios_vendor'  = 'partial'\n\t  THEN\n\t  'PARTIAL'\n\t  ELSE\n\t  'FAIL'\n\tEND \"Device BIOS Vendor\"\n\t,CASE\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'device.bios_release_date'  = 'ok'\n\t  THEN\n\t  'PASS'\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'device.bios_release_date'  = 'partial'\n\t  THEN\n\t  'PARTIAL'\n\t  ELSE\n\t  'FAIL'\n\tEND \"Device BIOS Release Date\"\n\t,CASE\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'device.bios_version'  = 'ok'\n\t  THEN\n\t  'PASS'\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'device.bios_version'  = 'partial'\n\t  THEN\n\t  'PARTIAL'\n\t  ELSE\n\t  'FAIL'\n\tEND \"Device BIOS Version\"\n\t,CASE\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'device.cpucount'  = 'ok'\n\t  THEN\n\t  'PASS'\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'device.cpucount'  = 'partial'\n\t  THEN\n\t  'PARTIAL'\n\t  ELSE\n\t  'FAIL'\n\tEND \"Device CPU Count\"\n\t,CASE\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'device.cpucore'  = 'ok'\n\t  THEN\n\t  'PASS'\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'device.cpucore'  = 'partial'\n\t  THEN\n\t  'PARTIAL'\n\t  ELSE\n\t  'FAIL'\n\tEND \"Device CPU Cores\"\n\t,CASE\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'device.cpupower'  = 'ok'\n\t  THEN\n\t  'PASS'\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'device.cpupower'  = 'partial'\n\t  THEN\n\t  'PARTIAL'\n\t  ELSE\n\t  'FAIL'\n\tEND \"Device CPU Speed\"\n\t,CASE\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'device.memory'  = 'ok'\n\t  THEN\n\t  'PASS'\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'device.memory'  = 'partial'\n\t  THEN\n\t  'PARTIAL'\n\t  ELSE\n\t  'FAIL'\n\tEND \"Device Memory\"\n\t,CASE\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'services.list'  = 'ok'\n\t  THEN\n\t  'PASS'\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'services.list'  = 'partial'\n\t  THEN\n\t  'PARTIAL'\n\t  ELSE\n\t  'FAIL'\n\tEND \"Services List\"\n\t,CASE\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'software.info'  = 'ok'\n\t  THEN\n\t  'PASS'\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'software.info'  = 'partial'\n\t  THEN\n\t  'PARTIAL'\n\t  ELSE\n\t  'FAIL'\n\tEND \"Software Info\"\n\t,CASE\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'software.list'  = 'ok'\n\t  THEN\n\t  'PASS'\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'software.list'  = 'partial'\n\t  THEN\n\t  'PARTIAL'\n\t  ELSE\n\t  'FAIL'\n\tEND \"Software List\"\n\t,CASE\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'schedules.list'  = 'ok'\n\t  THEN\n\t  'PASS'\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'schedules.list'  = 'partial'\n\t  THEN\n\t  'PARTIAL'\n\t  ELSE\n\t  'FAIL'\n\tEND \"Schedules List\"\n\t,CASE\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'network.list'  = 'ok'\n\t  THEN\n\t  'PASS'\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'network.list'  = 'partial'\n\t  THEN\n\t  'PARTIAL'\n\t  ELSE\n\t  'FAIL'\n\tEND \"Network List\"\n\t,CASE\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'monitoring.hdds'  = 'ok'\n\t  THEN\n\t  'PASS'\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'monitoring.hdds'  = 'partial'\n\t  THEN\n\t  'PARTIAL'\n\t  ELSE\n\t  'FAIL'\n\tEND \"Monitoring HDDs\"\n\t,CASE\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'monitoring.nics'  = 'ok'\n\t  THEN\n\t  'PASS'\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'monitoring.nics'  = 'partial'\n\t  THEN\n\t  'PARTIAL'\n\t  ELSE\n\t  'FAIL'\n\tEND \"Monitoring NICs\"\n\t,CASE\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'serviceports.list'  = 'ok'\n\t  THEN\n\t  'PASS'\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'serviceports.list'  = 'partial'\n\t  THEN\n\t  'PARTIAL'\n\t  ELSE\n\t  'FAIL'\n\tEND \"Service Ports List\"\n\t,CASE\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'device.hosts.list'  = 'ok'\n\t  THEN\n\t  'PASS'\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'device.hosts.list'  = 'partial'\n\t  THEN\n\t  'PARTIAL'\n\t  ELSE\n\t  'FAIL'\n\tEND \"Device Hosts List\"\n\t,CASE\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'mountpoints.list'  = 'ok'\n\t  THEN\n\t  'PASS'\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'mountpoints.list'  = 'partial'\n\t  THEN\n\t  'PARTIAL'\n\t  ELSE\n\t  'FAIL'\n\tEND \"Mount Points List\"\n\t,CASE\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'networkshares.list'  = 'ok'\n\t  THEN\n\t  'PASS'\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'networkshares.list'  = 'partial'\n\t  THEN\n\t  'PARTIAL'\n\t  ELSE\n\t  'FAIL'\n\tEND \"Network Shares List\"\n\t,CASE\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'app.webserver.apache'  = 'ok'\n\t  THEN\n\t  'PASS'\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'app.webserver.apache'  = 'partial'\n\t  THEN\n\t  'PARTIAL'\n\t  ELSE\n\t  'FAIL'\n\tEND \"App-Webserver Apache\"\n\t,CASE\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'app.webserver.iis7+'  = 'ok'\n\t  THEN\n\t  'PASS'\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'app.webserver.iis7+'  = 'partial'\n\t  THEN\n\t  'PARTIAL'\n\t  ELSE\n\t  'FAIL'\n\tEND \"App-Webserver IIS7+\"\n\t,CASE\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'containers.docker.list'  = 'ok'\n\t  THEN\n\t  'PASS'\n\t  WHEN ds.discovery_scores::json-&gt;&gt;'containers.docker.list'  = 'partial'\n\t  THEN\n\t  'PARTIAL'\n\t  ELSE\n\t  'FAIL'\n\tEND \"Containers-Docker List\"\n\t,ds.discovery_scores::json-&gt;&gt;'ips' \"IPs\"\n\t,ds.discovery_scores::json-&gt;&gt;'macs' \"MACs\"\n\t,ds.discovery_scores::json-&gt;&gt;'subnets' \"Subnets\"\n\t,ds.discovery_scores::json-&gt;&gt;'services' \"Services\"\n\t,ds.discovery_scores::json-&gt;&gt;'software' \"Software\"\n\t,ds.discovery_scores::json-&gt;&gt;'mountpoints' \"Mount Points\"\n\t,ds.discovery_scores::json-&gt;&gt;'device_match' \"Device Match\"\n\t,ds.discovery_scores::json-&gt;&gt;'app_webserver' \"App_Webserver\"\n\t,ds.discovery_scores::json-&gt;&gt;'service_ports' \"Service Ports\"\n\t,ds.discovery_scores::json-&gt;&gt;'network_shares' \"Network Shares\"\n\t,ds.discovery_scores::json-&gt;&gt;'software_services_bulk' \"Software Services Bulk\"\nFrom view_discoveryscores_v1 ds\n\tLeft Join view_device_v1 d On d.device_pk = ds.device_fk\n\tLeft Join view_jobscore_v1 js On ds.jobscore_fk = js.jobscore_pk\n\tLeft Join view_vserverdiscovery_v1 vsd On js.vserverdiscovery_fk = vsd.vserverdiscovery_pk\n\tWhere vsd.platform &lt;&gt; 'vmware' and ds.updated &gt; current_date - 14 and (js.jobscore_pk in (select max(jobscore_pk) from view_jobscore_v1 jk group by jk.vserverdiscovery_fk))\n\tOrder by ds.updated DESC ","datasource_id":"0","object_type":"sql","key":{"col_name":"Discovery Score ID"}}}}</custom_entities>
+  </main>
+  <entity>
+    <entity_name>Adv_Disc_Success</entity_name>
+    <group_by_flag>False</group_by_flag>
+  </entity>
+  <cell>
+    <id>1696433970</id>
+    <cell_text>Discovery Score ID</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>0</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>594291068</id>
+    <cell_text>Job ID</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>1</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>579959669</id>
+    <cell_text>Job Name</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>2</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1818390718</id>
+    <cell_text>Platform</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>3</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>580826944</id>
+    <cell_text>TCP Port</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>4</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1611322349</id>
+    <cell_text>Discovery Target</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>5</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>322086457</id>
+    <cell_text>Username</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>6</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1333082085</id>
+    <cell_text>Port Check</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>7</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1534847147</id>
+    <cell_text>Auth Check</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>8</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1348588633</id>
+    <cell_text>Sudo Check</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>9</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1347527196</id>
+    <cell_text>OS Support</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>10</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1859104599</id>
+    <cell_text>Sudo Error Message</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>11</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1733844764</id>
+    <cell_text>Exception Message</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>12</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>100415023</id>
+    <cell_text>Discovery Timestamp</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>13</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>273802540</id>
+    <cell_text>First Discovered</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>14</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>136049082</id>
+    <cell_text>Last Updated</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>15</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>953649648</id>
+    <cell_text>Device ID</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>16</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1489777191</id>
+    <cell_text>Device Name</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>17</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1143287716</id>
+    <cell_text>Operating System</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>18</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>2056352876</id>
+    <cell_text>OS Version</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>19</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>520803721</id>
+    <cell_text>Software Count</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>20</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1879131341</id>
+    <cell_text>Services Count</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>21</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1281818720</id>
+    <cell_text>Mounts Count</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>22</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1018575561</id>
+    <cell_text>Application Components Count</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>23</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>297094421</id>
+    <cell_text>Network Shares Count</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>24</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1622804169</id>
+    <cell_text>Parts Count</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>25</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>629258063</id>
+    <cell_text>RU Count</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>26</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1695438923</id>
+    <cell_text>Device OS</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>27</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1595959869</id>
+    <cell_text>Device OS Manufacturer</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>28</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>2114011429</id>
+    <cell_text>Device OS Serial</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>29</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>549109345</id>
+    <cell_text>Device OS Ver</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>30</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1159338831</id>
+    <cell_text>Device OS Ver No</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>31</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1277764779</id>
+    <cell_text>Device OS Type</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>32</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>211649460</id>
+    <cell_text>Device Domain</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>33</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>2122364746</id>
+    <cell_text>Device Hardware</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>34</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>40615201</id>
+    <cell_text>Device Manufacturer</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>35</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>451831962</id>
+    <cell_text>Device Serial No</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>36</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>895204065</id>
+    <cell_text>Device UUID</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>37</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>75105331</id>
+    <cell_text>Device BIOS Vendor</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>38</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1437793087</id>
+    <cell_text>Device BIOS Release Date</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>39</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>2032777346</id>
+    <cell_text>Device BIOS Version</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>40</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1912253336</id>
+    <cell_text>Device CPU Count</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>41</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>335285037</id>
+    <cell_text>Device CPU Cores</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>42</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1145158988</id>
+    <cell_text>Device CPU Speed</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>43</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>574305698</id>
+    <cell_text>Device Memory</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>44</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1675072791</id>
+    <cell_text>Services List</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>45</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>910528323</id>
+    <cell_text>Software Info</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>46</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>558227566</id>
+    <cell_text>Software List</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>47</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1099343083</id>
+    <cell_text>Schedules List</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>48</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1861273151</id>
+    <cell_text>Network List</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>49</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1600823844</id>
+    <cell_text>Monitoring HDDs</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>50</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1292947667</id>
+    <cell_text>Monitoring NICs</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>51</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1823695454</id>
+    <cell_text>Service Ports List</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>52</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1249916709</id>
+    <cell_text>Device Hosts List</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>53</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>123855589</id>
+    <cell_text>Mount Points List</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>54</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1814575614</id>
+    <cell_text>Network Shares List</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>55</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>731853468</id>
+    <cell_text>App-Webserver Apache</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>56</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1938280357</id>
+    <cell_text>App-Webserver IIS7+</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>57</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1991756919</id>
+    <cell_text>Containers-Docker List</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>58</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1307580821</id>
+    <cell_text>Adv_Disc_Success.Discovery Score ID</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>0</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1700372546</id>
+    <cell_text>Adv_Disc_Success.Job ID</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>1</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>649524368</id>
+    <cell_text>Adv_Disc_Success.Job Name</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>2</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1433141371</id>
+    <cell_text>Adv_Disc_Success.Platform</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>3</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1413813861</id>
+    <cell_text>Adv_Disc_Success.TCP Port</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>4</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1165299108</id>
+    <cell_text>Adv_Disc_Success.Discovery Target</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>5</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1464658290</id>
+    <cell_text>Adv_Disc_Success.Username</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>6</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1183902917</id>
+    <cell_text>Adv_Disc_Success.Port Check</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>7</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>360701191</id>
+    <cell_text>Adv_Disc_Success.Auth Check</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>8</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1416007786</id>
+    <cell_text>Adv_Disc_Success.Sudo Check</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>9</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1954236672</id>
+    <cell_text>Adv_Disc_Success.OS Support</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>10</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>572128160</id>
+    <cell_text>Adv_Disc_Success.Sudo Error Message</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>11</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>903869260</id>
+    <cell_text>Adv_Disc_Success.Exception Message</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>12</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>61864110</id>
+    <cell_text>Adv_Disc_Success.Discovery Timestamp</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>13</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1958089206</id>
+    <cell_text>Adv_Disc_Success.First Discovered</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>14</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1774417051</id>
+    <cell_text>Adv_Disc_Success.Last Updated</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>15</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>122260974</id>
+    <cell_text>Adv_Disc_Success.Device ID</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>16</cell_col>
+    <cell_horizontal_align>Right</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <format_type>Number</format_type>
+    <format_separator_flag>False</format_separator_flag>
+    <format_negative_symbol_flag>False</format_negative_symbol_flag>
+  </cell>
+  <cell>
+    <id>1123549013</id>
+    <cell_text>Adv_Disc_Success.Device Name</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>17</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>877056105</id>
+    <cell_text>Adv_Disc_Success.Operating System</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>18</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1107336911</id>
+    <cell_text>Adv_Disc_Success.OS Version</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>19</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <format_type>Text</format_type>
+  </cell>
+  <cell>
+    <id>111198267</id>
+    <cell_text>Adv_Disc_Success.Software Count</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>20</cell_col>
+    <cell_horizontal_align>Right</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>991554283</id>
+    <cell_text>Adv_Disc_Success.Services Count</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>21</cell_col>
+    <cell_horizontal_align>Right</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1812473304</id>
+    <cell_text>Adv_Disc_Success.Mounts Count</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>22</cell_col>
+    <cell_horizontal_align>Right</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1267828766</id>
+    <cell_text>Adv_Disc_Success.Application Components Count</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>23</cell_col>
+    <cell_horizontal_align>Right</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1864310655</id>
+    <cell_text>Adv_Disc_Success.Network Shares Count</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>24</cell_col>
+    <cell_horizontal_align>Right</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1701748671</id>
+    <cell_text>Adv_Disc_Success.Parts Count</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>25</cell_col>
+    <cell_horizontal_align>Right</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1019059654</id>
+    <cell_text>Adv_Disc_Success.RU Count</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>26</cell_col>
+    <cell_horizontal_align>Right</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1889680945</id>
+    <cell_text>Adv_Disc_Success.Device OS</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>27</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>22162908</id>
+    <cell_text>Adv_Disc_Success.Device OS Manufacturer</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>28</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1823574056</id>
+    <cell_text>Adv_Disc_Success.Device OS Serial</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>29</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1756526608</id>
+    <cell_text>Adv_Disc_Success.Device OS Ver</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>30</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>770221385</id>
+    <cell_text>Adv_Disc_Success.Device OS Ver No</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>31</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1984388945</id>
+    <cell_text>Adv_Disc_Success.Device OS Type</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>32</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>199825483</id>
+    <cell_text>Adv_Disc_Success.Device Domain</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>33</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>209533072</id>
+    <cell_text>Adv_Disc_Success.Device Hardware</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>34</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>657791042</id>
+    <cell_text>Adv_Disc_Success.Device Manufacturer</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>35</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>241251722</id>
+    <cell_text>Adv_Disc_Success.Device Serial No</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>36</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1236328929</id>
+    <cell_text>Adv_Disc_Success.Device UUID</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>37</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>867550316</id>
+    <cell_text>Adv_Disc_Success.Device BIOS Vendor</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>38</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>2068855107</id>
+    <cell_text>Adv_Disc_Success.Device BIOS Release Date</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>39</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>980069904</id>
+    <cell_text>Adv_Disc_Success.Device BIOS Version</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>40</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>556975532</id>
+    <cell_text>Adv_Disc_Success.Device CPU Count</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>41</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>581784058</id>
+    <cell_text>Adv_Disc_Success.Device CPU Cores</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>42</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>2082073641</id>
+    <cell_text>Adv_Disc_Success.Device CPU Speed</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>43</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1747579893</id>
+    <cell_text>Adv_Disc_Success.Device Memory</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>44</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1121124808</id>
+    <cell_text>Adv_Disc_Success.Services List</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>45</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>232778820</id>
+    <cell_text>Adv_Disc_Success.Software Info</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>46</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>911760760</id>
+    <cell_text>Adv_Disc_Success.Software List</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>47</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1108909956</id>
+    <cell_text>Adv_Disc_Success.Schedules List</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>48</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1444913422</id>
+    <cell_text>Adv_Disc_Success.Network List</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>49</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>818750078</id>
+    <cell_text>Adv_Disc_Success.Monitoring HDDs</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>50</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>87561349</id>
+    <cell_text>Adv_Disc_Success.Monitoring NICs</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>51</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>965013127</id>
+    <cell_text>Adv_Disc_Success.Service Ports List</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>52</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>388006341</id>
+    <cell_text>Adv_Disc_Success.Device Hosts List</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>53</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>459109994</id>
+    <cell_text>Adv_Disc_Success.Mount Points List</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>54</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>728409553</id>
+    <cell_text>Adv_Disc_Success.Network Shares List</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>55</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>45156322</id>
+    <cell_text>Adv_Disc_Success.App-Webserver Apache</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>56</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1716523088</id>
+    <cell_text>Adv_Disc_Success.App-Webserver IIS7+</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>57</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>602363299</id>
+    <cell_text>Adv_Disc_Success.Containers-Docker List</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>58</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <row>
+    <group_type>Page Header</group_type>
+  </row>
+  <row>
+    <group_type>Detail</group_type>
+  </row>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Discovery Score ID</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Job ID</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Job Name</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Platform</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>TCP Port</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Discovery Target</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Username</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Port Check</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Auth Check</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Sudo Check</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>OS Support</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Sudo Error Message</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Exception Message</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Discovery Timestamp</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>First Discovered</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Last Updated</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Device ID</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Device Name</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Operating System</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>OS Version</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Software Count</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Services Count</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Mounts Count</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Application Components Count</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Network Shares Count</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Parts Count</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>RU Count</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Device OS</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Device OS Manufacturer</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Device OS Serial</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Device OS Ver</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Device OS Ver No</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Device OS Type</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Device Domain</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Device Hardware</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Device Manufacturer</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Device Serial No</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Device UUID</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Device BIOS Vendor</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Device BIOS Release Date</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Device BIOS Version</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Device CPU Count</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Device CPU Cores</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Device CPU Speed</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Device Memory</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Services List</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Software Info</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Software List</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Schedules List</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Network List</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Monitoring HDDs</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Monitoring NICs</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Service Ports List</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Device Hosts List</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Mount Points List</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Network Shares List</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>App-Webserver Apache</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>App-Webserver IIS7+</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Containers-Docker List</column_label>
+  </column>
+  <sort>
+    <sort_name>Adv_Disc_Success.Discovery Timestamp</sort_name>
+    <sort_title />
+    <order_num>0</order_num>
+    <ascending_flag>True</ascending_flag>
+  </sort>
+  <dynamicfilters />
+</report>

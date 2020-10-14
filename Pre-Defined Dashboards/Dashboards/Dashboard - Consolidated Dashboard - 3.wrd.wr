@@ -1,0 +1,159 @@
+<?xml version="1.0"?>
+<DashboardReport xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ParameterPrompts />
+  <FilterPrompts />
+  <Layout>
+    <EmptyItems />
+    <TextItems />
+    <AdvancedReportItems>
+      <DashboardAdvancedReportItem>
+        <Id>974913328</Id>
+        <Bounds>
+          <height>0.58019538623317868</height>
+          <width>0.97782956029639279</width>
+          <top>0.40322580645161288</top>
+          <left>0.010869565217391304</left>
+        </Bounds>
+        <Format>
+          <Title>Dashboards/Dashboard - All Devices</Title>
+          <ShowTitleOnOutput>false</ShowTitleOnOutput>
+          <TileFit>All</TileFit>
+          <TitleFont>Arial</TitleFont>
+          <TitleFontSize>14</TitleFontSize>
+          <TitleFontColor>#545454</TitleFontColor>
+          <TitleFontWeight>Normal</TitleFontWeight>
+          <TitleHorizontalAlign>Center</TitleHorizontalAlign>
+          <TitleUnderline>None</TitleUnderline>
+          <HasTileBackground>true</HasTileBackground>
+          <TileBackgroundColor>#FFFFFF</TileBackgroundColor>
+          <TileBackgroundOpacity>100</TileBackgroundOpacity>
+          <HasTileTitleBackground>true</HasTileTitleBackground>
+          <TileTitleBackgroundColor>#FFFFFF</TileTitleBackgroundColor>
+          <TileTitleBackgroundOpacity>100</TileTitleBackgroundOpacity>
+          <Borders>
+            <UniformBorders>true</UniformBorders>
+            <TopBorderColor>#d7d7d7</TopBorderColor>
+            <TopBorderWeight>0</TopBorderWeight>
+            <BottomBorderColor>#d7d7d7</BottomBorderColor>
+            <BottomBorderWeight>0</BottomBorderWeight>
+            <LeftBorderColor>#d7d7d7</LeftBorderColor>
+            <LeftBorderWeight>0</LeftBorderWeight>
+            <RightBorderColor>#d7d7d7</RightBorderColor>
+            <RightBorderWeight>0</RightBorderWeight>
+            <BorderRadius>3</BorderRadius>
+          </Borders>
+          <HasTileShadow>false</HasTileShadow>
+        </Format>
+        <AllowAlign>false</AllowAlign>
+        <IsAnchor>false</IsAnchor>
+        <IsAnchorable>false</IsAnchorable>
+        <AllowElementInteraction>false</AllowElementInteraction>
+        <Report>Pre-Defined Dashboards\Dashboards\Dashboard - All Devices</Report>
+        <TitleText />
+        <AllowSearching>false</AllowSearching>
+        <AllowScrolling>true</AllowScrolling>
+        <DesignSuppressExecution>false</DesignSuppressExecution>
+        <AutoSizeExecution>true</AutoSizeExecution>
+        <ReloadInterval>0</ReloadInterval>
+        <UdfData />
+        <FilterValues />
+        <ParameterValues />
+        <FilterPrompts />
+        <ParameterPrompts />
+      </DashboardAdvancedReportItem>
+      <DashboardAdvancedReportItem>
+        <Id>298984269</Id>
+        <Bounds>
+          <height>0.38709677419354838</height>
+          <width>0.97782956029639279</width>
+          <top>0.016129032258064516</top>
+          <left>0.010869565217391304</left>
+        </Bounds>
+        <Format>
+          <Title>Dashboards/Dashboard - Devices by Type</Title>
+          <ShowTitleOnOutput>false</ShowTitleOnOutput>
+          <TileFit>All</TileFit>
+          <TitleFont>Arial</TitleFont>
+          <TitleFontSize>14</TitleFontSize>
+          <TitleFontColor>#545454</TitleFontColor>
+          <TitleFontWeight>Normal</TitleFontWeight>
+          <TitleHorizontalAlign>Center</TitleHorizontalAlign>
+          <TitleUnderline>None</TitleUnderline>
+          <HasTileBackground>true</HasTileBackground>
+          <TileBackgroundColor>#FFFFFF</TileBackgroundColor>
+          <TileBackgroundOpacity>100</TileBackgroundOpacity>
+          <HasTileTitleBackground>true</HasTileTitleBackground>
+          <TileTitleBackgroundColor>#FFFFFF</TileTitleBackgroundColor>
+          <TileTitleBackgroundOpacity>100</TileTitleBackgroundOpacity>
+          <Borders>
+            <UniformBorders>true</UniformBorders>
+            <TopBorderColor>#d7d7d7</TopBorderColor>
+            <TopBorderWeight>0</TopBorderWeight>
+            <BottomBorderColor>#d7d7d7</BottomBorderColor>
+            <BottomBorderWeight>0</BottomBorderWeight>
+            <LeftBorderColor>#d7d7d7</LeftBorderColor>
+            <LeftBorderWeight>0</LeftBorderWeight>
+            <RightBorderColor>#d7d7d7</RightBorderColor>
+            <RightBorderWeight>0</RightBorderWeight>
+            <BorderRadius>3</BorderRadius>
+          </Borders>
+          <HasTileShadow>false</HasTileShadow>
+        </Format>
+        <AllowAlign>false</AllowAlign>
+        <IsAnchor>false</IsAnchor>
+        <IsAnchorable>false</IsAnchorable>
+        <AllowElementInteraction>false</AllowElementInteraction>
+        <Report>Pre-Defined Dashboards\Dashboards\Dashboard - Devices by Type</Report>
+        <TitleText />
+        <AllowSearching>false</AllowSearching>
+        <AllowScrolling>true</AllowScrolling>
+        <DesignSuppressExecution>false</DesignSuppressExecution>
+        <AutoSizeExecution>true</AutoSizeExecution>
+        <ReloadInterval>0</ReloadInterval>
+        <UdfData />
+        <FilterValues />
+        <ParameterValues />
+        <FilterPrompts />
+        <ParameterPrompts />
+      </DashboardAdvancedReportItem>
+    </AdvancedReportItems>
+    <ExpressViewItems />
+    <ImageItems />
+    <UrlItems />
+    <FilterItems />
+  </Layout>
+  <ParameterModels />
+  <CanvasFormat>
+    <CanvasFit>All</CanvasFit>
+    <CanvasHeight>0</CanvasHeight>
+    <CanvasWidth>0</CanvasWidth>
+    <CanvasBackgroundColor>#EFEFEF</CanvasBackgroundColor>
+    <CanvasBackgroundOpacity>100</CanvasBackgroundOpacity>
+    <DefaultTileBackgroundColor>#FFFFFF</DefaultTileBackgroundColor>
+    <DefaultTileBackgroundOpacity>100</DefaultTileBackgroundOpacity>
+    <DefaultTileTitleBackgroundColor>#FFFFFF</DefaultTileTitleBackgroundColor>
+    <DefaultTileTitleBackgroundOpacity>100</DefaultTileTitleBackgroundOpacity>
+    <DefaultTileBorders>
+      <UniformBorders>true</UniformBorders>
+      <TopBorderColor>#d7d7d7</TopBorderColor>
+      <TopBorderWeight>0</TopBorderWeight>
+      <BottomBorderColor>#d7d7d7</BottomBorderColor>
+      <BottomBorderWeight>0</BottomBorderWeight>
+      <LeftBorderColor>#d7d7d7</LeftBorderColor>
+      <LeftBorderWeight>0</LeftBorderWeight>
+      <RightBorderColor>#d7d7d7</RightBorderColor>
+      <RightBorderWeight>0</RightBorderWeight>
+      <BorderRadius>3</BorderRadius>
+    </DefaultTileBorders>
+    <DefaultTileHasShadows>false</DefaultTileHasShadows>
+    <IsGridSnappingEnabled>true</IsGridSnappingEnabled>
+    <IsDashboardReflowEnabled>false</IsDashboardReflowEnabled>
+  </CanvasFormat>
+  <Main>
+    <Id>affbaae1-43af-4aa9-887f-209addcfc3a4</Id>
+    <ReportType>Dashboard</ReportType>
+    <ExportType>Html</ExportType>
+  </Main>
+  <Api />
+  <Id>affbaae1-43af-4aa9-887f-209addcfc3a4</Id>
+</DashboardReport>

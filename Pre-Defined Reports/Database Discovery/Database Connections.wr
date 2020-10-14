@@ -1,0 +1,425 @@
+<report>
+  <main>
+    <id>461c806b-b369-4cfa-a128-d69474bd9f19</id>
+    <version>1</version>
+    <type>Standard</type>
+    <sql_stmt />
+    <show_execute_form>False</show_execute_form>
+    <filter_execution_window>Default</filter_execution_window>
+    <fit_page_width>False</fit_page_width>
+    <suppress_formatting>False</suppress_formatting>
+    <report_tree_shortcut>2</report_tree_shortcut>
+    <output_mode>1</output_mode>
+    <prevent_output />
+    <page_size>Letter</page_size>
+    <page_orientation>Landscape</page_orientation>
+    <include_setup_info>No</include_setup_info>
+    <description />
+    <filter_description />
+    <show_grid>True</show_grid>
+    <pdf_template />
+    <embedded_pdf_template />
+    <simulate_pdf>True</simulate_pdf>
+    <no_data_render_type>ShowMessage</no_data_render_type>
+    <show_interactive_sorts>True</show_interactive_sorts>
+    <allow_column_hide>True</allow_column_hide>
+    <groups_on_separate_worksheets>False</groups_on_separate_worksheets>
+    <enable_cartesian_processing>Default</enable_cartesian_processing>
+    <visualization_report>false</visualization_report>
+    <use_cache_execution>false</use_cache_execution>
+    <excel_freeze_rows>2</excel_freeze_rows>
+    <excel_freeze_columns>1</excel_freeze_columns>
+    <excel_show_gridlines>True</excel_show_gridlines>
+    <suppressfiltersinterface>False</suppressfiltersinterface>
+    <suppresssortsinterface>False</suppresssortsinterface>
+    <row_range_limit>0</row_range_limit>
+    <custom_entities>{"webreports":{"entity":{"entity_name":"Database_Connections","affinity":"Report","db_name":"Database_Connections","sql_stmt":"select \ndc.host_name \"Database Server\",\ndc.program_name \"Program Name\",\ndc.connect_time \"Connect Time\",\ndi.dbinstance_name \"Instance Name\",\ndi.database_type \"Database Type\",\ndi.connection_count \"Connection Count\",\nCASE\n  WHEN di.is_default_instance = 't'\n  THEN\n  'YES'\n  WHEN di.is_default_instance = 'f'\n  THEN\n  'NO'\n  ELSE\n  'N/A'\nEND \"Default Instance?\",\ndc.num_reads \"# Reads\",\ndc.num_writes \"# Writes\",\nsc.client_ip \"Client IP\",\ncd.name \"Client Device Name\",\ndc.login_name \"Username\",\ncd.os_name \"Client OS Name\",\ncd.os_arch \"Client OS Arch\"\nfrom view_databaseconnection_v2 dc\nleft join view_databaseinstance_v2 di on di.databaseinstance_pk = dc.databaseinstance_fk\nleft join view_servicecommunication_v2 sc on sc.servicecommunication_pk = dc.serviceportremoteip_fk\nleft join view_device_v1 cd on sc.client_device_fk = cd.device_pk","datasource_id":"0","object_type":"sql","key":[{"col_name":"Client IP"},{"col_name":"Database Server"}]}}}</custom_entities>
+  </main>
+  <entity>
+    <entity_name>Database_Connections</entity_name>
+    <group_by_flag>False</group_by_flag>
+  </entity>
+  <cell>
+    <id>346448297</id>
+    <cell_text>Database Server</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>0</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1321405387</id>
+    <cell_text>Database Type</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>1</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1269861413</id>
+    <cell_text>Program Name</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>2</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1189972308</id>
+    <cell_text>Instance Name</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>3</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1049713091</id>
+    <cell_text>Default Instance?</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>4</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>580227698</id>
+    <cell_text>Username</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>5</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>2017181983</id>
+    <cell_text>Connect Time</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>6</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1139938808</id>
+    <cell_text># Reads</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>7</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1207190093</id>
+    <cell_text># Writes</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>8</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1648305867</id>
+    <cell_text>Client IP</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>9</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1177235399</id>
+    <cell_text>Client Device Name</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>10</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>650884345</id>
+    <cell_text>Client OS Name</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>11</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>129113697</id>
+    <cell_text>Client OS Arch</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>12</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1678472217</id>
+    <cell_text>Database_Connections.Database Server</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>0</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+  </cell>
+  <cell>
+    <id>907851528</id>
+    <cell_text>Database_Connections.Database Type</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>1</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+  </cell>
+  <cell>
+    <id>1190261545</id>
+    <cell_text>Database_Connections.Program Name</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>2</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+  </cell>
+  <cell>
+    <id>80528368</id>
+    <cell_text>Database_Connections.Instance Name</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>3</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+  </cell>
+  <cell>
+    <id>2009576602</id>
+    <cell_text>Database_Connections.Default Instance?</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>4</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+  </cell>
+  <cell>
+    <id>1276433424</id>
+    <cell_text>Database_Connections.Username</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>5</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+  </cell>
+  <cell>
+    <id>597404873</id>
+    <cell_text>Database_Connections.Connect Time</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>6</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+    <format_type>Text</format_type>
+  </cell>
+  <cell>
+    <id>1479010068</id>
+    <cell_text>Database_Connections.# Reads</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>7</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+  </cell>
+  <cell>
+    <id>790704069</id>
+    <cell_text>Database_Connections.# Writes</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>8</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+  </cell>
+  <cell>
+    <id>253236208</id>
+    <cell_text>Database_Connections.Client IP</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>9</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+  </cell>
+  <cell>
+    <id>2111089850</id>
+    <cell_text>Database_Connections.Client Device Name</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>10</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+  </cell>
+  <cell>
+    <id>280452826</id>
+    <cell_text>Database_Connections.Client OS Name</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>11</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+  </cell>
+  <cell>
+    <id>2029266142</id>
+    <cell_text>Database_Connections.Client OS Arch</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>12</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Helvetica</font_name>
+    <font_size>10</font_size>
+  </cell>
+  <row>
+    <group_type>Page Header</group_type>
+    <row_height>30</row_height>
+  </row>
+  <row>
+    <group_type>Detail</group_type>
+    <row_height>30</row_height>
+    <shading>
+      <color>#FFFFFF</color>
+    </shading>
+    <shading>
+      <color>#E2E2E2</color>
+    </shading>
+  </row>
+  <column>
+    <column_width>250</column_width>
+    <column_label>Database Server</column_label>
+  </column>
+  <column>
+    <column_width>250</column_width>
+    <column_label>Database Type</column_label>
+  </column>
+  <column>
+    <column_width>250</column_width>
+    <column_label>Program Name</column_label>
+  </column>
+  <column>
+    <column_width>250</column_width>
+    <column_label>Instance Name</column_label>
+  </column>
+  <column>
+    <column_width>250</column_width>
+    <column_label>Default Instance?</column_label>
+  </column>
+  <column>
+    <column_width>250</column_width>
+    <column_label>Username</column_label>
+  </column>
+  <column>
+    <column_width>250</column_width>
+    <column_label>Connect Time</column_label>
+  </column>
+  <column>
+    <column_width>250</column_width>
+    <column_label># Reads</column_label>
+  </column>
+  <column>
+    <column_width>250</column_width>
+    <column_label># Writes</column_label>
+  </column>
+  <column>
+    <column_width>250</column_width>
+    <column_label>Client IP</column_label>
+  </column>
+  <column>
+    <column_width>250</column_width>
+    <column_label>Client Device Name</column_label>
+  </column>
+  <column>
+    <column_width>250</column_width>
+    <column_label>Client OS Name</column_label>
+  </column>
+  <column>
+    <column_width>250</column_width>
+    <column_label>Client OS Arch</column_label>
+  </column>
+  <dynamicfilters />
+</report>
