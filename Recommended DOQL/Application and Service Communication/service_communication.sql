@@ -13,6 +13,9 @@ With
         Select
             dev.device_pk
             ,dev.name "Device"
+            ,dev.os_name "OS Name"
+            ,dev.os_version "OS Version"
+            ,dev.os_version_no "OS Version Number"
             ,dev.tags "Device Tags"
             ,oc.name "Object Category"
             ,ag.name "Affinity Group"
@@ -30,6 +33,9 @@ With
  /*Pull all the data together for the report  */        
 Select Distinct
     ldev."Device" "Listener Device"
+    ,ldev."OS Name" "Listener OS"
+    ,ldev."OS Version" "Listener OS Version"
+    ,ldev."OS Version Number" "Listener OS Version Number"
     ,ldev."Device Tags" "Listener Tag"
     ,ac.name "Listener App Comp"
     ,ldev."Affinity Group" "Listener Affinity Group"
@@ -51,6 +57,9 @@ Select Distinct
 	,euc.name "Client Service User"
     ,acc.name "Client App Comp"	
     ,cdev."Device" "Client Device"
+    ,cdev."OS Name" "Client OS"
+    ,cdev."OS Version" "Client OS Version"
+    ,cdev."OS Version Number" "Client OS Version Number"
     ,cdev."Device Tags" "Client Tag"
     ,cdev."Affinity Group" "Client Affinity Group"   /* Can comment out this row if you do not want Affinity Grp in Rpt  */
     ,cdev."Business App" "Client Business App"   /* Can comment out this row if you do not want Business App in Rpt */
