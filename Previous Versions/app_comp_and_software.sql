@@ -4,6 +4,9 @@ DOQL for App Comp's with related software in use details.
 select
 ac.name "App Comp",
 d.name "Device",
+d.os_name "OS Name",
+d.os_version "OS Version",
+d.os_version_no "OS Version Number",
 ip.ip_address "Device IP",
 s.name "Software Name",
 si.alias_name "Software Alias",
