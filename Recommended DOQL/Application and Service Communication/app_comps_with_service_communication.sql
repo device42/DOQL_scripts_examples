@@ -4,6 +4,7 @@ This leverages services that have been discovered with an App Comp, and joins th
 */
 select distinct
 sac.name "App Comp",
+sac.application_category_name "App Category",
 d.name "Device",
 s.name "Software Name",
 siu.alias_name "Software Alias",

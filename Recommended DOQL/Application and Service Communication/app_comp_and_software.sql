@@ -7,6 +7,7 @@ DOQL for App Comp's with related software in use details.
  With target_select_data  as (
 Select
 	ac.name "App Comp"
+	,ac.application_category_name "App Category"
 	,d.name "Device"
 	,ip.ip_address "Device IP"
 	,s.name "Software Name"
