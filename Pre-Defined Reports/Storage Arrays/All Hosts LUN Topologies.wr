@@ -1,0 +1,311 @@
+<report>
+  <main>
+    <id>f8a8ec55-0850-4f30-806d-c4da3d98cb6b</id>
+    <version>1</version>
+    <type>Standard</type>
+    <sql_stmt />
+    <show_execute_form>False</show_execute_form>
+    <filter_execution_window>Default</filter_execution_window>
+    <fit_page_width>False</fit_page_width>
+    <suppress_formatting>False</suppress_formatting>
+    <report_tree_shortcut>0</report_tree_shortcut>
+    <output_mode>6</output_mode>
+    <prevent_output />
+    <page_size>Letter</page_size>
+    <page_orientation>Portrait</page_orientation>
+    <include_setup_info>No</include_setup_info>
+    <description />
+    <filter_description />
+    <show_grid>True</show_grid>
+    <pdf_template />
+    <embedded_pdf_template />
+    <simulate_pdf>True</simulate_pdf>
+    <no_data_render_type>ShowMessage</no_data_render_type>
+    <show_interactive_sorts>True</show_interactive_sorts>
+    <allow_column_hide>True</allow_column_hide>
+    <groups_on_separate_worksheets>False</groups_on_separate_worksheets>
+    <enable_cartesian_processing>Default</enable_cartesian_processing>
+    <visualization_report>false</visualization_report>
+    <use_cache_execution>false</use_cache_execution>
+    <excel_freeze_rows>1</excel_freeze_rows>
+    <excel_freeze_columns>1</excel_freeze_columns>
+    <excel_show_gridlines>True</excel_show_gridlines>
+    <suppressfiltersinterface>False</suppressfiltersinterface>
+    <suppresssortsinterface>False</suppresssortsinterface>
+    <row_range_limit>0</row_range_limit>
+    <custom_entities>{"webreports":{"entity":{"entity_name":"all_hosts_lun_topologies","affinity":"Report","db_name":"all_hosts_lun_topologies","sql_stmt":" select vdh.virtualmachine_name as \"VM Name\"\n\t\t,vdh.hypervisor_name as \"Hypervisor Name\"\n\t\t,vdh.vdisk_name as \"VDisk Name\"\n\t\t,vdsa.mountpoint_name\tas \"Datastore Name\"\n\t\t,vdsa.vdisk_backing as \"VDisk Backing\"\n\t\t,vdsa.storageresource_name as \"LUN Filesystem\"\n\t\t,vdsa.storagearray_name as \"Storage Array Name\"\t\n\t\t,vdsa.storagearray_type as \"Storage Array Type\"\nfrom view_vdisk_to_hypervisor_v2 vdh \nleft join view_vdisk_to_storagearray_v2 vdsa \n \ton vdh.vdisk_fk = vdsa.vdisk_fk","datasource_id":"0","object_type":"sql","key":{"col_name":"Storage Array Name"}}}}</custom_entities>
+  </main>
+  <entity>
+    <entity_name>all_hosts_lun_topologies</entity_name>
+    <group_by_flag>False</group_by_flag>
+  </entity>
+  <cell>
+    <id>806732456</id>
+    <cell_text>All Hosts LUN Topologies</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>0</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <cell_colspan>8</cell_colspan>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>14</font_size>
+    <font_bold_flag>True</font_bold_flag>
+  </cell>
+  <cell>
+    <id>1900001504</id>
+    <cell_text />
+    <cell_type>text</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>0</cell_col>
+    <cell_colspan>8</cell_colspan>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1309617242</id>
+    <cell_text>VM Name</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>0</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1720530726</id>
+    <cell_text>Hypervisor Name</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>1</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1985219728</id>
+    <cell_text>VDisk Name</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>2</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1288538435</id>
+    <cell_text>Datastore Name</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>3</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>966941028</id>
+    <cell_text>VDisk Backing</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>4</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1130473818</id>
+    <cell_text>LUN Filesystem</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>5</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>359341139</id>
+    <cell_text>Storage Array Name</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>6</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>106128025</id>
+    <cell_text>Storage Array Type</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>7</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>323294298</id>
+    <cell_text>all_hosts_lun_topologies.VM Name</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>0</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+  </cell>
+  <cell>
+    <id>1324083625</id>
+    <cell_text>all_hosts_lun_topologies.Hypervisor Name</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>1</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+  </cell>
+  <cell>
+    <id>2144112233</id>
+    <cell_text>all_hosts_lun_topologies.VDisk Name</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>2</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+  </cell>
+  <cell>
+    <id>260949230</id>
+    <cell_text>all_hosts_lun_topologies.Datastore Name</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>3</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+  </cell>
+  <cell>
+    <id>872339142</id>
+    <cell_text>all_hosts_lun_topologies.VDisk Backing</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>4</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+  </cell>
+  <cell>
+    <id>2036450734</id>
+    <cell_text>all_hosts_lun_topologies.LUN Filesystem</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>5</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+  </cell>
+  <cell>
+    <id>1326850156</id>
+    <cell_text>all_hosts_lun_topologies.Storage Array Name</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>6</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+  </cell>
+  <cell>
+    <id>1450646083</id>
+    <cell_text>all_hosts_lun_topologies.Storage Array Type</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>7</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+  </cell>
+  <row>
+    <group_type>Page Header</group_type>
+    <suppress_flag>True</suppress_flag>
+  </row>
+  <row>
+    <group_type>Page Header</group_type>
+    <suppress_flag>True</suppress_flag>
+  </row>
+  <row>
+    <group_type>Page Header</group_type>
+  </row>
+  <row>
+    <group_type>Detail</group_type>
+    <shading>
+      <color>Transparent</color>
+    </shading>
+    <shading>
+      <color>#E2E2E2</color>
+    </shading>
+  </row>
+  <column>
+    <column_width>100</column_width>
+    <column_label>VM Name</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Hypervisor Name</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>VDisk Name</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Datastore Name</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>VDisk Backing</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>LUN Filesystem</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Storage Array Name</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Storage Array Type</column_label>
+  </column>
+  <dynamicfilters />
+</report>

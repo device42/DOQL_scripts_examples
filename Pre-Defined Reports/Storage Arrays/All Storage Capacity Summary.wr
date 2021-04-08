@@ -1,0 +1,459 @@
+<report>
+  <main>
+    <id>00fba76b-ce2f-4d66-be11-a527fceee351</id>
+    <version>1</version>
+    <type>Standard</type>
+    <sql_stmt />
+    <show_execute_form>False</show_execute_form>
+    <filter_execution_window>Default</filter_execution_window>
+    <fit_page_width>False</fit_page_width>
+    <suppress_formatting>False</suppress_formatting>
+    <report_tree_shortcut>0</report_tree_shortcut>
+    <output_mode>6</output_mode>
+    <prevent_output />
+    <page_size>Letter</page_size>
+    <page_orientation>Portrait</page_orientation>
+    <include_setup_info>No</include_setup_info>
+    <description />
+    <filter_description />
+    <show_grid>True</show_grid>
+    <pdf_template />
+    <embedded_pdf_template />
+    <simulate_pdf>True</simulate_pdf>
+    <no_data_render_type>ShowMessage</no_data_render_type>
+    <show_interactive_sorts>True</show_interactive_sorts>
+    <allow_column_hide>True</allow_column_hide>
+    <groups_on_separate_worksheets>False</groups_on_separate_worksheets>
+    <enable_cartesian_processing>Default</enable_cartesian_processing>
+    <visualization_report>false</visualization_report>
+    <use_cache_execution>false</use_cache_execution>
+    <excel_freeze_rows>1</excel_freeze_rows>
+    <excel_freeze_columns>1</excel_freeze_columns>
+    <excel_show_gridlines>True</excel_show_gridlines>
+    <suppressfiltersinterface>False</suppressfiltersinterface>
+    <suppresssortsinterface>False</suppresssortsinterface>
+    <row_range_limit>0</row_range_limit>
+    <custom_entities>{"webreports":{"entity":{"entity_name":"all_storage_summary","affinity":"Report","db_name":"all_storage_summary","sql_stmt":"select sa.model as \"Array Model\"\n             ,name as \"Array Name\"\n             ,sa.software_version as \"Software Version\"\n             ,sa.capacity_tb as \"Capacity (TB)\"\n             ,sa.free_capacity_tb as \"Free Capacity (TB)\"\n             ,sa.used_capacity_tb as \"Used Capacity (TB)\"\n\t\t\t ,sa.raw_capacity_tb as \"Raw Capacity (TB)\"\t\n\t\t\t ,sa.raw_used_capacity_tb as \"Raw Used Capacity (TB)\"\n\t\t\t ,sa.raw_capacity_tb - raw_used_capacity_tb as \"Raw Free Capacity (TB)\" \n\t\t\t ,sa.raw_used_capacity_tb/nullif(raw_capacity_tb, 0) as \"Raw Used Percentage\"\n\t\t\t ,sadc.disk_counts as \"Disk Counts\"\nfrom view_storagearray_v2 sa\nleft join view_storagearray_disk_counts_v2 sadc \n\ton sa.storagearray_pk = sadc.storagearray_fk","datasource_id":"0","object_type":"sql","key":{"col_name":"Array Name"}}}}</custom_entities>
+  </main>
+  <entity>
+    <entity_name>all_storage_summary</entity_name>
+    <group_by_flag>False</group_by_flag>
+  </entity>
+  <cell>
+    <id>1173910107</id>
+    <cell_text>All Storage Capacity Summary</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>0</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <cell_colspan>11</cell_colspan>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>14</font_size>
+    <font_bold_flag>True</font_bold_flag>
+  </cell>
+  <cell>
+    <id>2086187227</id>
+    <cell_text />
+    <cell_type>text</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>0</cell_col>
+    <cell_colspan>11</cell_colspan>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>751855012</id>
+    <cell_text>Array Model</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>0</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1978647268</id>
+    <cell_text>Array Name</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>1</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1006108442</id>
+    <cell_text>Software Version</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>2</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>411524008</id>
+    <cell_text>Capacity (TB)</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>3</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1901811771</id>
+    <cell_text>Free Capacity (TB)</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>4</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>890769771</id>
+    <cell_text>Used Capacity (TB)</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>5</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1078671555</id>
+    <cell_text>Raw Capacity (TB)</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>6</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1506871465</id>
+    <cell_text>Raw Free Capacity (TB)</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>7</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>2038525027</id>
+    <cell_text>Raw Used Capacity (TB)</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>8</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>14455524</id>
+    <cell_text>Raw Used Percentage</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>9</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1315971477</id>
+    <cell_text>Disk Counts</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>10</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>10</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>819767787</id>
+    <cell_text>all_storage_summary.Array Model</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>0</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+  </cell>
+  <cell>
+    <id>857484426</id>
+    <cell_text>all_storage_summary.Array Name</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>1</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+  </cell>
+  <cell>
+    <id>922218189</id>
+    <cell_text>all_storage_summary.Software Version</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>2</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+    <format_type>Text</format_type>
+  </cell>
+  <cell>
+    <id>82178604</id>
+    <cell_text>all_storage_summary.Capacity (TB)</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>3</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+    <format_type>Number</format_type>
+    <format_decimal_places>3</format_decimal_places>
+    <format_negative_symbol_flag>True</format_negative_symbol_flag>
+  </cell>
+  <cell>
+    <id>433929225</id>
+    <cell_text>all_storage_summary.Free Capacity (TB)</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>4</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+    <format_type>Number</format_type>
+    <format_decimal_places>3</format_decimal_places>
+    <format_negative_symbol_flag>True</format_negative_symbol_flag>
+  </cell>
+  <cell>
+    <id>142917612</id>
+    <cell_text>all_storage_summary.Used Capacity (TB)</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>5</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+    <format_type>Number</format_type>
+    <format_decimal_places>3</format_decimal_places>
+    <format_negative_symbol_flag>True</format_negative_symbol_flag>
+  </cell>
+  <cell>
+    <id>1296903041</id>
+    <cell_text>all_storage_summary.Raw Capacity (TB)</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>6</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <format_type>Number</format_type>
+    <format_decimal_places>3</format_decimal_places>
+    <format_negative_symbol_flag>True</format_negative_symbol_flag>
+  </cell>
+  <cell>
+    <id>1429193634</id>
+    <cell_text>all_storage_summary.Raw Free Capacity (TB)</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>7</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>393884098</id>
+    <cell_text>all_storage_summary.Raw Used Capacity (TB)</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>8</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>23280297</id>
+    <cell_text>all_storage_summary.Raw Used Percentage</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>9</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+    <format_type>Number</format_type>
+    <format_decimal_places>1</format_decimal_places>
+    <format_percent_sign_flag>True</format_percent_sign_flag>
+    <format_negative_symbol_flag>True</format_negative_symbol_flag>
+  </cell>
+  <cell>
+    <id>2050748266</id>
+    <cell_text>all_storage_summary.Disk Counts</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>10</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+  </cell>
+  <cell>
+    <id>1331896154</id>
+    <cell_text>Total</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>4</cell_row>
+    <cell_col>2</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+    <font_bold_flag>True</font_bold_flag>
+  </cell>
+  <cell>
+    <id>1451082337</id>
+    <cell_text>all_storage_summary.Capacity (TB)</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>4</cell_row>
+    <cell_col>3</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <sum_flag>True</sum_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+  </cell>
+  <cell>
+    <id>433069655</id>
+    <cell_text>all_storage_summary.Free Capacity (TB)</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>4</cell_row>
+    <cell_col>4</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <sum_flag>True</sum_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+  </cell>
+  <cell>
+    <id>510133274</id>
+    <cell_text>all_storage_summary.Used Capacity (TB)</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>4</cell_row>
+    <cell_col>5</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <sum_flag>True</sum_flag>
+    <font_name>Arial</font_name>
+    <font_size>9</font_size>
+  </cell>
+  <row>
+    <group_type>Page Header</group_type>
+    <suppress_flag>True</suppress_flag>
+  </row>
+  <row>
+    <group_type>Page Header</group_type>
+    <suppress_flag>True</suppress_flag>
+  </row>
+  <row>
+    <group_type>Page Header</group_type>
+  </row>
+  <row>
+    <group_type>Detail</group_type>
+    <shading>
+      <color>#FFFFFF</color>
+    </shading>
+    <shading>
+      <color>#E2E2E2</color>
+    </shading>
+  </row>
+  <row>
+    <group_type>Report Footer</group_type>
+  </row>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Array Model</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Array Name</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Software Version</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Capacity (TB)</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Free Capacity (TB)</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Used Capacity (TB)</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Raw Capacity (TB)</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Raw Free Capacity (TB)</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Raw Used Capacity (TB)</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Raw Used Percentage</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Disk Counts</column_label>
+  </column>
+  <dynamicfilters />
+</report>

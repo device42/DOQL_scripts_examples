@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<ChainedReport xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ParameterPrompts />
+  <FilterPrompts />
+  <Main>
+    <Id>c083d887-37cc-48d3-a45d-e797a8ec9420</Id>
+    <ReportType>Chained</ReportType>
+    <ExportType>Excel</ExportType>
+    <OutputType>Excel</OutputType>
+    <AllowHtml>false</AllowHtml>
+  </Main>
+  <Api />
+  <ReportItems>
+    <ReportItem>
+      <ReportType>Advanced</ReportType>
+      <Report>Pre-Defined Reports\Storage Arrays\All Storage Capacity Summary</Report>
+      <ParameterValues />
+      <FilterValues />
+      <ParameterPrompts />
+      <FilterPrompts />
+      <Id>0</Id>
+      <UdfData />
+      <TileBoundsTop>0</TileBoundsTop>
+      <TileBoundsLeft>0</TileBoundsLeft>
+    </ReportItem>
+    <ReportItem>
+      <ReportType>Advanced</ReportType>
+      <Report>Pre-Defined Reports\Storage Arrays\Storage Pools Overview</Report>
+      <ParameterValues />
+      <FilterValues />
+      <ParameterPrompts />
+      <FilterPrompts />
+      <Id>0</Id>
+      <UdfData />
+      <TileBoundsTop>0</TileBoundsTop>
+      <TileBoundsLeft>0</TileBoundsLeft>
+    </ReportItem>
+    <ReportItem>
+      <ReportType>Advanced</ReportType>
+      <Report>Pre-Defined Reports\Storage Arrays\Datastore Overview</Report>
+      <ParameterValues />
+      <FilterValues />
+      <ParameterPrompts />
+      <FilterPrompts />
+      <Id>0</Id>
+      <UdfData />
+      <TileBoundsTop>0</TileBoundsTop>
+      <TileBoundsLeft>0</TileBoundsLeft>
+    </ReportItem>
+    <ReportItem>
+      <ReportType>Advanced</ReportType>
+      <Report>Pre-Defined Reports\Storage Arrays\All Hosts LUN Topologies</Report>
+      <ParameterValues />
+      <FilterValues />
+      <ParameterPrompts />
+      <FilterPrompts />
+      <Id>0</Id>
+      <UdfData />
+      <TileBoundsTop>0</TileBoundsTop>
+      <TileBoundsLeft>0</TileBoundsLeft>
+    </ReportItem>
+    <ReportItem>
+      <ReportType>Advanced</ReportType>
+      <Report>Pre-Defined Reports\Storage Arrays\Individual LUN Topologies</Report>
+      <ParameterValues />
+      <FilterValues />
+      <ParameterPrompts />
+      <FilterPrompts />
+      <Id>0</Id>
+      <UdfData />
+      <TileBoundsTop>0</TileBoundsTop>
+      <TileBoundsLeft>0</TileBoundsLeft>
+    </ReportItem>
+  </ReportItems>
+</ChainedReport>
