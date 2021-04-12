@@ -218,7 +218,7 @@
 	Select Distinct
 		ru1.*
 		,count (*) over () ru_cnt
-		,round(100.0* rank() over(order by ru1.cpu_95)/nullif(count (*) over (),0)::decimal,2) rank_cpu_95
+		,round(100.0 * rank() over(order by ru1.cpu_95)/nullif(count (*) over (),0)::decimal,2) rank_cpu_95
 		,round(100.0 * rank() over(order by ru1.cpu_max)/nullif(count (*) over (),0)::decimal,2)rank_cpu_max
 		,round(100.0 * rank() over(order by ru1.mem_95)/nullif(count (*) over (),0)::decimal,2) rank_mem_95	
 		,round(100.0 * rank() over(order by ru1.mem_max)/nullif(count (*) over (),0)::decimal,2) rank_mem_max 
@@ -564,7 +564,7 @@
 	Select Distinct
 		impc.affinitygroup_pk
 		,impc.primary_device_fk
-		,count (*) over (Partition by impc.primary_device_fk) aff_device_cnt		
+		,count (*) over (Partition by impc.primary_device_fk) + 1  aff_device_cnt		
 	 From impact impc
 	 ),
 /* Rank the affinity group values  */
@@ -574,8 +574,10 @@
 		,count (*) over () affin_rec_cnt
 		,round(100 * rank() over(order by coalesce(tic.aff_device_cnt,0))/nullif(count (*) over (),0)::decimal,2 ) rank_aff_device_cnt2			
 	 From target_impact_count tic
-	 ) 
+	 ),
+	 
 /* Join up of all the records and Final report out   */ 
+   target_combined_data AS (
 	Select Distinct
         tdd.d_device_pk
         ,tdd.hostname
@@ -601,11 +603,12 @@
 		,Case When tcd.recommended_color = 'normal' Then 'Matching OS'
 			When tcd.recommended_color = 'yellow' Then 'Change OS'
 			When tcd.recommended_color = 'red' Then 'No Match'
-			Else ''
+			Else 'No Match'
 		End "Row Color"		
 		,tcd.recommended_instance "Recommended Instance"
 		,tcd.matching_os "Suggested OS"
 		,coalesce(tcd."R-Lane Classification",'RePlatform')  "R-Lane Classification"
+/* Set up display value based upon ranking - Low, Medium, High   */
  		,Case When rdc.rank_cpu_95 < 34 Then 'Low'
 			When rdc.rank_cpu_95 >= 34  and rdc.rank_cpu_95 < 67 Then 'Medium'
 			When rdc.rank_cpu_95 > 67 Then 'High'
@@ -707,11 +710,88 @@
 		,coalesce(tir.aff_device_cnt,0) affin_cnt
 		,tir.affin_rec_cnt
 		,tir.rank_aff_device_cnt2
-		,Case When tcd.recommended_color = 'normal' Then 0
-			When tcd.recommended_color = 'yellow' Then 1
-			When tcd.recommended_color = 'red' Then 2
+	/* Set summary values   */
+		,Case When tcd.recommended_color = 'normal' Then 1
+			When tcd.recommended_color = 'yellow' Then 2
+			When tcd.recommended_color = 'red' Then 3
+			Else 4
+		End rc_sort	
+/*	Get the values ready to summarize the value      */
+		,Case When tcd.recommended_color = 'normal' Then 1
+			When tcd.recommended_color = 'yellow' Then 2
+			When tcd.recommended_color = 'red' Then 3
 			Else 3
-		End rc_sort		
+		End row_color_value	
+ 		,Case When rdc.rank_cpu_95 < 34 Then 1
+			When rdc.rank_cpu_95 >= 34  and rdc.rank_cpu_95 < 67 Then 2
+			When rdc.rank_cpu_95 > 67 Then 3
+			Else 0
+		End cpu_95_value
+ 		,Case When rdc.rank_cpu_max < 34 Then 1
+			When rdc.rank_cpu_max >= 34  and rdc.rank_cpu_max < 67 Then 2
+			When rdc.rank_cpu_max > 67 Then 3
+			Else 0
+		End cpu_max_value	
+ 		,Case When rdc.rank_mem_95 < 34 Then 1
+			When rdc.rank_mem_95 >= 34  and rdc.rank_mem_95 < 67 Then 2
+			When rdc.rank_mem_95 > 67 Then 3
+			Else 0
+		End mem_95_value	
+ 		,Case When rdc.rank_mem_max < 34 Then 1
+			When rdc.rank_mem_max >= 34  and rdc.rank_mem_max < 67 Then 2
+			When rdc.rank_mem_max > 67 Then 3
+			Else 0
+		End mem_max_value	
+ 		,Case When rdc.rank_iops_95 < 34 Then 1
+			When rdc.rank_iops_95 >= 34  and rdc.rank_iops_95 < 67 Then 2
+			When rdc.rank_iops_95 > 67 Then 3
+			Else 0
+		End iops_95_value	
+ 		,Case When rdc.rank_iops_max < 34 Then 1
+			When rdc.rank_iops_max >= 34  and rdc.rank_iops_max < 67 Then 2
+			When rdc.rank_iops_max > 67 Then 3
+			Else 0
+		End iops_max_value	
+ 		,Case When rdc.rank_dtotal_95 < 34 Then 1
+			When rdc.rank_dtotal_95 >= 34  and rdc.rank_dtotal_95 < 67 Then 2
+			When rdc.rank_dtotal_95 > 67 Then 3
+			Else 0
+		End dtotal_95_value	
+ 		,Case When rdc.rank_dtotal_max < 34 Then 1
+			When rdc.rank_dtotal_max >= 34  and rdc.rank_dtotal_max < 67 Then 2
+			When rdc.rank_dtotal_max > 67 Then 3
+			Else 0
+		End dtotal_max_value	
+ 		,Case When rdc.rank_dused_95 < 34 Then 1
+			When rdc.rank_dused_95 >= 34  and rdc.rank_dused_95 < 67 Then 2
+			When rdc.rank_dused_95 > 67 Then 3
+			Else 0
+		End dused_95_value	
+ 		,Case When rdc.rank_dused_max < 34 Then 1
+			When rdc.rank_dused_max >= 34  and rdc.rank_dused_max < 67 Then 2
+			When rdc.rank_dused_max > 67 Then 3
+			Else 0
+		End dused_max_value	
+ 		,Case When tsr.rank_sc_activity < 34 Then 1
+			When tsr.rank_sc_activity >= 34 and tsr.rank_sc_activity < 67 Then 2
+			When tsr.rank_sc_activity > 67 Then 3
+			Else 0
+		End sc_activity_value	
+ 		,Case When tsr.rank_listener_cnt < 34 Then 1
+			When tsr.rank_listener_cnt >= 34  and tsr.rank_listener_cnt < 67 Then 2
+			When tsr.rank_listener_cnt > 67 Then 3
+			Else 0
+		End sc_interface_value	
+ 		,Case When tadp.tot_appcomp_unq_cnt = 1 Then 1
+			When tadp.tot_appcomp_unq_cnt = 2 Then 2
+			When tadp.tot_appcomp_unq_cnt = 3 Then 3
+			Else 0
+		End rank_appcomp_value	
+ 		,Case When tir.rank_aff_device_cnt2 < 34 Then 1
+			When tir.rank_aff_device_cnt2 >= 34  and tir.rank_aff_device_cnt2 < 67 Then 2
+			When tir.rank_aff_device_cnt2 > 67 Then 3
+			Else 0
+		End rank_aff_device_cnt2_value				
 /* get basic device data					    */
 	From target_device_data tdd
 	Left Join phy_device_summary pds ON pds.d_device_pk = tdd.d_device_pk
@@ -726,3 +806,15 @@
 	Left Join target_appcomp_data_pvt tadp ON tadp.d_device_pk = tdd.d_device_pk
 	Left Join target_impact_rank tir ON tir.primary_device_fk = tdd.d_device_pk
 	Order by d_type ASC, rc_sort ASC, tdd.d_device_pk ASC
+	)
+	Select 
+		tcd.*
+		,Case When tcd.row_color_value = 0 Then (tcd.cpu_95_value+tcd.mem_95_value+tcd.iops_95_value+tcd.dtotal_95_value+tcd.dused_95_value+tcd.sc_activity_value+tcd.sc_interface_value+tcd.rank_appcomp_value+tcd.rank_aff_device_cnt2_value) 
+			When (tcd.cpu_95_value+tcd.mem_95_value+tcd.iops_95_value+tcd.dtotal_95_value+tcd.dused_95_value+tcd.sc_activity_value+tcd.sc_interface_value+tcd.rank_appcomp_value+tcd.rank_aff_device_cnt2_value) = 0 Then tcd.row_color_value
+			Else tcd.row_color_value * (tcd.cpu_95_value+tcd.mem_95_value+tcd.iops_95_value+tcd.dtotal_95_value+tcd.dused_95_value+tcd.sc_activity_value+tcd.sc_interface_value+tcd.rank_appcomp_value+tcd.rank_aff_device_cnt2_value) 			
+		End summary_95
+		,Case When tcd.row_color_value = 0 Then (tcd.cpu_max_value+tcd.mem_max_value+tcd.iops_max_value+tcd.dtotal_max_value+tcd.dused_max_value+tcd.sc_activity_value+tcd.sc_interface_value+tcd.rank_appcomp_value+tcd.rank_aff_device_cnt2_value) 
+			When (tcd.cpu_max_value+tcd.mem_max_value+tcd.iops_max_value+tcd.dtotal_max_value+tcd.dused_max_value+tcd.sc_activity_value+tcd.sc_interface_value+tcd.rank_appcomp_value+tcd.rank_aff_device_cnt2_value) = 0 Then tcd.row_color_value
+			Else tcd.row_color_value * (tcd.cpu_max_value+tcd.mem_max_value+tcd.iops_max_value+tcd.dtotal_max_value+tcd.dused_max_value+tcd.sc_activity_value+tcd.sc_interface_value+tcd.rank_appcomp_value+tcd.rank_aff_device_cnt2_value) 			
+		End summary_max		
+	From target_combined_data as tcd 
