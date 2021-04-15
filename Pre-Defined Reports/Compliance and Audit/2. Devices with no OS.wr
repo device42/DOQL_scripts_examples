@@ -1,0 +1,451 @@
+<report>
+  <main>
+    <id>e0631ed5-b1e9-4abf-94e9-00d6f6038802</id>
+    <version>1</version>
+    <type>Standard</type>
+    <sql_stmt />
+    <show_execute_form>False</show_execute_form>
+    <filter_execution_window>Default</filter_execution_window>
+    <fit_page_width>False</fit_page_width>
+    <suppress_formatting>False</suppress_formatting>
+    <report_tree_shortcut>0</report_tree_shortcut>
+    <output_mode>6</output_mode>
+    <prevent_output />
+    <page_size>Letter</page_size>
+    <page_orientation>Portrait</page_orientation>
+    <include_setup_info>No</include_setup_info>
+    <description />
+    <filter_description />
+    <show_grid>True</show_grid>
+    <pdf_template />
+    <embedded_pdf_template />
+    <simulate_pdf>True</simulate_pdf>
+    <no_data_render_type>ShowMessage</no_data_render_type>
+    <show_interactive_sorts>True</show_interactive_sorts>
+    <allow_column_hide>True</allow_column_hide>
+    <groups_on_separate_worksheets>False</groups_on_separate_worksheets>
+    <enable_cartesian_processing>Default</enable_cartesian_processing>
+    <visualization_report>false</visualization_report>
+    <use_cache_execution>false</use_cache_execution>
+    <excel_freeze_rows>1</excel_freeze_rows>
+    <excel_freeze_columns>1</excel_freeze_columns>
+    <excel_show_gridlines>True</excel_show_gridlines>
+    <suppressfiltersinterface>False</suppressfiltersinterface>
+    <suppresssortsinterface>False</suppresssortsinterface>
+    <row_range_limit>0</row_range_limit>
+    <custom_entities>{"webreports":{"entity":{"entity_name":"devices_no_os","affinity":"Report","db_name":"devices_no_os","sql_stmt":"    select d.name as \"Device Name\"\n          ,d.type as \"Device Type\"\n          ,d.serial_no as \"Serial Number\"\n          ,d.service_level as \"Service Level\"\n          ,d.tags as \"Tags\"\n          ,d.first_added as \"First Added\"\n          ,d.last_changed as \"Last Changed\"\n          ,vh.name as \"Virtual Host Name\"\n          ,vh.service_level as \"Virtual Host Service Level\"\n          ,vh.tags as \"Virtual Host Tags\"\n          ,b.name as \"Building Name\" \n          ,rm.name as \"Room Name\" \n          ,rk.name as \"Rack Name\"\n    from view_device_v2 d\n    left join view_building_v1 b \n      on d.calculated_building_fk = b.building_pk \n    left join view_room_v1 rm \n      on d.calculated_room_fk = rm.room_pk \n    left join view_rack_v1 rk \n      on d.calculated_rack_fk = rk.rack_pk \n    left join view_device_v2 vh\n      on d.virtual_host_device_fk = vh.device_pk\n    where d.deviceos_fk is null  ","datasource_id":"0","object_type":"sql","key":{"col_name":"Device Name"}}}}</custom_entities>
+  </main>
+  <entity>
+    <entity_name>devices_no_os</entity_name>
+    <group_by_flag>False</group_by_flag>
+  </entity>
+  <cell>
+    <id>1820449621</id>
+    <cell_text>2. Devices with no OS</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>0</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <cell_colspan>13</cell_colspan>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>14</font_size>
+    <font_bold_flag>True</font_bold_flag>
+  </cell>
+  <cell>
+    <id>1356665678</id>
+    <cell_text />
+    <cell_type>text</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>0</cell_col>
+    <cell_colspan>13</cell_colspan>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1736179385</id>
+    <cell_text>Device Name</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>0</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>461395590</id>
+    <cell_text>Device Type</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>1</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>321353476</id>
+    <cell_text>First Added</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>2</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1876123641</id>
+    <cell_text>Last Changed</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>3</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>2110447349</id>
+    <cell_text>Serial Number</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>4</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>319537004</id>
+    <cell_text>Service Level</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>5</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1874972476</id>
+    <cell_text>Tags</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>6</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1289535279</id>
+    <cell_text>Building Name</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>7</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1404640522</id>
+    <cell_text>Room Name</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>8</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1928706051</id>
+    <cell_text>Rack Name</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>9</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>494147506</id>
+    <cell_text>Virtual Host Name</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>10</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>138801248</id>
+    <cell_text>Virtual Host Service Level</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>11</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1012610840</id>
+    <cell_text>Virtual Host Tags</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>12</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1937860451</id>
+    <cell_text>devices_no_os.Device Name</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>0</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>804373601</id>
+    <cell_text>devices_no_os.Device Type</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>1</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>2050086301</id>
+    <cell_text>devices_no_os.First Added</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>2</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1891358227</id>
+    <cell_text>devices_no_os.Last Changed</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>3</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1040815635</id>
+    <cell_text>devices_no_os.Serial Number</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>4</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1615631162</id>
+    <cell_text>devices_no_os.Service Level</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>5</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1526576356</id>
+    <cell_text>devices_no_os.Tags</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>6</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1374054600</id>
+    <cell_text>devices_no_os.Building Name</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>7</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>729210131</id>
+    <cell_text>devices_no_os.Room Name</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>8</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1768020501</id>
+    <cell_text>devices_no_os.Rack Name</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>9</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>58466343</id>
+    <cell_text>devices_no_os.Virtual Host Name</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>10</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1037875320</id>
+    <cell_text>devices_no_os.Virtual Host Service Level</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>11</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>299553034</id>
+    <cell_text>devices_no_os.Virtual Host Tags</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>12</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <row>
+    <group_type>Page Header</group_type>
+    <suppress_flag>True</suppress_flag>
+  </row>
+  <row>
+    <group_type>Page Header</group_type>
+    <suppress_flag>True</suppress_flag>
+  </row>
+  <row>
+    <group_type>Page Header</group_type>
+  </row>
+  <row>
+    <group_type>Detail</group_type>
+  </row>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Device Name</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Device Type</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>First Added</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Last Changed</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Serial Number</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Service Level</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Tags</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Building Name</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Room Name</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Rack Name</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Virtual Host Name</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Virtual Host Service Level</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Virtual Host Tags</column_label>
+  </column>
+  <sort>
+    <sort_name>devices_no_os.Device Name</sort_name>
+    <sort_title />
+    <order_num>0</order_num>
+    <ascending_flag>True</ascending_flag>
+  </sort>
+  <dynamicfilters />
+</report>

@@ -4,6 +4,7 @@ For RU data and metrics.
 */
 Select 
     r.last_updated "RU Data Last Updated"
+    ,d.device_pk "Device ID"
     ,d.name "Device Name"
     ,d.monitoring_enabled "Monitoring Enabled"
     ,r.rudata_pk "Resource ID"

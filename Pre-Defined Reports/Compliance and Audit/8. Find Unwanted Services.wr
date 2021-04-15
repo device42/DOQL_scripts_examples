@@ -1,0 +1,455 @@
+<report>
+  <main>
+    <id>af7672c5-6543-44cb-9349-9791429c20fa</id>
+    <version>1</version>
+    <type>Standard</type>
+    <sql_stmt />
+    <show_execute_form>False</show_execute_form>
+    <filter_execution_window>Default</filter_execution_window>
+    <fit_page_width>False</fit_page_width>
+    <suppress_formatting>False</suppress_formatting>
+    <report_tree_shortcut>0</report_tree_shortcut>
+    <output_mode>6</output_mode>
+    <prevent_output />
+    <page_size>Letter</page_size>
+    <page_orientation>Landscape</page_orientation>
+    <include_setup_info>No</include_setup_info>
+    <description />
+    <filter_description />
+    <show_grid>True</show_grid>
+    <pdf_template />
+    <embedded_pdf_template />
+    <simulate_pdf>True</simulate_pdf>
+    <no_data_render_type>ShowMessage</no_data_render_type>
+    <show_interactive_sorts>True</show_interactive_sorts>
+    <allow_column_hide>True</allow_column_hide>
+    <groups_on_separate_worksheets>False</groups_on_separate_worksheets>
+    <enable_cartesian_processing>Default</enable_cartesian_processing>
+    <visualization_report>false</visualization_report>
+    <use_cache_execution>false</use_cache_execution>
+    <excel_freeze_rows>1</excel_freeze_rows>
+    <excel_freeze_columns>1</excel_freeze_columns>
+    <excel_show_gridlines>True</excel_show_gridlines>
+    <suppressfiltersinterface>False</suppressfiltersinterface>
+    <suppresssortsinterface>False</suppresssortsinterface>
+    <row_range_limit>0</row_range_limit>
+    <custom_entities>{"webreports":{"entity":{"entity_name":"services","affinity":"Report","db_name":"services","sql_stmt":"select  d.name as \"Device Name\"\n      ,initcap(d.type) as \"Device Type\"\n      ,d.serial_no as \"Serial Number\"\n      ,d.in_service as \"Is in Service\"\n      ,d.service_level as \"Service Level\"\n      ,d.first_added as \"First Added\"\n      ,d.last_edited as \"Last Edited\"\n      ,d.last_changed as \"Last Changed\"\n      ,s.pretty_name as \"Service Pretty Name\"\n      ,s.displayname as \"Service Display Name\"\n      ,si.topology_status as \"Topology Status\"\n      ,si.pinned as \"Pinned\"\nfrom view_device_v2 d\nleft join view_serviceinstance_v2 si\n  on d.device_pk = si.device_fk\nleft join view_service_v2 s\n  on si.service_fk = s.service_pk","datasource_id":"0","object_type":"sql","key":{"col_name":"Device Name"}}}}</custom_entities>
+  </main>
+  <entity>
+    <entity_name>services</entity_name>
+    <group_by_flag>False</group_by_flag>
+  </entity>
+  <cell>
+    <id>878517855</id>
+    <cell_text>8. Find Unwanted Services</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>0</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <cell_colspan>12</cell_colspan>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>14</font_size>
+    <font_bold_flag>True</font_bold_flag>
+  </cell>
+  <cell>
+    <id>1142274386</id>
+    <cell_text />
+    <cell_type>text</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>0</cell_col>
+    <cell_colspan>12</cell_colspan>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>19918856</id>
+    <cell_text>Device Name</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>0</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>402330293</id>
+    <cell_text>Device Type</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>1</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>2087359946</id>
+    <cell_text>Service Level</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>2</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1730125477</id>
+    <cell_text>Is in Service</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>3</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1729909415</id>
+    <cell_text>First Added</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>4</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>901901790</id>
+    <cell_text>Last Changed</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>5</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1223563993</id>
+    <cell_text>Serial Number</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>6</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>94408958</id>
+    <cell_text>Service Level</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>7</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>2041105192</id>
+    <cell_text>Service Pretty Name</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>8</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1187085159</id>
+    <cell_text>Service Display Name</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>9</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1402744847</id>
+    <cell_text>Topology Status</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>10</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>459584255</id>
+    <cell_text>Pinned</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>11</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>2037724450</id>
+    <cell_text>services.Device Name</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>0</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>109214287</id>
+    <cell_text>services.Device Type</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>1</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1008941932</id>
+    <cell_text>services.Service Level</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>2</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>7230572</id>
+    <cell_text>services.Is in Service</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>3</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>23988903</id>
+    <cell_text>services.First Added</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>4</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1166964898</id>
+    <cell_text>services.Last Changed</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>5</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>810742340</id>
+    <cell_text>services.Serial Number</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>6</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>906658190</id>
+    <cell_text>services.Service Level</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>7</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1643016401</id>
+    <cell_text>services.Service Pretty Name</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>8</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1373724794</id>
+    <cell_text>services.Service Display Name</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>9</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1593737066</id>
+    <cell_text>services.Topology Status</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>10</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1953004376</id>
+    <cell_text>services.Pinned</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>11</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <row>
+    <group_type>Page Header</group_type>
+    <suppress_flag>True</suppress_flag>
+  </row>
+  <row>
+    <group_type>Page Header</group_type>
+    <suppress_flag>True</suppress_flag>
+  </row>
+  <row>
+    <group_type>Page Header</group_type>
+  </row>
+  <row>
+    <group_type>Detail</group_type>
+  </row>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Device Name</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Device Type</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Service Level</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Is in Service</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>First Added</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Last Changed</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Serial Number</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Service Level</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Service Pretty Name</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Topology Status</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Pinned</column_label>
+  </column>
+  <sort>
+    <sort_name>services.Device Name</sort_name>
+    <sort_title />
+    <order_num>0</order_num>
+    <ascending_flag>True</ascending_flag>
+  </sort>
+  <filter>
+    <filter_name>services.Service Display Name</filter_name>
+    <order_num>0</order_num>
+    <operator>&lt;&gt;</operator>
+    <prompt_flag>True</prompt_flag>
+    <and_flag>False</and_flag>
+    <group_with_next_flag>True</group_with_next_flag>
+    <filter_ref_id>2124593543</filter_ref_id>
+    <filter_title />
+    <values>
+      <value>CHANGE TO "EQUAL TO" AND INSERT SERVICE NAME HERE</value>
+    </values>
+  </filter>
+  <filter>
+    <filter_name>services.Service Pretty Name</filter_name>
+    <order_num>1</order_num>
+    <operator>&lt;&gt;</operator>
+    <prompt_flag>True</prompt_flag>
+    <and_flag>True</and_flag>
+    <group_with_next_flag>False</group_with_next_flag>
+    <filter_ref_id>362386623</filter_ref_id>
+    <filter_title />
+    <values>
+      <value>CHANGE TO "EQUAL TO" AND INSERT SERVICE NAME HERE</value>
+    </values>
+  </filter>
+  <topn>
+    <action>top</action>
+    <use_topn_item>False</use_topn_item>
+    <num_items>10</num_items>
+    <cellId>-1</cellId>
+    <direction>asc</direction>
+  </topn>
+  <dynamicfilters />
+</report>

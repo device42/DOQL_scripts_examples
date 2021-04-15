@@ -1,0 +1,587 @@
+<report>
+  <main>
+    <id>d8f701ba-61f6-4850-8dfe-98735c037a20</id>
+    <version>1</version>
+    <type>Standard</type>
+    <sql_stmt />
+    <show_execute_form>False</show_execute_form>
+    <filter_execution_window>Default</filter_execution_window>
+    <fit_page_width>False</fit_page_width>
+    <suppress_formatting>False</suppress_formatting>
+    <report_tree_shortcut>0</report_tree_shortcut>
+    <output_mode>6</output_mode>
+    <prevent_output />
+    <page_size>Letter</page_size>
+    <page_orientation>Landscape</page_orientation>
+    <include_setup_info>No</include_setup_info>
+    <description />
+    <filter_description />
+    <show_grid>True</show_grid>
+    <pdf_template />
+    <embedded_pdf_template />
+    <simulate_pdf>True</simulate_pdf>
+    <no_data_render_type>ShowMessage</no_data_render_type>
+    <show_interactive_sorts>True</show_interactive_sorts>
+    <allow_column_hide>True</allow_column_hide>
+    <groups_on_separate_worksheets>False</groups_on_separate_worksheets>
+    <enable_cartesian_processing>Default</enable_cartesian_processing>
+    <visualization_report>false</visualization_report>
+    <use_cache_execution>false</use_cache_execution>
+    <excel_freeze_rows>1</excel_freeze_rows>
+    <excel_freeze_columns>1</excel_freeze_columns>
+    <excel_show_gridlines>True</excel_show_gridlines>
+    <suppressfiltersinterface>False</suppressfiltersinterface>
+    <suppresssortsinterface>False</suppresssortsinterface>
+    <row_range_limit>0</row_range_limit>
+    <custom_entities>{"webreports":{"entity":{"entity_name":"external_ips","affinity":"Report","db_name":"external_ips","sql_stmt":"with ips as\n    \n    (select\n                distinct \n                sc.listener_device_fk\n                ,sc.client_device_fk\n                ,ld.name as \"Listening Device Name\"\n                ,ld.type as \"Listening Device Type\"\n                ,ld.serial_no as \"Listening Serial Number\"\n                ,ld.uuid as \"Listening Device UUID\"\n                ,ld.service_level as \"Listening Device Service Level\"\n                ,ld.tags as \"Listening Device Tags\"\n                ,ld.first_added as \"Listening Device First Added\"\n                ,ld.last_changed as \"Listening Device Last Changed\"\n                ,split_part(sc.listener_ip::text, '/', 1) as \"Listening IP\"\n                ,CASE\n                  WHEN sc.protocol  = '6'\n                  THEN 'TCP'\n                  WHEN sc.protocol  = '17'\n                  THEN 'UDP'\n                  ELSE ''\n                END \"Protocol\"\n                ,sc.port \"Port Communication\"\n                ,cd.name \"Client Device Name\"\n                ,cd.type as \"Client Device Type\"\n                ,cd.service_level as \"Client Device Service Level\"\n                ,cd.first_added as \"Client Device First Added\"\n                ,cd.last_changed as \"Client Device Last Changed\"\n                ,split_part(sc.client_ip::text, '/', 1) \"Client IP\"\n                ,case when (replace(split_part(sc.client_ip::text, '/', 1), '::ffff:', '')::inet &lt;&lt; '127.0.0.0/8' OR\n                            replace(split_part(sc.client_ip::text, '/', 1), '::ffff:', '')::inet &lt;&lt; '10.0.0.0/8' OR\n                            replace(split_part(sc.client_ip::text, '/', 1), '::ffff:', '')::inet &lt;&lt; '172.16.0.0/12' OR\n                            replace(split_part(sc.client_ip::text, '/', 1), '::ffff:', '')::inet &lt;&lt; '192.168.0.0/16' OR\n                            replace(split_part(sc.client_ip::text, '/', 1), '::ffff:', '')::inet &lt;&lt; 'fc00::/7' OR\n                            replace(split_part(sc.client_ip::text, '/', 1), '::ffff:', '')::inet &lt;&lt; 'fe80::/10') then 'Private'\n                      else 'Public'\n                      end as \"Client Private or Public IP\"\n                ,case when (replace(split_part(sc.listener_ip::text, '/', 1), '::ffff:', '')::inet &lt;&lt; '127.0.0.0/8' OR\n                            replace(split_part(sc.listener_ip::text, '/', 1), '::ffff:', '')::inet &lt;&lt; '10.0.0.0/8' OR\n                            replace(split_part(sc.listener_ip::text, '/', 1), '::ffff:', '')::inet &lt;&lt; '172.16.0.0/12' OR\n                            replace(split_part(sc.listener_ip::text, '/', 1), '::ffff:', '')::inet &lt;&lt; '192.168.0.0/16' OR\n                            replace(split_part(sc.listener_ip::text, '/', 1), '::ffff:', '')::inet &lt;&lt; 'fc00::/7' OR\n                            replace(split_part(sc.listener_ip::text, '/', 1), '::ffff:', '')::inet &lt;&lt; 'fe80::/10') then 'Private'\n                      else 'Public'\n                      end as \"Listener Private or Public IP\"\n            from view_servicecommunication_v2 sc\n            left Join view_device_v2 ld ON ld.device_pk = sc.listener_device_fk\n            left join view_ipaddress_v1 ip on ld.device_pk = ip.device_fk\n            left Join view_servicelistenerport_v2 lp ON lp.servicelistenerport_pk = sc.servicelistenerport_fk\n            left Join view_serviceinstance_v2 si ON si.serviceinstance_pk = lp.discovered_serviceinstance_fk\n            left Join view_service_v2 s ON s.service_pk = si.service_fk\n            Left Join view_device_v2 cd ON cd.device_pk = sc.client_device_fk\n            Left Join view_affinitygroup_v2 ag ON ag.primary_device_fk = ld.device_pk\n            Where sc.client_ip::text not like '%127.0.0.1%' and sc.client_ip::text not like '%::1%')\n            \n  select *\n  from ips\n  where (\"Client Private or Public IP\" like 'Public'\n    or \"Listener Private or Public IP\" like 'Public')","datasource_id":"0","object_type":"sql","key":{"col_name":"listener_device_fk"}}}}</custom_entities>
+  </main>
+  <entity>
+    <entity_name>external_ips</entity_name>
+    <group_by_flag>False</group_by_flag>
+  </entity>
+  <cell>
+    <id>1085009684</id>
+    <cell_text>7. Devices Accessed by External IPs</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>2</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <cell_colspan>16</cell_colspan>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>14</font_size>
+    <font_bold_flag>True</font_bold_flag>
+  </cell>
+  <cell>
+    <id>926416838</id>
+    <cell_text />
+    <cell_type>text</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>2</cell_col>
+    <cell_colspan>16</cell_colspan>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1682952820</id>
+    <cell_text>Listener Private or Public IP</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>0</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>220217501</id>
+    <cell_text>Client Private or Public IP</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>1</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1236066176</id>
+    <cell_text>Listening Device Name</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>2</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>131071666</id>
+    <cell_text>Listening Device Type</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>3</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>602509071</id>
+    <cell_text>Listening Device Service Level</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>4</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>739185499</id>
+    <cell_text>Listening Device First Added</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>5</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>2037259608</id>
+    <cell_text>Listening Device Last Changed</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>6</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>101192127</id>
+    <cell_text>Listening Device Tags</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>7</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>338107881</id>
+    <cell_text>Listening Serial Number</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>8</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>2079704521</id>
+    <cell_text>Listening IP</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>9</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>362944186</id>
+    <cell_text>Port Communication</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>10</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1688421698</id>
+    <cell_text>Protocol</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>11</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>200055933</id>
+    <cell_text>Client Device Name</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>12</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1725201670</id>
+    <cell_text>Client Device Type</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>13</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>181133964</id>
+    <cell_text>Client Device Service Level</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>14</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>2080571827</id>
+    <cell_text>Client Device First Added</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>15</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>817281373</id>
+    <cell_text>Client Device Last Changed</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>16</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1729512789</id>
+    <cell_text>Client IP</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>17</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1930789243</id>
+    <cell_text>external_ips.Listener Private or Public IP</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>0</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1075919442</id>
+    <cell_text>external_ips.Client Private or Public IP</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>1</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1714124989</id>
+    <cell_text>external_ips.Listening Device Name</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>2</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1289739559</id>
+    <cell_text>external_ips.Listening Device Type</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>3</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1028256468</id>
+    <cell_text>external_ips.Listening Device Service Level</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>4</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>160831100</id>
+    <cell_text>external_ips.Listening Device First Added</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>5</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>845928067</id>
+    <cell_text>external_ips.Listening Device Last Changed</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>6</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1836913195</id>
+    <cell_text>external_ips.Listening Device Tags</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>7</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>800386969</id>
+    <cell_text>external_ips.Listening Serial Number</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>8</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1917732904</id>
+    <cell_text>external_ips.Listening IP</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>9</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>734776084</id>
+    <cell_text>external_ips.Port Communication</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>10</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1611115633</id>
+    <cell_text>external_ips.Protocol</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>11</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1580269660</id>
+    <cell_text>external_ips.Client Device Name</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>12</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1296112831</id>
+    <cell_text>external_ips.Client Device Type</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>13</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>847663190</id>
+    <cell_text>external_ips.Client Device Service Level</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>14</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>583480395</id>
+    <cell_text>external_ips.Client Device First Added</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>15</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1932983760</id>
+    <cell_text>external_ips.Client Device Last Changed</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>16</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>709477063</id>
+    <cell_text>external_ips.Client IP</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>17</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <row>
+    <group_type>Page Header</group_type>
+    <suppress_flag>True</suppress_flag>
+  </row>
+  <row>
+    <group_type>Page Header</group_type>
+    <suppress_flag>True</suppress_flag>
+  </row>
+  <row>
+    <group_type>Page Header</group_type>
+  </row>
+  <row>
+    <group_type>Detail</group_type>
+  </row>
+  <column>
+    <column_width>100</column_width>
+  </column>
+  <column>
+    <column_width>100</column_width>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Listening Device Name</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Listening Device Type</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Listening Device Service Level</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Listening Device First Added</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Listening Device Last Changed</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Listening Device Tags</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Listening Serial Number</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Listening IP</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Port Communication</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Protocol</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Client Device Name</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Client Device Type</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Client Device Service Level</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Client Device First Added</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Client Device Last Changed</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Client IP</column_label>
+  </column>
+  <sort>
+    <sort_name>external_ips.Client Device Name</sort_name>
+    <sort_title />
+    <order_num>0</order_num>
+    <ascending_flag>True</ascending_flag>
+  </sort>
+  <dynamicfilters />
+</report>
