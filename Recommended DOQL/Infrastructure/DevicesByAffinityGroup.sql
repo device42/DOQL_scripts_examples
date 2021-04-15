@@ -4,7 +4,8 @@
       Note: Will need to add &affinity_group_pk=<affinity group pk or id> to the Saved DOQL URL.
 */
 WITH RECURSIVE 
-  impact AS ( -- impact report
+ /*  impact report  */
+  impact AS ( 
   SELECT da1.*
   FROM view_deviceaffinity_v2 AS da1, src
   WHERE da1.dependency_device_fk = src.primary_device_fk
@@ -17,7 +18,8 @@ WITH RECURSIVE
         AND da2.effective_from <= src.effective_on
         AND (da2.effective_to IS NULL OR da2.effective_to > src.effective_on)
 ), 
-  dependency AS ( -- dependency report
+  /*  dependency report  */
+  dependency AS ( 
   SELECT da1.*
   FROM view_deviceaffinity_v2 AS da1, src
   WHERE da1.dependent_device_fk = src.primary_device_fk
@@ -32,11 +34,13 @@ WITH RECURSIVE
 ), 
 src AS (
     SELECT
-      last_processed AS effective_on, -- we need only effective now records
-      primary_device_fk,
-      report_type_id
+    /*  we need only effective now records   */
+      last_processed AS effective_on 
+      ,primary_device_fk
+      ,report_type_id
     FROM view_affinitygroup_v2
-    WHERE affinitygroup_pk = {affinity_group_pk} -- specify Affinity Group pk
+    /*  specify Affinity Group pk  */
+    WHERE affinitygroup_pk = {affinity_group_pk} /* Use this only if you want a specific affinitygroup  */
 )
 SELECT Distinct
   dependency.*

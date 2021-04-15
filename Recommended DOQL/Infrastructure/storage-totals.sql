@@ -1,26 +1,30 @@
 /*
 Device mount storage information, but total'd for all mounts instead of a row for each mount.
+Changes:
+  Update 2020-10-19
+  - updated the view_device_v1 to view_device_v2
 */
-select
-    a.last_edited Last_Update,
-    a.device_pk Device_ID,
-    a.name Device_name,
-    a.type Hardware_Type,
-    a.virtual_subtype Virtual_Subtype,
-    a.os_name OS_Name,
-    a.os_version OS_Version_No,
-    sum(c.capacity) Volume_Capacity_in_MB,
-    sum(c.free_capacity) Free_Space_in_MB,
-    sum(c.capacity - c.free_capacity) Used_Space_in_MB
-from
-    view_device_v1 a
-    left join view_mountpoint_v1 c on c.device_fk = a.device_pk where c.capacity>0
-group by
-    a.last_edited,
-    a.device_pk,
-    a.name,
-    a.type,
-    a.virtual_subtype,
-    a.os_name,
-    a.os_version
-order by a.device_pk
+Select
+    d.last_edited Last_Update
+    ,d.device_pk Device_ID
+    ,d.name Device_name
+    ,d.type Hardware_Type
+    ,d.virtualsubtype Virtual_Subtype
+    ,d.os_name OS_Name
+    ,d.os_version OS_Version_No
+    ,sum(c.capacity) Volume_Capacity_in_MB
+    ,sum(c.free_capacity) Free_Space_in_MB
+    ,sum(c.capacity - c.free_capacity) Used_Space_in_MB
+From
+    view_device_v2 d
+    Left Join view_mountpoint_v1 c ON c.device_fk = d.device_pk 
+    Where c.capacity > 0
+Group by
+    d.last_edited
+    ,d.device_pk
+    ,d.name
+    ,d.type
+    ,d.virtualsubtype
+    ,d.os_name
+    ,d.os_version
+Order by d.device_pk ASC

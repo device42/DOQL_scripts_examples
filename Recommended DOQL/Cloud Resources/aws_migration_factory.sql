@@ -10,14 +10,16 @@ Feedback - 6/23
             A lot of servers do not have a server_fqdn column, so I filled these up with sample data
  New Add - 9/9/20
         1. Add CRE info included in the 16.16 release
+ Update 2020-10-19
+  - updated the view_device_v1 to view_device_v2       
 */
 With 
     target_device  as (
         Select Distinct        
           d.device_pk
           ,d.type
-          ,d.sub_type
-          ,d.virtual_subtype
+          ,d.physicalsubtype
+          ,d.virtualsubtype
           ,lower(d.name) "Device Name"
           ,CASE When split_part(d.name,'.',2) is Null  
               THEN Null 
@@ -61,11 +63,11 @@ With
           ,d.os_version
           ,d.service_level "Service_Level"  
        From 
-          view_device_v1 d
+          view_device_v2 d
         Where Not d.network_device  and       
-                  (lower(d.sub_type) NOT IN ('ups','pdu','crac','tap','scrambler','encoder','access point','ats','multiplexer','network printer') or  lower(d.sub_type) IN ('','laptop','workstation','server board','branch circuit power meter') or
-                    d.sub_type is NULL) and
-                    position('container' IN lower(d.virtual_subtype)) = 0 
+                  (lower(d.physicalsubtype) NOT IN ('ups','pdu','ats','network printer','crac','tap','scrambler','encoder','access point','multiplexer') or  lower(d.physicalsubtype) IN ('','laptop','workstation','server board','branch circuit power meter') or
+                    d.physicalsubtype is NULL) and
+                    position('container' IN lower(d.virtualsubtype)) = 0 
        ),
 /*  Build FQDN with DNSzone via IP
 */         
@@ -78,9 +80,9 @@ With
           ,concat(lower(td."Device Name"),'.', lower(dz.name))fqdn_dns          
        From 
           view_ipaddress_v1 ip
-          join target_device td on td.device_pk = ip.device_fk
-          join view_subnet_v1 sn on sn.subnet_pk = ip.subnet_fk
-          join view_dnszone_v1 dz on dz.vrfgroup_fk = sn.vrfgroup_fk
+          Join target_device td ON td.device_pk = ip.device_fk
+          Join view_subnet_v1 sn ON sn.subnet_pk = ip.subnet_fk
+          Join view_dnszone_v1 dz ON dz.vrfgroup_fk = sn.vrfgroup_fk
        ),
 /*  Build FQDN with DNSzone via DNSrecord
 */         
@@ -92,8 +94,8 @@ With
           ,concat(lower(td."Device Name"),'.', lower(dz.name))fqdn_dns          
        From 
           target_device td
-          join view_dnsrecords_v1 dns on dns.name = td."Device Name"
-          join view_dnszone_v1 dz on dz.dnszone_pk = dns.dnszone_fk
+          Join view_dnsrecords_v1 dns ON dns.name = td."Device Name"
+          Join view_dnszone_v1 dz ON dz.dnszone_pk = dns.dnszone_fk
        ),      
 /*  Figure out the FQDN candidates from aliases and device name
 */  
@@ -114,8 +116,8 @@ With
           End as "na_dname"
        From 
             target_device ctd 
-            Left join view_devicealias_v1 da on da.device_fk = ctd.device_pk
-            Left join view_devicenonauthoritativealias_v1 dna on dna.device_fk = ctd.device_pk
+            Left Join view_devicealias_v1 da ON da.device_fk = ctd.device_pk
+            Left Join view_devicenonauthoritativealias_v1 dna ON dna.device_fk = ctd.device_pk
         ),
 /*  Figure out the Business Apps for each device
 */  
@@ -125,8 +127,8 @@ With
           ,ba.name
        From 
           target_device td 
-          Left join view_businessapplicationelement_v1 bae on bae.device_fk = td.device_pk
-          Left join view_businessapplication_v1 ba on ba.businessapplication_pk = bae.businessapplication_fk
+          Left Join view_businessapplicationelement_v1 bae ON bae.device_fk = td.device_pk
+          Left Join view_businessapplication_v1 ba ON ba.businessapplication_pk = bae.businessapplication_fk
         ),
 /* Get the RU CRE data  */
     target_cre_data_ru  as (
@@ -166,8 +168,8 @@ With
         End server_os_version         
         ,coalesce(tdf."dname", tdsnr.fqdn_dns, tdsn.fqdn_dns, tdf."aa_dname", tdf."na_dname") server_fqdn  
         ,lower(td."Service_Level") server_environment
-        ,td.type, td.sub_type 
-        ,td.virtual_subtype
+        ,td.type, td.physicalsubtype
+        ,td.virtualsubtype
         ,ru.tenancy ru_tenancy
         ,ru.recommendation_type ru_recommendation_type
         ,ru.recommended_instance ru_recommended_instance
@@ -188,10 +190,10 @@ With
          End recommended_instance_sl          
       From 
         target_device td
-        Left join target_device_FQDN tdf on tdf.device_pk = td.device_pk  
-        Left join target_dnsname tdsn on tdsn.device_pk = td.device_pk
-        Left join target_dnsname_dnsrecord  tdsnr on tdsnr.device_pk = td.device_pk
-        Left Join target_cre_data_ru ru on ru.device_fk = td.device_pk
-        Left Join target_cre_data_reg reg on reg.device_fk = td.device_pk
+        Left Join target_device_FQDN tdf ON tdf.device_pk = td.device_pk  
+        Left Join target_dnsname tdsn ON tdsn.device_pk = td.device_pk
+        Left Join target_dnsname_dnsrecord  tdsnr ON tdsnr.device_pk = td.device_pk
+        Left Join target_cre_data_ru ru ON ru.device_fk = td.device_pk
+        Left Join target_cre_data_reg reg ON reg.device_fk = td.device_pk
       Where td."OS Group" is  NOT Null and 
             td."OS Group" IN ('Windows', 'Linux')

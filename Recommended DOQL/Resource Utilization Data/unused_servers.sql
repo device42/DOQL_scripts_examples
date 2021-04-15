@@ -10,6 +10,8 @@
     - only look at non-network devices
     - remove the filtering of devices that have a job scan. (want to see all devices that have not been scan)
     - used CTEs and simplified the grouping
+   Update 2020-10-19
+  - updated the view_device_v1 to view_device_v2
 */
 With 
     target_device_data  as (
@@ -17,12 +19,12 @@ With
             d.device_pk
             ,d.last_edited "Last Successful Discovery"
             ,d.name "Device Name"
-            ,d.virtual_subtype "Virtual Subtype"
+            ,d.virtualsubtype "Virtual Subtype"
             ,d.os_name "OS Name"
             ,d.os_version_no "OS Version"
-            ,d.os_arch "OS Architecture"
-            ,d.cpucount "CPU Count"
-            ,d.cpucore "Cores Per Socket"
+            ,d.os_architecture "OS Architecture"
+            ,d.total_cpus "CPU Count"
+            ,d.core_per_cpu "Cores Per Socket"
             ,CASE 
                 When ram_size_type = 'GB' 
                 Then d.ram*1024
@@ -34,7 +36,7 @@ With
                 ELSE 'NO'
             END "In Service?"
         From 
-            view_device_v1 d
+            view_device_v2 d
         Where Not network_device    
         Order by d.name 
     ),
@@ -150,12 +152,12 @@ Select
 From
     target_device_data tdd
     Left Join target_ru_data trd on trd.device_pk = tdd.device_pk
-    Left Join view_discoveryscores_v1 ds on ds.device_fk = tdd.device_pk and
-                                       ds.added = (Select max(lds.added) From view_discoveryscores_v1 lds Where lds.device_fk = tdd.device_pk)  
-    Left Join view_jobscore_v1 js on ds.jobscore_fk = js.jobscore_pk and
-                                js.jobscore_pk = (Select max(ljs.jobscore_pk) From view_jobscore_v1 ljs Where ljs.jobscore_pk = ds.jobscore_fk)
-    Left Join view_devicelastlogin_v1 l on l.device_fk = tdd.device_pk and 
-                                      l.last_login = (Select max(lr.last_login) From view_devicelastlogin_v1 lr Where lr.device_fk = tdd.device_pk)   
+    Left Join view_discoveryscores_v1 ds on ds.device_fk = tdd.device_pk 
+                                  and ds.added = (Select max(lds.added) From view_discoveryscores_v1 lds Where lds.device_fk = tdd.device_pk)  
+    Left Join view_jobscore_v1 js on ds.jobscore_fk = js.jobscore_pk 
+                                  and js.jobscore_pk = (Select max(ljs.jobscore_pk) From view_jobscore_v1 ljs Where ljs.jobscore_pk = ds.jobscore_fk)
+    Left Join view_devicelastlogin_v1 l on l.device_fk = tdd.device_pk  
+                                  and  l.last_login = (Select max(lr.last_login) From view_devicelastlogin_v1 lr Where lr.device_fk = tdd.device_pk)   
 /* Removed the where clause because it was filtering out devices that had not been scan recently (> 7 days)
  Where 
     js.jobscore_pk in (Select max(jobscore_pk) From view_jobscore_v1 jk Group by jk.vserverdiscovery_fk) */  

@@ -17,7 +17,7 @@ Select
     ,dz.date_updated "Zone Last Discovered"
     ,dz.vrfgroup_fk
  From view_dnszone_v1 dz 
- Join view_cloudinfrastructure_v2 ci on ci.cloudinfrastructure_pk = dz.cloudinfrastructure_fk 	
+ Join view_cloudinfrastructure_v2 ci ON ci.cloudinfrastructure_pk = dz.cloudinfrastructure_fk 	
  ) 	
 Select 
     tzc."Cloud Infrastructure Name"
@@ -36,6 +36,6 @@ Select
     ,dr.date_updated "Record Last Discovered"
     ,vrf.name "VRF Group"
 From view_dnsrecords_v1 dr 
-Join target_zone_cloud_data tzc on tzc.dnszone_pk = dr.dnszone_fk 
-Left Join view_vrfgroup_v1 vrf on vrf.vrfgroup_pk = tzc.vrfgroup_fk
+Join target_zone_cloud_data tzc ON tzc.dnszone_pk = dr.dnszone_fk 
+Left Join view_vrfgroup_v1 vrf ON vrf.vrfgroup_pk = tzc.vrfgroup_fk
 Order by tzc."DNS Zone" ASC

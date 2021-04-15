@@ -1,5 +1,7 @@
 /*
 DOQL for detailed data of Devices related to Discovery Scores and Job Scores.
+  Update 2020-10-19
+  - updated the view_device_v1 to view_device_v2
 */
 Select 
 	ds.discoveryscores_pk "Discovery Score ID"
@@ -385,8 +387,8 @@ Select
 	,ds.discovery_scores::json->>'network_shares' "Network Shares"
 	,ds.discovery_scores::json->>'software_services_bulk' "Software Services Bulk"
 From view_discoveryscores_v1 ds
-	Left Join view_device_v1 d On d.device_pk = ds.device_fk
-	Left Join view_jobscore_v1 js On ds.jobscore_fk = js.jobscore_pk
-	Left Join view_vserverdiscovery_v1 vsd On js.vserverdiscovery_fk = vsd.vserverdiscovery_pk
+	Left Join view_device_v2 d ON d.device_pk = ds.device_fk
+	Left Join view_jobscore_v1 js ON ds.jobscore_fk = js.jobscore_pk
+	Left Join view_vserverdiscovery_v1 vsd ON js.vserverdiscovery_fk = vsd.vserverdiscovery_pk
 	Where vsd.platform <> 'vmware' and ds.updated > current_date - 14 and (js.jobscore_pk in (select max(jobscore_pk) from view_jobscore_v1 jk group by jk.vserverdiscovery_fk))
 	Order by ds.updated DESC 

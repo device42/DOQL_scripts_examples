@@ -4,6 +4,8 @@
 	- Changed to use the avg and max functions to replace the sum functions
 	- Only showing devices that have RU data collected for CPU, Disk, Memory and NIC IO
 	- add in location - for on Prem use building; for cloud use cloud_location 
+	Update 2020-10-19
+  	- updated the view_device_v1 to view_device_v2
 */
 With 
     target_device_data  as (
@@ -11,12 +13,12 @@ With
             d.device_pk
             ,d.last_edited "Last Successful Discovery"
             ,d.name "Device Name"
-            ,d.virtual_subtype "Virtual Subtype"
+            ,d.virtualsubtype "Virtual Subtype"
             ,d.os_name "OS Name"
             ,d.os_version_no "OS Version"
-            ,d.os_arch "OS Architecture"
-            ,d.cpucount "CPU Count"
-            ,d.cpucore "Cores Per Socket"
+            ,d.os_architecture "OS Architecture"
+            ,d.total_cpus "CPU Count"
+            ,d.core_per_cpu "Cores Per Socket"
             ,CASE 
 				When ram_size_type = 'GB' 
 				Then d.ram*1024
@@ -28,11 +30,12 @@ With
 				ELSE 'NO'
             END "In Service?"
 			,b.name "Building Loc"
-			,d.cloud_location "Cloud Loc"
-			,coalesce(d.cloud_location,b.name) "Location"			
+			,ci.location "Cloud Loc"
+			,coalesce(ci.location,b.name) "Location"			
         From 
-            view_device_v1 d
+            view_device_v2 d
 		Left Join view_building_v1 b on b.building_pk = d.building_fk
+		Left Join view_cloudinstance_v1 ci ON ci.device_fk = d.device_pk		
 		Where Not network_device and d.ram > 0	
 		Order by d.name	
 	),
