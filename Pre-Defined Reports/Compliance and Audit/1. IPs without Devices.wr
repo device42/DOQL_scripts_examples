@@ -1,0 +1,339 @@
+<report>
+  <main>
+    <id>99039e25-a4fd-4e82-8cb5-d61010badfc4</id>
+    <version>1</version>
+    <type>Standard</type>
+    <sql_stmt />
+    <show_execute_form>False</show_execute_form>
+    <filter_execution_window>Default</filter_execution_window>
+    <fit_page_width>False</fit_page_width>
+    <suppress_formatting>False</suppress_formatting>
+    <report_tree_shortcut>0</report_tree_shortcut>
+    <output_mode>6</output_mode>
+    <prevent_output />
+    <page_size>Letter</page_size>
+    <page_orientation>Portrait</page_orientation>
+    <include_setup_info>No</include_setup_info>
+    <description />
+    <filter_description />
+    <show_grid>True</show_grid>
+    <pdf_template />
+    <embedded_pdf_template />
+    <simulate_pdf>True</simulate_pdf>
+    <no_data_render_type>ShowMessage</no_data_render_type>
+    <show_interactive_sorts>True</show_interactive_sorts>
+    <allow_column_hide>True</allow_column_hide>
+    <groups_on_separate_worksheets>False</groups_on_separate_worksheets>
+    <enable_cartesian_processing>Default</enable_cartesian_processing>
+    <visualization_report>false</visualization_report>
+    <use_cache_execution>false</use_cache_execution>
+    <excel_freeze_rows>1</excel_freeze_rows>
+    <excel_freeze_columns>1</excel_freeze_columns>
+    <excel_show_gridlines>True</excel_show_gridlines>
+    <suppressfiltersinterface>False</suppressfiltersinterface>
+    <suppresssortsinterface>False</suppresssortsinterface>
+    <row_range_limit>0</row_range_limit>
+    <custom_entities>{"webreports":{"entity":{"entity_name":"ips_no_device","affinity":"Report","db_name":"ips_no_device","sql_stmt":"select ip.ipaddress_pk\n          ,split_part(ip.ip_address::text, '/', 1) as \"IP Address\"\n          ,sn.network as \"Subnet Network\"\n          ,range_begin as \"Subnet Range Begin\"\n          ,range_end as \"Subnet Range End\"\n          ,sn.mask_bits as \"Mask Bits\"\n          ,dns.name as \"DNS Name\"\n          ,dns.type as \"DNS Type\"\n          ,dns.content as \"DNS Content\"\n          ,dns.dnszone_fk\n    from view_ipaddress_v1 ip\n    left join view_subnet_v1 sn\n      on ip.subnet_fk = sn.subnet_pk\n    left join view_dnsrecords_v1 dns\n      on host(ip.ip_address) =  dns.content\n      and dns.type like 'A'\n    where ip.device_fk is null\n      and not ip.available","datasource_id":"0","object_type":"sql","key":{"col_name":"ipaddress_pk"}}}}</custom_entities>
+  </main>
+  <entity>
+    <entity_name>ips_no_device</entity_name>
+    <group_by_flag>False</group_by_flag>
+  </entity>
+  <cell>
+    <id>111209914</id>
+    <cell_text>1. IPs without Devices</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>0</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <cell_colspan>9</cell_colspan>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>14</font_size>
+    <font_bold_flag>True</font_bold_flag>
+  </cell>
+  <cell>
+    <id>855038126</id>
+    <cell_text />
+    <cell_type>text</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>0</cell_col>
+    <cell_colspan>9</cell_colspan>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1605981648</id>
+    <cell_text>IP Address</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>0</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1799269007</id>
+    <cell_text>ipaddress_pk</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>1</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>2029935711</id>
+    <cell_text>Subnet Network</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>2</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>948038405</id>
+    <cell_text>Subnet Range Begin</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>3</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1704272227</id>
+    <cell_text>Subnet Range End</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>4</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1960631439</id>
+    <cell_text>Mask Bits</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>5</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>2023645443</id>
+    <cell_text>DNS Name</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>6</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1078588451</id>
+    <cell_text>DNS Type</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>7</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>674839119</id>
+    <cell_text>DNS Content</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>8</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1201901524</id>
+    <cell_text>ips_no_device.IP Address</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>0</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>776450115</id>
+    <cell_text>ips_no_device.ipaddress_pk</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>1</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1222958895</id>
+    <cell_text>ips_no_device.Subnet Network</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>2</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1672832854</id>
+    <cell_text>ips_no_device.Subnet Range Begin</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>3</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>989798981</id>
+    <cell_text>ips_no_device.Subnet Range End</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>4</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>535391054</id>
+    <cell_text>ips_no_device.Mask Bits</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>5</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>723310362</id>
+    <cell_text>ips_no_device.DNS Name</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>6</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>2009778222</id>
+    <cell_text>ips_no_device.DNS Type</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>7</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>1719857137</id>
+    <cell_text>ips_no_device.DNS Content</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>8</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <row>
+    <group_type>Page Header</group_type>
+    <suppress_flag>True</suppress_flag>
+  </row>
+  <row>
+    <group_type>Page Header</group_type>
+    <suppress_flag>True</suppress_flag>
+  </row>
+  <row>
+    <group_type>Page Header</group_type>
+  </row>
+  <row>
+    <group_type>Detail</group_type>
+  </row>
+  <column>
+    <column_width>100</column_width>
+    <column_label>IP Address</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>ipaddress_pk</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Subnet Network</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Subnet Range Begin</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Subnet Range End</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>Mask Bits</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>DNS Name</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>DNS Type</column_label>
+  </column>
+  <column>
+    <column_width>100</column_width>
+    <column_label>DNS Content</column_label>
+  </column>
+  <sort>
+    <sort_name>ips_no_device.IP Address</sort_name>
+    <sort_title />
+    <order_num>0</order_num>
+    <ascending_flag>True</ascending_flag>
+  </sort>
+  <dynamicfilters />
+</report>

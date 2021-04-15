@@ -9,7 +9,7 @@
     <fit_page_width>False</fit_page_width>
     <suppress_formatting>False</suppress_formatting>
     <report_tree_shortcut>0</report_tree_shortcut>
-    <output_mode>6</output_mode>
+    <output_mode>1</output_mode>
     <prevent_output />
     <page_size>Legal</page_size>
     <page_orientation>Landscape</page_orientation>
@@ -377,7 +377,7 @@
   </cell>
   <cell>
     <id>1312403608</id>
-    <cell_text>CPU Peak</cell_text>
+    <cell_text>CPU Peak Percent</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
     <cell_col>24</cell_col>
@@ -405,7 +405,7 @@
   </cell>
   <cell>
     <id>140018102</id>
-    <cell_text>Ram - Peak</cell_text>
+    <cell_text>RAM - Peak Percent</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
     <cell_col>26</cell_col>
@@ -433,7 +433,7 @@
   </cell>
   <cell>
     <id>238114075</id>
-    <cell_text>IOPS - Peak</cell_text>
+    <cell_text>IOPS - Peak Percent</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
     <cell_col>28</cell_col>
@@ -461,7 +461,7 @@
   </cell>
   <cell>
     <id>358577940</id>
-    <cell_text>Disk Total - Peak</cell_text>
+    <cell_text>Disk Total - Peak Percent</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
     <cell_col>30</cell_col>
@@ -489,7 +489,7 @@
   </cell>
   <cell>
     <id>2000174204</id>
-    <cell_text>Disk Used Peak</cell_text>
+    <cell_text>Disk Used Peak Percent</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
     <cell_col>32</cell_col>
@@ -587,7 +587,7 @@
   </cell>
   <cell>
     <id>1553613072</id>
-    <cell_text>Summary - Max  Percent</cell_text>
+    <cell_text>Summary - Peak  Percent</cell_text>
     <cell_type>text</cell_type>
     <cell_row>0</cell_row>
     <cell_col>39</cell_col>
