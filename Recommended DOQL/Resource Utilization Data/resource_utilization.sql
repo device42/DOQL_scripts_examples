@@ -4,6 +4,8 @@
     - Changed to use the avg and max functions to replace the sum functions
     - Only showing devices that have RU data collected for CPU, Disk, Memory and NIC IO
  
+   4/15/21
+   - change device_v1 to device_v2 
 */
 With 
     target_device_data  as (
@@ -11,12 +13,12 @@ With
             d.device_pk
             ,d.last_edited "Last Successful Discovery"
             ,d.name "Device Name"
-            ,d.virtual_subtype "Virtual Subtype"
+            ,d.virtualsubtype "Virtual Subtype"
             ,d.os_name "OS Name"
             ,d.os_version_no "OS Version"
-            ,d.os_arch "OS Architecture"
-            ,d.cpucount "CPU Count"
-            ,d.cpucore "Cores Per Socket"
+            ,d.os_architecture "OS Architecture"
+            ,d.total_cpus "CPU Count"
+            ,d.core_per_cpu "Cores Per Socket"
             ,CASE 
                 When ram_size_type = 'GB' 
                 Then d.ram*1024
@@ -28,7 +30,7 @@ With
                 ELSE 'NO'
             END "In Service?"
         From 
-            view_device_v1 d
+            view_device_v2 d
         Where Not network_device and d.ram > 0   
         Order by d.name 
     ),

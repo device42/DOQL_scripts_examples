@@ -2,6 +2,8 @@
    9/9/20 - add tenancy, recommend_instance and recommendation_type
           - Only show data for AWS
           - prioritize recommendation_type ru over regular
+   - Updated - 4/15/21
+    - Change view_device_v1 to view_device_v2
 */
 /* Get the RU CRE data  */
 With 
@@ -52,7 +54,7 @@ With
               Else ru.recommended_instance
          End recommended_instance_sl        
      From 
-                view_device_v1 d
+                view_device_v2 d
         Left Join target_cre_data_ru ru on ru.device_fk = d.device_pk
         Left Join target_cre_data_reg reg on reg.device_fk = d.device_pk
         Where d.network_device = 'f' and (ru.recommended_instance != '' or reg.recommended_instance != '')

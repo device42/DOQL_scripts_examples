@@ -10,6 +10,9 @@ Feedback - 6/23
             A lot of servers do not have a server_fqdn column, so I filled these up with sample data
  New Add - 9/9/20
         1. Add CRE info included in the 16.16 release
+  Updated - 4/15/21
+  - Chnged view_device_v1 to view_device_v2
+
 */
 With 
     target_device  as (
@@ -61,7 +64,7 @@ With
           ,d.os_version
           ,d.service_level "Service_Level"  
        From 
-          view_device_v1 d
+          view_device_v2 d
         Where Not d.network_device  and       
                   (lower(d.sub_type) NOT IN ('ups','pdu','crac','tap','scrambler','encoder','access point','ats','multiplexer','network printer') or  lower(d.sub_type) IN ('','laptop','workstation','server board','branch circuit power meter') or
                     d.sub_type is NULL) and

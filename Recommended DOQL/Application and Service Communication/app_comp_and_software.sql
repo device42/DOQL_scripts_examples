@@ -1,5 +1,7 @@
 /*
 DOQL for App Comp's with related software in use details.
+ Update 2020-10-19
+  - updated the view_device_v1 to view_device_v2
 */
  /*  Inline view of target data required (CTE - Common Table Expression) 
   Get target data       
@@ -20,7 +22,7 @@ Select
 	,adb.version "DB Product Version"
 	,adbi.instance "DB Instance"
 From view_appcomp_v1 ac
-Left Join view_device_v1 d ON d.device_pk = ac.device_fk
+Left Join view_device_v2 d ON d.device_pk = ac.device_fk
 Left Join view_ipaddress_v1 ip ON ip.device_fk = d.device_pk
 Left Join view_softwareinuse_v1 si ON si.appcomp_fk = ac.appcomp_pk
 Left Join view_software_v1 s ON s.software_pk = si.software_fk

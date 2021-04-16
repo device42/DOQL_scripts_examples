@@ -6,6 +6,8 @@ Query for all discovered connections to service instances.
   - Add device obj category to listener and client
   - Add App Components to listener and client Service Instance
   - Add Service End User to listener and client Service Instance
+  Updated 4/15/21
+  - Changed from view_device_v1 to View_device_v2
 */
 /* Get all the Device info required for this report once.  */
 With 
@@ -21,7 +23,7 @@ With
             ,ag.name "Affinity Group"
             ,ba.name "Business App"       
         From    
-            view_device_v1 dev
+            view_device_v2 dev
  /* get Object Category for  for both listener and client  */   
             Left Join view_objectcategory_v1 oc On oc.objectcategory_pk = dev.objectcategory_fk
  /* get affinity Group for both listener and client  */ 
