@@ -7,6 +7,7 @@
     select
         d.last_edited "Last_Discovered",
         d.name "Device_Name",
+        d.tags "Tags",
         d.in_service "In Service",
         d.service_level "Service_Level",
         d.type "Device_Type",
