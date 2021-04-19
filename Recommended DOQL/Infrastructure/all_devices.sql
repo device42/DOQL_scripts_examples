@@ -6,6 +6,7 @@
 */
     select
         d.last_edited "Last_Discovered",
+        d.device_pk "Device ID",
         d.name "Device_Name",
         d.tags "Tags",
         d.in_service "In Service",
