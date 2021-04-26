@@ -103,14 +103,14 @@ Setup of the Device42 ODBC DSN is complete. You should now be able to utilize th
 
 Now that the prerequisites have been performed. The Power BI file can be downloaded and loaded for use.
 
-1. Download the Power BI .pbix file
+1. [Download the Power BI .pbix file](https://github.com/device42/DOQL_scripts_examples/raw/Goldberg-SA-Branch/Device42%20Data%20Insights%20Power%20BI/Device42_Data_Insights.pbix)
 2. Open the file Device42_Data_Insights.pbix
-    1. This file will open pre-loaded with data from a demo environment of Device42
+    A. This file will open pre-loaded with data from a demo environment of Device42
 3. In order to load your Device42 data update the Data Source Settings by performing the following
-    2. In the right side pane for **_Fields_** right click any table and** **select **_Edit query_**
-    3. This will then open the** _Power BI Query Editor_**, click on **_Data Source Settings_** from the **_Home_** menu
-    4. Select the currently listed **_DSN_**, then click **_Change Source_**, and select the **_Data Source name (DSN) _**drop down to the **_DSN_** configured in the previous steps above. Once done, click **_Ok_**, then click **_Close_**
-    5. Finally, click on **_Close & Apply_** in the **_Home_** menu
+    A. In the right side pane for **_Fields_** right click any table and** **select **_Edit query_**
+    B. This will then open the** _Power BI Query Editor_**, click on **_Data Source Settings_** from the **_Home_** menu
+    C. Select the currently listed **_DSN_**, then click **_Change Source_**, and select the **_Data Source name (DSN) _**drop down to the **_DSN_** configured in the previous steps above. Once done, click **_Ok_**, then click **_Close_**
+    D. Finally, click on **_Close & Apply_** in the **_Home_** menu
 4. Power BI will then start to refresh and load the data into the dashboard. **_For all prompts to follow click “Run” or “Ok”_**
-    6. There will be multiple prompts about running a **_Native Database Query_** this is normal and **_Run_** can be performed
+    A. There will be multiple prompts about running a **_Native Database Query_** this is normal and **_Run_** can be performed
 5. After some time the data and connection model will be updated with your data and all visualizations will reflect your Device42 data.
