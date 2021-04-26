@@ -24,55 +24,9 @@ You have 6 H1 headings. You may want to use the "H1 -> H2" option to demote all 
 
 ----->
 
-
-<p style="color: red; font-weight: bold">>>>>>  gd2md-html alert:  ERRORs: 0; WARNINGs: 1; ALERTS: 9.</p>
-<ul style="color: red; font-weight: bold"><li>See top comment block for details on ERRORs and WARNINGs. <li>In the converted Markdown or HTML, search for inline alerts that start with >>>>>  gd2md-html alert:  for specific instances that need correction.</ul>
-
-<p style="color: red; font-weight: bold">Links to alert messages:</p><a href="#gdcalert1">alert1</a>
-<a href="#gdcalert2">alert2</a>
-<a href="#gdcalert3">alert3</a>
-<a href="#gdcalert4">alert4</a>
-<a href="#gdcalert5">alert5</a>
-<a href="#gdcalert6">alert6</a>
-<a href="#gdcalert7">alert7</a>
-<a href="#gdcalert8">alert8</a>
-<a href="#gdcalert9">alert9</a>
-
-<p style="color: red; font-weight: bold">>>>>> PLEASE check and correct alert issues and delete this message and the inline alerts.<hr></p>
-
-
-
-# Device42 Data Insights with Power BI
-
-**_Table of Contents_**
-
-
-[TOC]
-
-
-
 # Introduction
 
 In order to facilitate an easy method to extract data from Device42 and provide insightful visuals and metrics Device42  makes available a pre-built Power BI Dashboard file that contains visualizations and reports for multiple use cases that include transformation, security, inventory, and others.
-
-Example Screenshots:
-
-
-
-<p id="gdcalert1" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: inline image link here (to images/image1.png). Store image on your image server and adjust path/filename/extension if necessary. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert2">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
-
-
-![alt_text](images/image1.png "image_tooltip")
-
-
-
-
-<p id="gdcalert2" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: inline image link here (to images/image2.png). Store image on your image server and adjust path/filename/extension if necessary. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert3">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
-
-
-![alt_text](images/image2.png "image_tooltip")
-
-
 
 # Prerequisites for Usage
 
@@ -95,11 +49,6 @@ For all visualizations and functions to be available make sure to configure or e
 
 
 1. **Enable Global Cloud Recommendation Engine Settings**, this can be performed by navigating to Tools > Settings > Global Settings. Then _Edit_ the Global Settings and Scroll to the bottom to find _Global Cloud Recommendation Settings_. At a minimum this must be enabled for **_AWS_**, but you can enable it for all CSP’s. **_It is also recommended to use the 95th Percentile as the RU Recommendation Metric_**. All other options and regions can be set by preference.
-
-<p id="gdcalert3" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: inline image link here (to images/image3.png). Store image on your image server and adjust path/filename/extension if necessary. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert4">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
-
-
-![alt_text](images/image3.png "image_tooltip")
 
 2. Many of the visuals and functions will also use **Device Tags **and **Business Applications** as slicers, it is possible to modify the dashboards to use other values, but it is recommended to apply relevant business tags or [create Business Applications](https://docs.device42.com/apps/business-applications/) with your devices.
 
@@ -135,27 +84,9 @@ Run the ODBC Driver install after it has been downloaded, [steps to install foun
 <span style="text-decoration:underline;">Windows 10</span>: click **_Start -> Windows Administrative Tools -> ODBC Data Sources (64-bit)_**; [note there is also a 32-bit version, which you can ignore]. \
 <span style="text-decoration:underline;">Windows 7</span>: Click **_Start -> All Programs -> Administrative Tools -> Data Sources (ODBC)_**: \
 
-
-<p id="gdcalert4" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: inline image link here (to images/image4.png). Store image on your image server and adjust path/filename/extension if necessary. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert5">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
-
-
-![alt_text](images/image4.png "image_tooltip")
-
 2. Click the **Add** button to begin adding a new datasource. In the “Create New Data Source” window that is displayed, choose the “Device42 ODBC Driver” and click “Finish”: \
 
-
-<p id="gdcalert5" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: inline image link here (to images/image5.png). Store image on your image server and adjust path/filename/extension if necessary. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert6">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
-
-
-![alt_text](images/image5.png "image_tooltip")
-
 3. On the “Device42 ODBC Driver DSN Configuration” screen that is displayed, enter values as explained below: \
-
-
-<p id="gdcalert6" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: inline image link here (to images/image6.png). Store image on your image server and adjust path/filename/extension if necessary. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert7">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
-
-
-![alt_text](images/image6.png "image_tooltip")
 
     1. **DSN Name**: The name to identify this DSN.
     2. **Server Host**: The host name of the Device42 server.
@@ -172,33 +103,13 @@ Setup of the Device42 ODBC DSN is complete. You should now be able to utilize th
 
 Now that the prerequisites have been performed. The Power BI file can be downloaded and loaded for use.
 
-
-
 1. Download the Power BI .pbix file
 2. Open the file Device42_Data_Insights.pbix
     1. This file will open pre-loaded with data from a demo environment of Device42
 3. In order to load your Device42 data update the Data Source Settings by performing the following
     2. In the right side pane for **_Fields_** right click any table and** **select **_Edit query_**
-
-<p id="gdcalert7" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: inline image link here (to images/image7.png). Store image on your image server and adjust path/filename/extension if necessary. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert8">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
-
-
-![alt_text](images/image7.png "image_tooltip")
-
     3. This will then open the** _Power BI Query Editor_**, click on **_Data Source Settings_** from the **_Home_** menu
-
-<p id="gdcalert8" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: inline image link here (to images/image8.png). Store image on your image server and adjust path/filename/extension if necessary. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert9">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
-
-
-![alt_text](images/image8.png "image_tooltip")
-
     4. Select the currently listed **_DSN_**, then click **_Change Source_**, and select the **_Data Source name (DSN) _**drop down to the **_DSN_** configured in the previous steps above. Once done, click **_Ok_**, then click **_Close_**
-
-<p id="gdcalert9" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: inline image link here (to images/image9.png). Store image on your image server and adjust path/filename/extension if necessary. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert10">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
-
-
-![alt_text](images/image9.png "image_tooltip")
-
     5. Finally, click on **_Close & Apply_** in the **_Home_** menu
 4. Power BI will then start to refresh and load the data into the dashboard. **_For all prompts to follow click “Run” or “Ok”_**
     6. There will be multiple prompts about running a **_Native Database Query_** this is normal and **_Run_** can be performed
