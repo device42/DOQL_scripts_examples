@@ -1,0 +1,139 @@
+<report>
+  <main>
+    <id>9c2248fc-7ddc-45f0-8a5e-10906fb2c9e4</id>
+    <version>1</version>
+    <type>Standard</type>
+    <sql_stmt />
+    <show_execute_form>False</show_execute_form>
+    <filter_execution_window>Default</filter_execution_window>
+    <fit_page_width>False</fit_page_width>
+    <suppress_formatting>False</suppress_formatting>
+    <report_tree_shortcut>0</report_tree_shortcut>
+    <output_mode>1</output_mode>
+    <prevent_output />
+    <page_size>Letter</page_size>
+    <page_orientation>Portrait</page_orientation>
+    <include_setup_info>No</include_setup_info>
+    <description>This is a legend for the Move Group Report</description>
+    <filter_description />
+    <show_grid>True</show_grid>
+    <pdf_template />
+    <embedded_pdf_template />
+    <simulate_pdf>True</simulate_pdf>
+    <no_data_render_type>ShowMessage</no_data_render_type>
+    <show_interactive_sorts>True</show_interactive_sorts>
+    <allow_column_hide>True</allow_column_hide>
+    <groups_on_separate_worksheets>False</groups_on_separate_worksheets>
+    <enable_cartesian_processing>Default</enable_cartesian_processing>
+    <visualization_report>false</visualization_report>
+    <use_cache_execution>false</use_cache_execution>
+    <excel_freeze_rows>1</excel_freeze_rows>
+    <excel_freeze_columns>1</excel_freeze_columns>
+    <excel_show_gridlines>True</excel_show_gridlines>
+    <suppressfiltersinterface>False</suppressfiltersinterface>
+    <suppresssortsinterface>False</suppresssortsinterface>
+    <row_range_limit>0</row_range_limit>
+    <custom_entities>{"webreports":{"entity":{"entity_name":"mglegend","affinity":"Report","db_name":"mglegend","sql_stmt":"  /*  Just put out the legend for the Move Group   \n  4/13/21\n  */\n\nWith \n\ttarget_data_dummy as (\n\t\tSelect 'Device ID' as field_name, 'Device internal unique key for each device (device_pk)' as field_definition Union All \n\t\tSelect 'Device Name' as field_name, 'Device name' as field_definition Union All \n\t\tSelect 'Type' as field_name, 'Device type - Physical or Virtual' as field_definition Union All \n\t\tSelect 'Virtual subtype' as field_name, 'If Virtual, what the hypervisor type is' as field_definition Union All \n\t\tSelect 'Tags' as field_name, 'Tags set for the device; Tags can be used to identify the application this device is associated with' as field_definition Union All \n\t\tSelect '# of Unique Tags' as field_name, '# of tags associated with this device' as field_definition Union All \n\t\tSelect 'Service Level' as field_name, 'Service Level set for this device. Default set in a scan job is *Production*' as field_definition Union All \n\t\tSelect '# of VM Guests' as field_name, 'If a hypervisor host, how many guests are allocated to this hypervisor' as field_definition Union All \n\t\tSelect 'Total CPUs' as field_name, 'Total # of CPUs/Processors discovered for this device' as field_definition Union All \n\t\tSelect 'Cores per CPU' as field_name, 'For each CPU/Processor, how many cores are there for each  CPU/Processor' as field_definition Union All \n\t\tSelect 'CPU Threads' as field_name, '# Threads per CPU/Processor - Physical = 1-n; Virtual = 1' as field_definition Union All \n\t\tSelect 'Memory GB' as field_name, 'Amount of Memory/Ram discovered for this device' as field_definition Union All \n\t\tSelect 'CPU String' as field_name, 'For Physical devices - Information about the CPU' as field_definition Union All \n\t\tSelect 'CPU Manufacturer' as field_name, 'For Physical devices - Information about the CPU' as field_definition Union All \n\t\tSelect 'CPU Model' as field_name, 'For Physical devices - Information about the CPU' as field_definition Union All \n\t\tSelect 'Operating System' as field_name, 'Discovered OS for the device' as field_definition Union All \n\t\tSelect 'Location' as field_name, 'Location of the device based upon the value found the associated building' as field_definition Union All \n\t\tSelect 'Device Make' as field_name, 'For Physical devices - Information about the device' as field_definition Union All \n\t\tSelect 'Device Model' as field_name, 'For Physical devices - Information about the device' as field_definition Union All \n\t\tSelect 'Matching OS Portability' as field_name, 'From the Cloud Recommendation Engine (CRE) data, was there a match for the current OS - Matching OS, Change OS or No Match' as field_definition Union All \n\t\tSelect 'Recommended Instance' as field_name, 'From the CRE, the recommended AWS Instance' as field_definition Union All \n\t\tSelect 'Recommended OS' as field_name, 'From the CRE, the recommended AWS OS' as field_definition Union All \n\t\tSelect 'R-Lane Classification (ReHost, RePlatform)' as field_name, 'For R-Lane analysis, is the recommendationa ReHost or a RePlatform' as field_definition Union All \n\t\tSelect 'CPU - 95th Percent' as field_name, 'For CPU, the Resource Utilization (RU) data collected selecting the 95th percentile value. Then value is then ranked with all the 95th percentile values in the same category for all the devices. Based upon the ranking the 1st 1/3 is rated - Low, the 2nd 1/3 is rated - Medium and the last 1/3 is rated - High' as field_definition Union All \n\t\tSelect 'CPU Peak Percent' as field_name, 'Same process as the CPU 95th percentile, except using the Peak value found for the device.' as field_definition Union All \n\t\tSelect 'RAM - 95th Percent' as field_name, 'Same Process as the CPU 95th percentile, except using the RAM value for the device.' as field_definition Union All \n\t\tSelect 'RAM - Peak Percent' as field_name, 'Same Process as the CPU Peak percentile, except using the RAM value for the device.' as field_definition Union All \n\t\tSelect 'IOPS - 95th Percent' as field_name, 'Same Process as the CPU 95th percentile, except using the IOPS value for the device. (IOPS - both read and write iops)' as field_definition Union All \n\t\tSelect 'IOPS - Peak Percent' as field_name, 'Same Process as the CPU Peak percentile, except using the IOPS value for the device. (IOPS - both read and write iops)' as field_definition Union All \n\t\tSelect 'Disk Total - 95th Percent' as field_name, 'Same Process as the CPU 95th percentile, except using the disk space allocated value for the device for all disks allocated..' as field_definition Union All \n\t\tSelect 'Disk Total - Peak Percent' as field_name, 'Same Process as the CPU Peak percentile, except using the disk space allocated value for the device for all disks allocated..' as field_definition Union All \n\t\tSelect 'Disk Used - 95th Percent' as field_name, 'Same Process as the CPU 95th percentile, except using the disk space used value for the device for all disks allocated..' as field_definition Union All \n\t\tSelect 'Disk Used Peak Percent' as field_name, 'Same Process as the CPU Peak percentile, except using the disk space used value for the device for all disks allocated..' as field_definition Union All \n\t\tSelect 'Rank by # of Active Ports' as field_name, 'Sum of the # of Ports captured via Netstats. These are then ranked against other devices. (1/3 - Low, 1/3 - Medium, 1/3 - High)' as field_definition Union All \n\t\tSelect 'Rank by Unique Interfaces' as field_name, 'Unique interfaces (Listener/Client) for each Listener device.  These are then ranked against other devices. (1/3 - Low, 1/3 - Medium, 1/3 - High)' as field_definition Union All \n\t\tSelect 'Rank by Unique App Tiers' as field_name, 'Of the 3 tiers (Web, App, Database), How many of the tiers are found on this device.  1 tier - Low, 2 tiers - Medium, 3 tiers - High' as field_definition Union All \n\t\tSelect 'App Components - Count by Tier' as field_name, 'If a device has a App Component, what are the Tiers/Category for the App Component and the number found for each Tier/Category (Web, App, Database)' as field_definition Union All \n\t\tSelect 'Affinity Group Influence' as field_name, '# of unique interfaces for the focus device. These are then ranked (1/3 - Low, 1/3 - Medium, 1/3 - High)' as field_definition Union All \n\t\tSelect 'Summary - 95th  Percent' as field_name, 'For Low (1), Medium (2) and High (3); all 95th percentile values are added along with Rank by # of Active Ports, Rank by Unique Interfaces, Rank by Unique App Tiers and Affinity Group Influence. This is then mutiplied by the R-Lane Classification (if set).  (OS Match - 1, Change OS - 2), No Match - 3).' as field_definition Union All \n\t\tSelect 'Summary - Max  Percent' as field_name, 'For Low (1), Medium (2) and High (3); all Peak values are added along with Rank by # of Active Ports, Rank by Unique Interfaces, Rank by Unique App Tiers and Affinity Group Influence. This is then mutiplied by the R-Lane Classification (if set).  (OS Match - 1, Change OS - 2), No Match - 3).' as field_definition\n\n\t)\n /* Put out the legend  */ \n\nSelect \n \ttdd.field_name\n    ,tdd.field_definition\n  From \n    target_data_dummy tdd  ","datasource_id":"0","object_type":"sql","key":{"col_name":"field_name"}}}}</custom_entities>
+  </main>
+  <entity>
+    <entity_name>mglegend</entity_name>
+    <group_by_flag>False</group_by_flag>
+  </entity>
+  <cell>
+    <id>271342993</id>
+    <cell_text>Move Group Legend</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>0</cell_row>
+    <cell_col>0</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <cell_colspan>2</cell_colspan>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>16</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <background_color>#FFFFE0</background_color>
+  </cell>
+  <cell>
+    <id>227834325</id>
+    <cell_text />
+    <cell_type>text</cell_type>
+    <cell_row>1</cell_row>
+    <cell_col>0</cell_col>
+    <cell_colspan>2</cell_colspan>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>8</font_size>
+  </cell>
+  <cell>
+    <id>240212466</id>
+    <cell_text>Field Name</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>0</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>14</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1378796880</id>
+    <cell_text>Field Description</cell_text>
+    <cell_type>text</cell_type>
+    <cell_row>2</cell_row>
+    <cell_col>1</cell_col>
+    <cell_horizontal_align>Center</cell_horizontal_align>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>14</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <foreground_color>#FFFFFF</foreground_color>
+    <background_color>#000000</background_color>
+  </cell>
+  <cell>
+    <id>1978703205</id>
+    <cell_text>mglegend.field_name</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>0</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>12</font_size>
+    <font_bold_flag>True</font_bold_flag>
+    <background_color>#D7D7D7</background_color>
+  </cell>
+  <cell>
+    <id>71465436</id>
+    <cell_text>mglegend.field_definition</cell_text>
+    <cell_type>data</cell_type>
+    <cell_row>3</cell_row>
+    <cell_col>1</cell_col>
+    <wrap_text_flag>True</wrap_text_flag>
+    <font_name>Arial</font_name>
+    <font_size>12</font_size>
+    <format_type>Text</format_type>
+  </cell>
+  <row>
+    <group_type>Page Header</group_type>
+  </row>
+  <row>
+    <group_type>Page Header</group_type>
+  </row>
+  <row>
+    <group_type>Page Header</group_type>
+  </row>
+  <row>
+    <group_type>Detail</group_type>
+  </row>
+  <column>
+    <column_width>390</column_width>
+    <column_label>field_name</column_label>
+  </column>
+  <column>
+    <column_width>1250</column_width>
+    <column_label>field_definition</column_label>
+  </column>
+  <dynamicfilters />
+</report>
