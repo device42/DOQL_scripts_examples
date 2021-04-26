@@ -15,6 +15,8 @@ Select
     ,r.metric "Measurement Metric"
     ,r.timeperiod_id "Time Period ID"
     ,r.timeperiod "Time Period"
+    ,r.start_time "Start Time"
+    ,r.end_time "End Time"
     ,rc.name "Remote Collector Name"
     ,rc.ip "Remote Collector IP"
 From 
