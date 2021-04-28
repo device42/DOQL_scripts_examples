@@ -8,6 +8,7 @@
         d.last_edited "Last_Discovered",
         d.device_pk "Device ID",
         d.name "Device_Name",
+        ip.ip_address "IP_Address",
         d.tags "Tags",
         d.in_service "In Service",
         d.service_level "Service_Level",
@@ -92,6 +93,7 @@
        round(((select sum(m.capacity/1024) from view_mountpoint_v1 m where m.device_fk = d.device_pk and m.fstype_name <> 'nfs' and m.fstype_name <> 'nfs4' and m.filesystem not like '\\\\%')), 2)"Total Space",
        round(((select sum(m.free_capacity/1024) from view_mountpoint_v1 m where m.device_fk = d.device_pk and m.fstype_name <> 'nfs' and m.fstype_name <> 'nfs4' and m.filesystem not like '\\\\%')), 2)"Total Free Space"
         from view_device_v2 d
+        left join view_ipaddress_v1 ip on ip.device_fk = d.device_pk
         left join view_purchaselineitems_to_devices_v1 ptd on ptd.device_fk = d.device_pk
         left join view_purchaselineitem_v1 pli on ptd.purchaselineitem_fk = pli.purchaselineitem_pk
         left join view_purchase_v1 pch on pch.purchase_pk = pli.purchase_fk
