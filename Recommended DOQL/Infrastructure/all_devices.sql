@@ -38,7 +38,7 @@
         v.name "Manufacturer",
         h.name "Hardware Model",
         d.asset_no "Asset Number",
-(select count(*) from view_softwaredetails_v1 sd where sd.device_fk = d.device_pk) "Software Discovered",
+(select count(*) from view_softwareinuse_v1 sd where sd.device_fk = d.device_pk) "Software Discovered",
 (select count(*) from view_serviceinstance_v2 si where si.device_fk = d.device_pk) "Services Discovered",
 (select count(*) from view_appcomp_v1 a where a.device_fk = d.device_pk) "Application Components Discovered",
 (select count(*) from view_mountpoint_v1 m where m.device_fk = d.device_pk and m.fstype_name <> 'nfs' and m.fstype_name <> 'nfs4' and m.filesystem not like '\\\\%')"Local Disk Count",
@@ -109,4 +109,5 @@
         left join view_device_custom_fields_flat_v1 dcf on dcf.device_fk = d.device_pk
         left join view_cloudinstance_v1 ci on ci.device_fk = d.device_pk
         left join view_vendor_v1 cv on cv.vendor_pk = ci.vendor_fk
+        left join view_customer_v1 cu on cu.customer_pk = d.customer_fk
         order by d.name ASC
