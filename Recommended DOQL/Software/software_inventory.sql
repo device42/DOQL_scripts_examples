@@ -16,6 +16,7 @@ WITH ip_info AS (
 )
 Select 
 	d.name "Device Name"
+    ,d.device_pk "Device ID"
     ,i.d_ips "Device IP Addresses"
 	,s.software_pk "Software ID"
     ,siu.softwareinuse_pk "SIU PK"
@@ -27,6 +28,8 @@ Select
 	,siu.file_version "File Version"
 	,siu.install_date "Installation Date"
 	,siu.install_path "Installation Path"
+    ,s.licensed_count "Allowed License Count"
+    ,s.discovered_count "Discovered License Count"
 From view_softwareinuse_v1 siu
 Left Join view_software_v1 s ON s.software_pk = siu.software_fk
 Left Join view_appcomp_v1 ac ON siu.appcomp_fk = ac.appcomp_pk
