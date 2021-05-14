@@ -1,6 +1,8 @@
 /*
-Get all devices that communicate with AIX
+
+Get all devices with that communicate with AIX
 Get all devices that do not communicate with AIX
+
 */
 /* Get all the Devices with not AIX  */
 With
@@ -41,12 +43,20 @@ With
 		concat(sc.listener_device_fk,'|',sc.client_device_fk) sc_search_key
         ,sc.listener_device_fk
         ,ld.name ld_name
-		,ld.os_name	ld_os_name
+/*		,ld.os_name	ld_os_name */
+        ,CASE ld.os_version 
+            WHEN '' then ld.os_name
+            ELSE coalesce(ld.os_name || ' - ' || 
+            ld.os_version,ld.os_name) End ld_os_name
 		,sc.listener_ip		
 		,Case When position('aix' IN lower(ld.os_name)) > 0	Then 'aix' Else '' End ld_os_type
 		,sc.client_device_fk		
 		,cd.name cd_name 
-		,cd.os_name cd_os_name
+/*		,cd.os_name cd_os_name */
+        ,CASE cd.os_version 
+            WHEN '' then cd.os_name
+            ELSE coalesce(cd.os_name || ' - ' || 
+            cd.os_version,cd.os_name) End cd_os_name
 		,sc.client_ip
 		,Case When position('aix' IN lower(cd.os_name)) > 0	Then 'aix' Else '' End cd_os_type		
        From 
@@ -54,7 +64,7 @@ With
 		Left Join view_device_v2 ld ON ld.device_pk = sc.listener_device_fk
 		Left Join view_device_v2 cd ON cd.device_pk = sc.client_device_fk
 		Where sc.client_ip != '127.0.0.1' and sc.client_ip != '::1'	
-			and  (lower(ld.os_name) = 'aix' or lower(cd.os_name) = 'aix') 
+			and  (position('aix' IN lower(ld.os_name)) > 0 or position('aix' IN lower(cd.os_name)) > 0) 
 			and  (lower(ld.os_name) != lower(cd.os_name))			
  ), 
     target_aix_data  as (
@@ -71,7 +81,9 @@ With
         ,tdn.dev_name "Device name"
 		,tdn.type "Device Type"
 		,tdn.os_name "Device OS"
-		,'Non-AIX Comm' as "Communication"		
+		,'Non-AIX Comm' as "Communication"
+		,NULL "AIX Hostname"
+		,NULL "AIX OS Name"
 		From target_device_noaix tdn
 		 Left Join target_aix_data tad ON tad.exclude_pk = tdn.non_device_pk
 		 Where tad.exclude_pk is Null
@@ -81,7 +93,9 @@ With
         ,tdn.dev_name "Device name"
 		,tdn.type "Device Type"
 		,tdn.os_name "Device OS"
-		,'AIX Comm' as "Communication"		
+		,'AIX Comm' as "Communication"
+		,CASE WHEN position('aix' IN lower(tad.ld_os_name)) > 0 THEN tad.ld_name ELSE tad.cd_name END "AIX Hostname"
+		,CASE WHEN position('aix' IN lower(tad.ld_os_name)) > 0 THEN tad.ld_os_name ELSE tad.cd_os_name END "AIX OS Name"
 		From target_device_noaix tdn
 		 Left Join target_aix_data tad ON tad.exclude_pk = tdn.non_device_pk
 		 Where tad.exclude_pk is Not Null
@@ -91,7 +105,9 @@ With
         ,tda.dev_name "Device name"
 		,tda.type "Device Type"
 		,tda.os_name "Device OS"
-		,'AIX-AIX Comm' as "Communication"		
+		,'AIX-AIX Comm' as "Communication"
+		,NULL "AIX Hostname"
+		,NULL "AIX OS Name"
 		From target_device_aix tda
 		 Left Join target_aix_data tad ON tad.include_pk = tda.aix_device_pk
 		 Where tad.include_pk is Null
