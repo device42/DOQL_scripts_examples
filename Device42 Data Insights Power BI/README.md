@@ -103,7 +103,7 @@ Setup of the Device42 ODBC DSN is complete. You should now be able to utilize th
 
 Now that the prerequisites have been performed. The Power BI file can be downloaded and loaded for use.
 
-1. [Download the Power BI .pbix file](https://github.com/device42/DOQL_scripts_examples/raw/Goldberg-SA-Branch/Device42%20Data%20Insights%20Power%20BI/Device42_Data_Insights.pbix)
+1. [Download the Power BI .pbix file](https://raw.githubusercontent.com/device42/DOQL_scripts_examples/master/Device42%20Data%20Insights%20Power%20BI/Device42_Data_Insights.pbix)
 2. Open the file Device42_Data_Insights.pbix
     1. This file will open pre-loaded with data from a demo environment of Device42
 3. In order to load your Device42 data update the Data Source Settings by performing the following
