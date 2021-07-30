@@ -13,6 +13,8 @@ With
             d.device_pk
             ,d.last_edited "Last Successful Discovery"
             ,d.name "Device Name"
+            ,hd.name "Hypervisor Hostname"
+            ,cd.name "Chassis Hostname"
             ,d.virtualsubtype "Virtual Subtype"
             ,d.os_name "OS Name"
             ,d.os_version_no "OS Version"
@@ -20,7 +22,7 @@ With
             ,d.total_cpus "CPU Count"
             ,d.core_per_cpu "Cores Per Socket"
             ,CASE 
-                When ram_size_type = 'GB' 
+                When d.ram_size_type = 'GB' 
                 Then d.ram*1024
                 ELSE d.ram
             END "Ram"         
@@ -31,7 +33,9 @@ With
             END "In Service?"
         From 
             view_device_v2 d
-        Where Not network_device and d.ram > 0   
+            left join (select * from view_device_v2 where blade_chassis = 't') cd on d.host_chassis_device_fk = cd.device_pk
+            left join (select * from view_device_v2 where virtual_host = 't') hd on d.virtual_host_device_fk = hd.device_pk
+        Where Not d.network_device and d.ram > 0   
         Order by d.name 
     ),
  /* Pull the RU data and get the desired values  */ 
@@ -103,6 +107,8 @@ Select Distinct
     tdd."Last Successful Discovery"
     ,tdd.device_pk
     ,tdd."Device Name"
+    ,tdd."Hypervisor Hostname"
+    ,tdd."Chassis Hostname"
     ,tdd."Virtual Subtype"
     ,tdd."OS Name"
     ,tdd."OS Version"
