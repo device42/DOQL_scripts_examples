@@ -14,7 +14,7 @@ With
             ,d.last_edited "Last Successful Discovery"
             ,d.name "Device Name"
             ,hd.name "Hypervisor Hostname"
-            ,cd.name "Chassis Hostname"
+            ,coalesce(cd.name, hcd.name, '') "Chassis Hostname"
             ,d.virtualsubtype "Virtual Subtype"
             ,d.os_name "OS Name"
             ,d.os_version_no "OS Version"
@@ -35,6 +35,7 @@ With
             view_device_v2 d
             left join (select * from view_device_v2 where blade_chassis = 't') cd on d.host_chassis_device_fk = cd.device_pk
             left join (select * from view_device_v2 where virtual_host = 't') hd on d.virtual_host_device_fk = hd.device_pk
+            left join view_device_v2 hcd on hd.host_chassis_device_fk = hcd.device_pk
         Where Not d.network_device and d.ram > 0   
         Order by d.name 
     ),
@@ -90,6 +91,22 @@ With
             ,round(max((Select ru.value Where ru.measure_type_id = '9' and ru.timeperiod_id = '4' and ru.metric_id = '1'))::numeric, 2) "90 Day NIC Transfer IN MAX"
             ,round(avg((Select ru.value Where ru.measure_type_id = '10' and ru.timeperiod_id = '4' and ru.metric_id = '3'))::numeric, 2) "90 Day NIC Transfer OUT AVG"
             ,round(max((Select ru.value Where ru.measure_type_id = '10' and ru.timeperiod_id = '4' and ru.metric_id = '1'))::numeric, 2) "90 Day NIC Transfer OUT MAX"
+            ,round(avg((Select ru.value Where ru.measure_type_id = '7' and ru.timeperiod_id = '1' and ru.metric_id = '3'))::numeric, 2) "1 Day NIC Speed IN AVG"
+            ,round(max((Select ru.value Where ru.measure_type_id = '7' and ru.timeperiod_id = '1' and ru.metric_id = '1'))::numeric, 2) "1 Day NIC Speed IN MAX"
+            ,round(avg((Select ru.value Where ru.measure_type_id = '8' and ru.timeperiod_id = '1' and ru.metric_id = '3'))::numeric, 2) "1 Day NIC Speed OUT AVG"
+            ,round(max((Select ru.value Where ru.measure_type_id = '8' and ru.timeperiod_id = '1' and ru.metric_id = '1'))::numeric, 2) "1 Day NIC Speed OUT MAX"
+            ,round(avg((Select ru.value Where ru.measure_type_id = '7' and ru.timeperiod_id = '2' and ru.metric_id = '3'))::numeric, 2) "7 Day NIC Speed IN AVG"
+            ,round(max((Select ru.value Where ru.measure_type_id = '7' and ru.timeperiod_id = '2' and ru.metric_id = '1'))::numeric, 2) "7 Day NIC Speed IN MAX"
+            ,round(avg((Select ru.value Where ru.measure_type_id = '8' and ru.timeperiod_id = '2' and ru.metric_id = '3'))::numeric, 2) "7 Day NIC Speed OUT AVG"
+            ,round(max((Select ru.value Where ru.measure_type_id = '8' and ru.timeperiod_id = '2' and ru.metric_id = '1'))::numeric, 2) "7 Day NIC Speed OUT MAX"
+            ,round(avg((Select ru.value Where ru.measure_type_id = '7' and ru.timeperiod_id = '3' and ru.metric_id = '3'))::numeric, 2) "30 Day NIC Speed IN AVG"
+            ,round(max((Select ru.value Where ru.measure_type_id = '7' and ru.timeperiod_id = '3' and ru.metric_id = '1'))::numeric, 2) "30 Day NIC Speed IN MAX"
+            ,round(avg((Select ru.value Where ru.measure_type_id = '8' and ru.timeperiod_id = '3' and ru.metric_id = '3'))::numeric, 2) "30 Day NIC Speed OUT AVG"
+            ,round(max((Select ru.value Where ru.measure_type_id = '8' and ru.timeperiod_id = '3' and ru.metric_id = '1'))::numeric, 2) "30 Day NIC Speed OUT MAX"
+            ,round(avg((Select ru.value Where ru.measure_type_id = '7' and ru.timeperiod_id = '4' and ru.metric_id = '3'))::numeric, 2) "90 Day NIC Speed IN AVG"
+            ,round(max((Select ru.value Where ru.measure_type_id = '7' and ru.timeperiod_id = '4' and ru.metric_id = '1'))::numeric, 2) "90 Day NIC Speed IN MAX"
+            ,round(avg((Select ru.value Where ru.measure_type_id = '8' and ru.timeperiod_id = '4' and ru.metric_id = '3'))::numeric, 2) "90 Day NIC Speed OUT AVG"
+            ,round(max((Select ru.value Where ru.measure_type_id = '8' and ru.timeperiod_id = '4' and ru.metric_id = '1'))::numeric, 2) "90 Day NIC Speed OUT MAX"
             ,rc.name "Remote Collector Name"
             ,rc.ip "Remote Collector IP"          
         From 
@@ -164,6 +181,22 @@ Select Distinct
     ,trd. "90 Day NIC Transfer IN MAX"
     ,trd. "90 Day NIC Transfer OUT AVG"
     ,trd. "90 Day NIC Transfer OUT MAX"
+    ,trd. "1 Day NIC Speed IN AVG"
+    ,trd. "1 Day NIC Speed IN MAX"
+    ,trd. "1 Day NIC Speed OUT AVG"
+    ,trd. "1 Day NIC Speed OUT MAX"
+    ,trd. "7 Day NIC Speed IN AVG"
+    ,trd. "7 Day NIC Speed IN MAX"
+    ,trd. "7 Day NIC Speed OUT AVG"
+    ,trd. "7 Day NIC Speed OUT MAX"
+    ,trd. "30 Day NIC Speed IN AVG"
+    ,trd. "30 Day NIC Speed IN MAX"
+    ,trd. "30 Day NIC Speed OUT AVG"
+    ,trd. "30 Day NIC Speed OUT MAX"
+    ,trd. "90 Day NIC Speed IN AVG"
+    ,trd. "90 Day NIC Speed IN MAX"
+    ,trd. "90 Day NIC Speed OUT AVG"
+    ,trd. "90 Day NIC Speed OUT MAX"
     ,trd."Remote Collector Name"
     ,trd."Remote Collector IP"
     ,l.last_login
@@ -174,4 +207,4 @@ From
     Join target_ru_data trd on trd.device_pk = tdd.device_pk
     Left Join view_devicelastlogin_v1 l on l.device_fk = tdd.device_pk and 
                                       l.last_login = (Select max(lr.last_login) From view_devicelastlogin_v1 lr Where lr.device_fk = tdd.device_pk)     
-Order by tdd."Last Successful Discovery" ASC, tdd."Device Name" ASC
+Order by tdd."Chassis Hostname" ASC, tdd."Device Name" ASC
