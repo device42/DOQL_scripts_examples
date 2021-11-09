@@ -2,3 +2,6 @@ settings.json
 *.csv
 *.json
 
+Unreleased Versions/ag_union.sql
+Unreleased Versions/rack_servicenow.sql
+Unreleased Versions/device_trends.sql
