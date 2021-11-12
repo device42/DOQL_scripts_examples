@@ -28,8 +28,6 @@ You have 6 H1 headings. You may want to use the "H1 -> H2" option to demote all 
 
 In order to facilitate an easy method to extract data from Device42 and provide insightful visuals and metrics Device42  makes available a pre-built Power BI Dashboard file that contains visualizations and reports for multiple use cases that include transformation, security, inventory, and others.
 
-<iframe width="1024" height="612" src="https://app.powerbi.com/view?r=eyJrIjoiMDA5ZWQxZTktYmQ4NS00OGUxLTg2ZWQtMWVhZGJlMmVhYjhlIiwidCI6ImY0OWQzOWE3LWRmMDgtNGMwNi1iNTU3LTI4MzVhZWM1ZGUwYiJ9&pageName=ReportSectionf4c6d52b6be18731dc4f" frameborder="0" allowFullScreen="true"></iframe>
-
 # Prerequisites for Usage
 
 In order to use the dashboard the following must be available.
