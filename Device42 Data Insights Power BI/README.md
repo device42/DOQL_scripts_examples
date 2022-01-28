@@ -24,6 +24,8 @@ You have 6 H1 headings. You may want to use the "H1 -> H2" option to demote all 
 
 ----->
 
+# Page under construction and will be moved to its own repo to increase visibility [here](https://github.com/device42/d42-power-bi)
+
 # Introduction
 
 In order to facilitate an easy method to extract data from Device42 and provide insightful visuals and metrics Device42  makes available a pre-built Power BI Dashboard file that contains visualizations and reports for multiple use cases that include transformation, security, inventory, and others.
