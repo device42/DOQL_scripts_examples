@@ -91,4 +91,4 @@ From
     Left Join view_serviceinstance_appcomp_v2 siac on siac.serviceinstance_fk = sic.serviceinstance_pk
     Left Join view_appcomp_v1 acc on acc.appcomp_pk = siac.appcomp_fk	
     Left Join target_device_data cdev On cdev.device_pk = sc.client_device_fk
-Where sc.client_ip != '127.0.0.1' and sc.client_ip != '::1' 
+Where sc.client_ip != '127.0.0.1' and sc.client_ip != '::1' and coalesce(si.topology_status_id,1) <> 3 and coalesce(sic.topology_status_id,1) <> 3
