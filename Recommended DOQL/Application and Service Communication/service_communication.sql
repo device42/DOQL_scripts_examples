@@ -13,7 +13,7 @@ Query for all discovered connections to service instances.
 With 
     target_device_data  as (
         Select
-            dev.device_pk
+            dev.device_pk "object_id"
             ,dev.name "Device"
             ,dev.os_name "OS Name"
             ,dev.os_version "OS Version"
@@ -31,6 +31,31 @@ With
  /* get Business Apps for both listener and client  */  
         Left Join view_businessapplicationelement_v1 bae on bae.device_fk = dev.device_pk
         Left Join view_businessapplication_v1 ba on ba.businessapplication_pk = bae.businessapplication_fk
+    ),
+    target_resource_data  as (
+        Select
+            dev.resource_pk "object_id"
+            ,dev.resource_name "Device"
+            ,dev.vendor_resource_type "OS Name"
+            ,'n/a' "OS Version"
+            ,'n/a' "OS Version Number"
+            ,dev.tags "Device Tags"
+            ,'n/a' "Object Category"
+            ,ag.name "Affinity Group"
+            ,ba.name "Business App"       
+        From    
+            view_resource_v2 dev
+ /* get affinity Group for both listener and client  */ 
+        Left Join view_affinitygroup_v2 ag On ag.primary_resource_fk = dev.resource_pk
+ /* get Business Apps for both listener and client  */  
+        Left Join view_businessapplicationelement_v1 bae on bae.resource_fk = dev.resource_pk 
+        Left Join view_businessapplication_v1 ba on ba.businessapplication_pk = bae.businessapplication_fk
+        WHERE LOWER(dev.vendor_resource_type) LIKE '%database%'
+    ),
+    union_devices_resources as (
+    SELECT * FROM target_device_data
+    UNION ALL
+    SELECT * FROM target_resource_data
     )
  /*Pull all the data together for the report  */        
 Select Distinct
@@ -78,7 +103,7 @@ Select Distinct
     ,sc.netstat_all_last_stat "Netstat Last Time Port Connected at Discovery"
 From 
         view_servicecommunication_v2 sc
-    Join target_device_data ldev On ldev.device_pk = sc.listener_device_fk
+    Join union_devices_resources ldev On ldev."object_id" = sc.listener_device_fk
     Join view_servicelistenerport_v2 lp On lp.servicelistenerport_pk = sc.servicelistenerport_fk
     Join view_serviceinstance_v2 si On si.serviceinstance_pk = lp.discovered_serviceinstance_fk
     Join view_service_v2 s On s.service_pk = si.service_fk
@@ -90,5 +115,5 @@ From
     Left Join view_appcomp_v1 ac on ac.appcomp_pk = sia.appcomp_fk
     Left Join view_serviceinstance_appcomp_v2 siac on siac.serviceinstance_fk = sic.serviceinstance_pk
     Left Join view_appcomp_v1 acc on acc.appcomp_pk = siac.appcomp_fk	
-    Left Join target_device_data cdev On cdev.device_pk = sc.client_device_fk
+    Left Join union_devices_resources cdev On cdev."object_id" = sc.client_device_fk
 Where sc.client_ip != '127.0.0.1' and sc.client_ip != '::1' and coalesce(si.topology_status_id,1) <> 3 and coalesce(sic.topology_status_id,1) <> 3
