@@ -20,7 +20,8 @@ Select
 	,dbs.type "File Type"
 	,dbs.path "Physical File Path"
 From view_databasesize_v2 dbs
-Left Join view_database_v2 db ON dbs.database_fk = db.database_pk
-Left Join view_databaseinstance_v2 di ON db.databaseinstance_fk = di.databaseinstance_pk
+JOIN view_database_to_databasesize_v2 dbds ON dbds.databasesize_fk = dbs.databasesize_pk 
+JOIN view_database_v2 db ON dbds.database_fk = db.database_pk
+JOIN view_databaseinstance_v2 di ON db.databaseinstance_fk = di.databaseinstance_pk
 Left Join view_appcomp_v1 ac ON di.appcomp_fk = ac.appcomp_pk
 Left Join view_device_v2 d ON d.device_pk = ac.device_fk
