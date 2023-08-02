@@ -1,30 +1,42 @@
-/* Database Details  - Information Extract */
-/* Inline view of Target CTE (inline views) to streamline the process  - 
-   Update 2023-08-01 
-	- updated to use view_appcomp_resources_v2
-   Update 2020-10-19
-   - updated the view_device_v1 to view_device_v2			 
-		*/
-Select
-	dbs.databasesize_pk
-	,d.name "Device Name"
-	,CASE 
-		When di.is_default_instance = 't' Then 'YES'
-		Else 'NO'
-	END "Default Instance"
-	,di.database_type "Database Type"
-	,db.compatibility_level "Compatibility Level"
-	,di.dbinstance_name "Database Instance Name"
-	,db.database_name "Database Name"
-	,dbs.name "Logical File Name"
-	,dbs.create_date "File Create Date"
-	,dbs.size "File Size"
-	,dbs.type "File Type"
-	,dbs.path "Physical File Path"
-From view_databasesize_v2 dbs
-JOIN view_database_to_databasesize_v2 dbds ON dbds.databasesize_fk = dbs.databasesize_pk 
-JOIN view_database_v2 db ON dbds.database_fk = db.database_pk
-JOIN view_databaseinstance_v2 di ON db.databaseinstance_fk = di.databaseinstance_pk
-JOIN view_appcomp_resources_v2 acr ON acr.appcomp_fk = di.appcomp_fk 
-Left Join view_appcomp_v1 ac ON acr.appcomp_fk = ac.appcomp_pk
-Left Join view_device_v2 d ON d.device_pk = ac.device_fk
+/* Databases
+ * Creation: 01/11/2023
+ * Desc: Returns information on individual databases
+ *  - this is a repurposed version of the Exago report - not a 1-1 match up
+ * ********************
+ * Update: 01/31/2023
+ *  - Update join criteria to db instances
+ */
+WITH db_appcomps AS (
+      SELECT
+        ac.device_fk
+        ,ac.appcomp_pk
+        ,ac.name AS ac_name
+        ,split_part(ac.name, '-', 1) AS ac_type
+      FROM view_appcomp_v1 ac
+      WHERE 
+        ac.application_category_name = 'Database'
+)
+SELECT
+  d."name"                                                                  AS "Device Name"
+  ,ac.ac_type                                                               AS "Database Type"
+  ,dbi.dbinstance_name                                                      AS "Database Instance"
+  ,INITCAP(dbi.is_default_instance::text)                                   AS "Default"
+  ,dbi.host_name                                                            AS "Database Instance Hostname"
+  ,db.database_name                                                         AS "Database"
+  ,db.compatibility_level                                                   AS "Compatability Level"
+  ,db.recovery_model                                                        AS "Recovery Model"
+  ,db.creation_date                                                         AS "Creation Date"
+  ,dbs."size"::bigint                                                       AS "File Size"
+  ,dbs."type"                                                               AS "File Type"
+  ,dbs."path"                                                               AS "Physical File Path"
+FROM view_database_v2 db            
+JOIN view_databaseinstance_v2 dbi   ON dbi.databaseinstance_pk = db.databaseinstance_fk
+JOIN view_appcomp_resources_v2 acr  ON acr.resource_fk = dbi.databaseinstance_pk
+JOIN db_appcomps ac                 ON ac.appcomp_pk = acr.appcomp_fk
+JOIN view_device_v2 d               ON ac.device_fk = d.device_pk
+JOIN view_databasesize_v2 dbs       ON dbs.database_fk = db.database_pk
+ORDER BY 
+  d.name
+  ,ac.ac_type
+  ,dbi.dbinstance_name
+  ,db.database_name
